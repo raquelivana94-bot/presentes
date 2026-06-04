@@ -1,0 +1,1179 @@
+<!doctype html>
+<html lang="pt">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Presentes J&amp;M</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&amp;family=Playfair+Display:wght@400;700&amp;display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: 'Raleway', sans-serif; }
+    .font-display { font-family: 'Playfair Display', serif; }
+    .botanical-leaf {
+      position: fixed; top: -40px; right: -40px; width: 220px; height: 220px;
+      background: radial-gradient(ellipse at 70% 30%, rgba(231,191,179,0.25) 0%, transparent 70%);
+      border-radius: 0 0 0 100%;
+      pointer-events: none; z-index: 0;
+    }
+    .botanical-leaf-bl {
+      position: fixed; bottom: -40px; left: -40px; width: 180px; height: 180px;
+      background: radial-gradient(ellipse at 30% 70%, rgba(247,220,203,0.3) 0%, transparent 70%);
+      border-radius: 0 100% 0 0;
+      pointer-events: none; z-index: 0;
+    }
+  </style>
+ </head>
+ <body data-template-id="__page-root" class="min-h-screen relative">
+  <div class="botanical-leaf"></div>
+  <div class="botanical-leaf-bl"></div>
+  <nav class="fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-end px-4" style="background:#fdf8f5"><button id="btn-admin-access" class="text-sm px-3 py-1.5 rounded-lg font-medium transition hover:opacity-80" style="color:#8b7355;border:1px solid #e7bfb3">Área dos Noivos</button> <button id="btn-logout" class="hidden text-sm px-3 py-1.5 rounded-lg font-medium transition hover:opacity-80" style="color:#8b7355;border:1px solid #e7bfb3">Sair</button>
+  </nav>
+  <header class="text-center relative z-10 pt-16">
+   <div id="cover-photo-container" class="w-full h-56 overflow-hidden bg-gray-200 relative group">
+    <img id="cover-photo" class="hidden w-full h-full object-cover" alt="Foto de Capa">
+    <div id="cover-placeholder" class="w-full h-56 flex items-center justify-center" style="background:#f7dccb"></div><button id="btn-edit-cover" class="hidden absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-medium text-sm" style="background:rgba(139, 115, 85, 0.5)">Editar Capa</button>
+   </div>
+   <div class="py-12 px-4">
+    <h1 data-template-id="page-title" class="canva-text font-display mt-4"></h1>
+    <p data-template-id="page-subtitle" class="canva-text mt-2"></p>
+   </div>
+  </header>
+  <main class="w-full max-w-6xl mx-auto px-3 sm:px-4 pb-8 relative z-10">
+   <section id="guest-view">
+    <div class="mb-8 rounded-xl border p-5 sm:p-6" style="border-color:#e7bfb3;background:#fffaf7">
+     <p class="text-xs uppercase tracking-[0.18em] font-semibold mb-2" style="color:#b89a7a">Ofertas</p>
+     <h2 class="font-display text-2xl sm:text-3xl mb-3" style="color:#8b7355">Lista de Presentes de Casamento</h2>
+     <p class="text-sm leading-7 mb-4" style="color:#8b7355">Querido(a) convidado(a), a vossa presen&ccedil;a neste dia t&atilde;o especial &eacute;, para n&oacute;s, o maior presente. Ainda assim, para quem nos quiser mimar com um gesto adicional, deixamos algumas op&ccedil;&otilde;es, inteiramente facultativas e sem qualquer obriga&ccedil;&atilde;o.</p>
+     <p class="text-sm leading-7 mb-5" style="color:#8b7355">A nossa lista de presentes de casamento foi pensada com muito carinho e reflete o estilo que queremos dar ao nosso lar, privilegiando tons suaves e harmoniosos, com especial prefer&ecirc;ncia por branco, bege e azul claro.</p>
+     <p class="text-sm leading-7 mb-5 rounded-lg px-4 py-3" style="color:#8b7355;background:#fdf8f5">Sugest&otilde;es de pequenos eletrodom&eacute;sticos em marcas como SMEG s&atilde;o muito bem-vindas, preferencialmente em azul pastel, creme ou branco e num estilo moderno/minimalista. Para loi&ccedil;a e mesa, temos prefer&ecirc;ncia por conjuntos para 8 pessoas.</p>
+     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div class="rounded-lg border p-4" style="border-color:#f7dccb;background:#fff">
+       <p class="text-sm font-semibold mb-2" style="color:#8b7355">1. Lista de presentes</p>
+       <p class="text-sm leading-6" style="color:#8b7355">Podem consultar abaixo a lista de presentes cuidadosamente preparada por n&oacute;s.</p>
+      </div>
+      <div class="rounded-lg border p-4" style="border-color:#f7dccb;background:#fff">
+       <p class="text-sm font-semibold mb-2" style="color:#8b7355">2. Lojas parceiras em Luanda</p>
+       <ul class="text-sm leading-7" style="color:#8b7355">
+        <li>Dakaza - Luanda Centro e Maxi</li>
+        <li>Vista Alegre - Belas Shopping</li>
+        <li>Casa Ferreira - Shopping Talatona</li>
+        <li>Kinda Home - Belas Shopping</li>
+        <li>Luxury - Belas Shopping</li>
+        <li>Espa&ccedil;o Coisas - Belas Shopping</li>
+       </ul>
+      </div>
+      <div class="rounded-lg border p-4" style="border-color:#f7dccb;background:#fff">
+       <p class="text-sm font-semibold mb-2" style="color:#8b7355">3. Contribui&ccedil;&atilde;o livre</p>
+       <p class="text-sm leading-6" style="color:#8b7355">Ou, se preferirem, poder&atilde;o optar por oferecer um valor livre atrav&eacute;s de transfer&ecirc;ncia banc&aacute;ria para o IBAN indicado pelos noivos.</p>
+       <div id="iban-box" class="hidden mt-3 rounded-lg px-3 py-3" style="background:#fdf8f5">
+        <p class="text-xs font-semibold mb-1" style="color:#b89a7a">IBAN</p>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+         <code id="iban-value" class="text-sm break-all" style="color:#8b7355"></code>
+         <button id="btn-copy-iban" type="button" class="w-full sm:w-auto px-3 py-2 rounded-lg text-sm font-medium" style="background:#e7bfb3;color:#8b7355">Copiar</button>
+        </div>
+        <p id="iban-copy-status" class="hidden text-xs mt-2" style="color:#8b7355">IBAN copiado.</p>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="flex items-center justify-end mb-5">
+     <div class="flex items-center gap-1 rounded-full p-1" style="background:#e7bfb3"><button id="btn-view-grid" class="px-4 py-1.5 rounded-full text-sm font-medium transition-all" style="background:#fff;color:#8b7355">Grelha</button> <button id="btn-view-list" class="px-4 py-1.5 rounded-full text-sm font-medium transition-all" style="color:#8b7355">Lista</button>
+     </div>
+    </div>
+    <div id="gift-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    <p id="empty-guest" class="text-center py-12 opacity-60" style="color:#8b7355">Nenhum presente na lista ainda.</p>
+   </section><!-- Messages Section (Guest View Only) -->
+   <section id="messages-section" class="mt-16">
+    <h2 data-template-id="messages-title" class="canva-text font-display text-2xl mb-6"></h2>
+    <div id="messages-form-container" class="mb-8 p-5 rounded-xl border" style="border-color:#e7bfb3;background:#fffaf7">
+     <p id="msg-no-reservation" class="text-center py-6 text-sm" style="color:#b89a7a">Precisa de escolher um presente primeiro para deixar um recado.</p>
+     <div id="msg-form-content" class="hidden">
+      <p class="text-sm font-medium block mb-3" style="color:#8b7355">Deixe um recado *</p><textarea id="guest-message" placeholder="Escreva aqui os seus desejos e bênçãos..." class="w-full border rounded-lg px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;min-height:100px;resize:vertical"></textarea> <button id="btn-msg-submit" class="px-4 py-2 rounded-lg text-white text-sm font-medium" style="background:#8b7355">Enviar Recado</button>
+      <p id="msg-error" class="text-red-500 text-xs mt-2 hidden">Por favor, escreva uma mensagem.</p>
+     </div>
+    </div>
+    <div id="messages-list" class="space-y-4"></div>
+    <p id="empty-messages" class="text-center py-8 opacity-60" style="color:#8b7355">Ainda não há recados. Seja o primeiro a deixar um!</p>
+   </section>
+   <section id="admin-view" class="hidden">
+    <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
+     <h2 data-template-id="admin-title" class="canva-text font-display"></h2><button id="btn-back-guest" class="text-sm underline" style="color:#8b7355">← Voltar à Lista</button>
+    </div>
+    <div class="mb-6 p-4 rounded-xl border" style="border-color:#e7bfb3">
+     <p class="text-sm font-medium mb-2" style="color:#8b7355">Foto de Capa</p>
+     <div class="flex items-center gap-3"><label class="cursor-pointer px-3 py-2 rounded-lg text-sm text-white" style="background:#8b7355">Carregar Foto<input type="file" id="cover-upload" accept="image/*" class="hidden"></label> <button id="btn-remove-cover" class="text-xs underline text-red-600 hidden">Remover</button>
+     </div>
+    </div>
+    <div class="mb-6 p-4 rounded-xl border" style="border-color:#e7bfb3">
+     <p class="text-sm font-medium mb-3" style="color:#8b7355">Contribui&ccedil;&atilde;o livre</p>
+     <div class="flex flex-col sm:flex-row gap-3"><input type="text" id="iban-input" placeholder="IBAN para contribui&ccedil;&atilde;o livre" class="flex-1 border rounded-lg px-3 py-2 text-sm" style="border-color:#e7bfb3"> <button type="button" id="btn-save-iban" class="w-full sm:w-auto px-4 py-2 rounded-lg text-white text-sm font-medium" style="background:#8b7355">Guardar IBAN</button></div>
+     <p id="iban-admin-status" class="hidden text-xs mt-2" style="color:#8b7355">IBAN guardado.</p>
+    </div>
+    <div class="mb-6 p-4 rounded-xl border" style="border-color:#e7bfb3">
+     <p id="form-label" class="text-sm font-medium mb-3" style="color:#8b7355">Adicionar Presente</p>
+     <form id="gift-form" class="flex flex-col gap-3"><input type="text" id="gift-name" placeholder="Nome do presente" class="border rounded-lg px-3 py-2 text-sm" style="border-color:#e7bfb3" required> <input type="text" id="gift-category" placeholder="Categoria (ex: Cozinha)" class="border rounded-lg px-3 py-2 text-sm" style="border-color:#e7bfb3">
+      <div class="flex flex-col sm:flex-row gap-3 sm:flex-wrap"><input type="number" id="gift-max" placeholder="Limite" min="1" value="1" class="w-full sm:w-20 border rounded-lg px-3 py-2 text-sm" style="border-color:#e7bfb3"> <label class="cursor-pointer px-3 py-2 rounded-lg text-sm border flex items-center justify-center gap-1" style="border-color:#e7bfb3;color:#8b7355"><i data-lucide="image" style="width:16px;height:16px"></i> Foto<input type="file" id="gift-img" accept="image/*" class="hidden"></label> <button type="submit" id="btn-form-submit" class="w-full sm:w-auto px-4 py-2 rounded-lg text-white text-sm font-medium" style="background:#8b7355">Adicionar</button> <button type="button" id="btn-form-cancel" class="hidden w-full sm:w-auto px-4 py-2 rounded-lg text-sm border" style="border-color:#e7bfb3;color:#8b7355">Cancelar</button>
+      </div>
+     </form>
+     <p id="gift-img-name" class="text-xs mt-1 opacity-60"></p>
+    </div>
+    <div class="mb-6 p-4 rounded-xl border" style="border-color:#e7bfb3">
+     <p class="text-sm font-medium mb-2" style="color:#8b7355">Colar lista de presentes</p>
+     <textarea id="bulk-gifts-input" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;min-height:150px;resize:vertical" placeholder="Ex:&#10;Pequenos Electrodom&eacute;sticos&#10;• Torradeira&#10;• Chaleira el&eacute;ctrica&#10;&#10;Essenciais de Cozinha&#10;• Conjunto de panelas em inox"></textarea>
+     <div class="flex flex-col sm:flex-row sm:items-center gap-3 mt-3"><button type="button" id="btn-import-bulk-gifts" class="w-full sm:w-auto px-4 py-2 rounded-lg text-white text-sm font-medium" style="background:#8b7355">Importar lista</button><p id="bulk-gifts-status" class="hidden text-xs" style="color:#8b7355"></p></div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+     <div data-template-id="metric-total-card" class="canva-card rounded-xl p-5 text-center">
+      <p class="text-sm opacity-70">Total de Itens</p>
+      <p id="metric-total" class="text-3xl font-bold" style="color:#8b7355">0</p>
+     </div>
+     <div data-template-id="metric-reserved-card" class="canva-card rounded-xl p-5 text-center">
+      <p class="text-sm opacity-70">Reservados</p>
+      <p id="metric-reserved" class="text-3xl font-bold" style="color:#8b7355">0</p>
+     </div>
+     <div data-template-id="metric-progress-card" class="canva-card rounded-xl p-5 text-center">
+      <p class="text-sm opacity-70">Progresso</p>
+      <p id="metric-progress" class="text-3xl font-bold" style="color:#8b7355">0%</p>
+     </div>
+    </div>
+    <div class="overflow-x-auto rounded-xl border mb-8" style="border-color:#e7bfb3">
+     <table class="w-full text-left text-sm">
+      <thead style="background:#f7dccb">
+       <tr>
+        <th class="p-3">Presente</th>
+        <th class="p-3">Categoria</th>
+        <th class="p-3">Reservas</th>
+        <th class="p-3">Limite</th>
+        <th class="p-3">Ações</th>
+       </tr>
+      </thead>
+      <tbody id="admin-gifts-body"></tbody>
+     </table>
+    </div>
+    <div class="mb-6 p-4 rounded-xl border flex items-center justify-between" style="border-color:#e7bfb3">
+     <div>
+      <p class="text-sm font-medium mb-1" style="color:#8b7355">Ativar Recados</p>
+      <p class="text-xs opacity-70" style="color:#8b7355">Permita que convidados deixem mensagens</p>
+     </div><label class="cursor-pointer flex items-center gap-2"> <input type="checkbox" id="toggle-messages" class="w-5 h-5"> <span class="text-sm" style="color:#8b7355">Ativado</span> </label>
+    </div>
+    <h3 class="font-medium mb-3" style="color:#8b7355">Recados dos Convidados</h3>
+    <div class="overflow-x-auto rounded-xl border" style="border-color:#e7bfb3">
+     <table class="w-full text-left text-sm">
+      <thead style="background:#f7dccb">
+       <tr>
+        <th class="p-3">Autor</th>
+        <th class="p-3">Recado</th>
+        <th class="p-3">Data</th>
+        <th class="p-3">Ações</th>
+       </tr>
+      </thead>
+      <tbody id="admin-messages-body"></tbody>
+     </table>
+    </div>
+    <div class="overflow-x-auto rounded-xl border" style="border-color:#e7bfb3">
+     <table class="w-full text-left text-sm">
+      <thead style="background:#f7dccb">
+       <tr>
+        <th class="p-3">Presente</th>
+        <th class="p-3">Convidado</th>
+        <th class="p-3">Telefone</th>
+        <th class="p-3">Data</th>
+        <th class="p-3">Ações</th>
+       </tr>
+      </thead>
+      <tbody id="admin-table-body"></tbody>
+     </table>
+    </div>
+   </section>
+  </main><!-- Reservation Modal -->
+  <div id="modal-overlay" class="hidden fixed inset-0 bg-black/30 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+   <div class="rounded-t-2xl sm:rounded-2xl p-6 w-full max-w-sm shadow-xl" style="background:#fffaf7">
+    <h3 data-template-id="modal-title" class="canva-text font-display text-center mb-4"></h3>
+    <p id="modal-gift-name" class="text-center text-sm mb-4" style="color:#8b7355"></p><label for="guest-name-input" class="text-sm font-medium" style="color:#8b7355">Seu nome *</label> <input id="guest-name-input" type="text" class="w-full border rounded-lg px-3 py-2 mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3" placeholder="Ex: Tia Maria"> <label for="guest-phone-input" class="text-sm font-medium" style="color:#8b7355">Número de telefone *</label> <input id="guest-phone-input" type="tel" class="w-full border rounded-lg px-3 py-2 mt-1 mb-4 focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3" placeholder="Ex: 923 456 789">
+    <div class="flex gap-3"><button id="btn-modal-cancel" class="flex-1 py-2 rounded-lg border" style="border-color:#e7bfb3;color:#8b7355">Cancelar</button> <button id="btn-modal-confirm" class="flex-1 py-2 rounded-lg text-white font-medium" style="background:#8b7355">Confirmar</button>
+    </div>
+    <p id="modal-error" class="text-red-500 text-xs mt-2 hidden">Por favor, preencha o nome e o telefone.</p>
+   </div>
+  </div><!-- Login Modal -->
+  <div id="password-overlay" class="hidden fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
+   <div class="rounded-2xl p-6 w-full max-w-xs shadow-xl text-center" style="background:#fffaf7">
+    <h3 class="font-display text-lg mb-4" style="color:#8b7355">Área dos Noivos</h3><input id="username-input" type="text" class="w-full border rounded-lg px-3 py-2 mb-2 focus:outline-none" style="border-color:#e7bfb3" placeholder="Utilizador">
+    <div class="relative mb-2"><input id="password-input" type="password" class="w-full border rounded-lg px-3 py-2 focus:outline-none" style="border-color:#e7bfb3" placeholder="Senha"><button type="button" id="btn-toggle-password" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700" style="width:20px;height:20px;display:flex;align-items:center;justify-content:center"><i data-lucide="eye" style="width:16px;height:16px"></i></button>
+    </div>
+    <p id="pw-error" class="text-red-500 text-xs mb-3 hidden">Credenciais incorretas.</p>
+    <div class="flex gap-3"><button id="btn-pw-cancel" class="flex-1 py-2 rounded-lg border" style="border-color:#e7bfb3;color:#8b7355">Cancelar</button> <button id="btn-pw-ok" class="flex-1 py-2 rounded-lg text-white" style="background:#8b7355">Entrar</button>
+    </div>
+   </div>
+  </div><!-- Delete Confirm -->
+  <div id="delete-overlay" class="hidden fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
+   <div class="rounded-2xl p-6 w-full max-w-xs shadow-xl text-center" style="background:#fffaf7">
+    <p class="text-sm mb-4" style="color:#8b7355">Tem certeza que deseja eliminar este presente?</p>
+    <div class="flex gap-3"><button id="btn-del-cancel" class="flex-1 py-2 rounded-lg border" style="border-color:#e7bfb3;color:#8b7355">Cancelar</button> <button id="btn-del-confirm" class="flex-1 py-2 rounded-lg text-white bg-red-600">Eliminar</button>
+    </div>
+   </div>
+  </div><!-- Reply Modal -->
+  <div id="reply-overlay" class="hidden fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
+   <div class="rounded-2xl p-6 w-full max-w-sm shadow-xl" style="background:#fffaf7">
+    <h3 class="font-display text-lg mb-3" style="color:#8b7355">Responder ao Recado</h3><textarea id="reply-text" placeholder="Digite a resposta dos noivos..." class="w-full border rounded-lg px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;min-height:80px;resize:vertical"></textarea>
+    <p id="reply-error" class="text-red-500 text-xs mb-2 hidden">Por favor, escreva uma resposta.</p>
+    <div class="flex gap-3"><button id="btn-reply-cancel" class="flex-1 py-2 rounded-lg border" style="border-color:#e7bfb3;color:#8b7355">Cancelar</button> <button id="btn-reply-confirm" class="flex-1 py-2 rounded-lg text-white" style="background:#8b7355">Responder</button>
+    </div>
+   </div>
+  </div><!-- Edit Guest Message Modal -->
+  <div id="edit-msg-overlay" class="hidden fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
+   <div class="rounded-2xl p-6 w-full max-w-sm shadow-xl" style="background:#fffaf7">
+    <h3 class="font-display text-lg mb-3" style="color:#8b7355">Editar Recado</h3><textarea id="edit-msg-text" placeholder="Escreva o seu recado..." class="w-full border rounded-lg px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;min-height:80px;resize:vertical"></textarea>
+    <p id="edit-msg-error" class="text-red-500 text-xs mb-2 hidden">Por favor, escreva uma mensagem.</p>
+    <div class="flex gap-3"><button id="btn-edit-msg-cancel" class="flex-1 py-2 rounded-lg border" style="border-color:#e7bfb3;color:#8b7355">Cancelar</button> <button id="btn-edit-msg-confirm" class="flex-1 py-2 rounded-lg text-white" style="background:#8b7355">Guardar</button>
+    </div>
+   </div>
+  </div><!-- Delete Message Confirm -->
+  <div id="delete-msg-overlay" class="hidden fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
+   <div class="rounded-2xl p-6 w-full max-w-xs shadow-xl text-center" style="background:#fffaf7">
+    <p class="text-sm mb-4" style="color:#8b7355">Tem certeza que deseja eliminar este recado?</p>
+    <div class="flex gap-3"><button id="btn-del-msg-cancel" class="flex-1 py-2 rounded-lg border" style="border-color:#e7bfb3;color:#8b7355">Cancelar</button> <button id="btn-del-msg-confirm" class="flex-1 py-2 rounded-lg text-white bg-red-600">Eliminar</button>
+    </div>
+   </div>
+  </div>
+  <script>
+const SUPABASE_URL = 'https://uspirobzmeywizilmokn.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzcGlyb2J6bWV5d2l6aWxtb2tuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MzYxNjcsImV4cCI6MjA5NjExMjE2N30.TCZnoIACHt2zPCv5wag3E0S4IfJNrC6n1Mehyvj99DQ';
+const ADMIN_USERNAME = 'IvanaR2026';
+const ADMIN_EMAIL = 'ivanar2026@admin.local';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let GIFTS = [];
+let reservations = [];
+let messages = [];
+let messagesEnabled = false;
+let contributionIban = '';
+let selectedGiftId = null;
+let deleteGiftId = null;
+let editGiftId = null;
+let formImgData = null;
+let currentViewMode = localStorage.getItem('jm_view_mode') || 'grid';
+let isLoggedIn = false;
+let replyMessageId = null;
+let editMessageId = null;
+let deleteMessageId = null;
+let currentGuestName = localStorage.getItem('jm_guest_name') || null;
+
+function normalizeGift(row) {
+  return {
+    id: row.id,
+    name: row.name,
+    img: row.img || '',
+    maxChoices: row.max_choices || 1,
+    category: row.category || ''
+  };
+}
+
+function normalizeReservation(row) {
+  return { ...row, __backendId: row.id };
+}
+
+function normalizeMessage(row) {
+  return { ...row, __backendId: row.id };
+}
+
+async function loadSupabaseData() {
+  const reservationColumns = isLoggedIn
+    ? 'id,gift_id,gift_name,gift_category,guest_name,guest_phone,reserved_at'
+    : 'id,gift_id,gift_name,gift_category,guest_name,reserved_at';
+
+  const reservationSource = isLoggedIn ? 'wedding_reservations' : 'wedding_reservations_public';
+  const [giftsRes, reservationsRes, messagesRes, settingsRes] = await Promise.all([
+    supabaseClient.from('wedding_gifts').select('*').order('created_at', { ascending: true }),
+    supabaseClient.from(reservationSource).select(reservationColumns).order('reserved_at', { ascending: false }),
+    supabaseClient.from('wedding_messages').select('*').order('created_at', { ascending: false }),
+    supabaseClient.from('wedding_settings').select('key,value')
+  ]);
+
+  if (giftsRes.error) throw giftsRes.error;
+  if (reservationsRes.error) throw reservationsRes.error;
+  if (messagesRes.error) throw messagesRes.error;
+  if (settingsRes.error) throw settingsRes.error;
+
+  GIFTS = (giftsRes.data || []).map(normalizeGift);
+  reservations = (reservationsRes.data || []).map(normalizeReservation);
+  messages = (messagesRes.data || []).map(normalizeMessage);
+
+  const settings = Object.fromEntries((settingsRes.data || []).map(item => [item.key, item.value]));
+  messagesEnabled = settings.messages_enabled === true || settings.messages_enabled === 'true';
+  contributionIban = String(settings.contribution_iban || '').trim();
+  applyCoverPhoto(settings.cover_photo || '');
+  document.getElementById('toggle-messages').checked = messagesEnabled;
+  updateContributionIban();
+}
+
+async function refreshFromSupabase() {
+  try {
+    await loadSupabaseData();
+    renderGiftGrid();
+    renderMessagesSection();
+    updateMessageFormVisibility();
+    renderAdminDashboard();
+  } catch (error) {
+    console.error('Erro ao carregar dados do Supabase:', error);
+    alert('Erro ao conectar com o Supabase. Confira se as tabelas foram criadas.');
+  }
+}
+
+async function saveGifts() {
+  await refreshFromSupabase();
+}
+
+async function upsertSetting(key, value) {
+  const { error } = await supabaseClient
+    .from('wedding_settings')
+    .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+  if (error) throw error;
+}
+
+function escapeHtml(value) {
+  return String(value || '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[char]));
+}
+
+function updateContributionIban() {
+  const box = document.getElementById('iban-box');
+  const value = document.getElementById('iban-value');
+  const adminInput = document.getElementById('iban-input');
+  if (adminInput) adminInput.value = contributionIban;
+  if (!box || !value) return;
+  if (contributionIban) {
+    value.textContent = contributionIban;
+    box.classList.remove('hidden');
+  } else {
+    value.textContent = '';
+    box.classList.add('hidden');
+  }
+}
+
+function applyCoverPhoto(c) {
+  if (c) {
+    document.getElementById('cover-photo').src = c;
+    document.getElementById('cover-photo').classList.remove('hidden');
+    document.getElementById('cover-placeholder').classList.add('hidden');
+    document.getElementById('btn-edit-cover').classList.remove('hidden');
+    document.getElementById('btn-remove-cover').classList.remove('hidden');
+  } else {
+    document.getElementById('cover-photo').removeAttribute('src');
+    document.getElementById('cover-photo').classList.add('hidden');
+    document.getElementById('cover-placeholder').classList.remove('hidden');
+    document.getElementById('btn-edit-cover').classList.add('hidden');
+    document.getElementById('btn-remove-cover').classList.add('hidden');
+  }
+}
+
+document.getElementById('cover-upload').addEventListener('change', function(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async ev => {
+    try {
+      await upsertSetting('cover_photo', ev.target.result);
+      applyCoverPhoto(ev.target.result);
+    } catch (error) {
+      console.error(error);
+      alert('Não foi possível guardar a capa no Supabase.');
+    }
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('btn-remove-cover').addEventListener('click', async () => {
+  await upsertSetting('cover_photo', '');
+  applyCoverPhoto('');
+});
+
+document.getElementById('btn-edit-cover').addEventListener('click', () => {
+  document.getElementById('cover-upload').click();
+});
+
+
+
+const dataHandler = {
+  onDataChanged(data) {
+    reservations = data.filter(r => r.type === 'reservation' || !r.type);
+    messages = data.filter(r => r.type === 'message');
+    renderGiftGrid();
+    renderMessagesSection();
+    updateMessageFormVisibility();
+    renderAdminDashboard();
+  }
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const { data: authData } = await supabaseClient.auth.getSession();
+  isLoggedIn = Boolean(authData.session);
+  await refreshFromSupabase();
+  renderGiftGrid();
+  renderMessagesSection();
+  updateMessageFormVisibility();
+  lucide.createIcons();
+  updateViewModeButtons();
+  updateHeaderButtons();
+  if (isLoggedIn) { showAdminPanel(); }
+  document.getElementById('toggle-messages').checked = messagesEnabled;
+});
+
+document.getElementById('btn-toggle-password').addEventListener('click', function() {
+  const input = document.getElementById('password-input');
+  const icon = this.querySelector('i');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.setAttribute('data-lucide', 'eye-off');
+  } else {
+    input.type = 'password';
+    icon.setAttribute('data-lucide', 'eye');
+  }
+  lucide.createIcons();
+});
+
+document.getElementById('btn-view-grid').addEventListener('click', () => {
+  currentViewMode = 'grid'; localStorage.setItem('jm_view_mode', 'grid');
+  updateViewModeButtons(); renderGiftGrid();
+});
+document.getElementById('btn-view-list').addEventListener('click', () => {
+  currentViewMode = 'list'; localStorage.setItem('jm_view_mode', 'list');
+  updateViewModeButtons(); renderGiftGrid();
+});
+
+function updateViewModeButtons() {
+  const g = document.getElementById('btn-view-grid'), l = document.getElementById('btn-view-list');
+  if (currentViewMode === 'grid') { g.style.background='#fff'; l.style.background='transparent'; }
+  else { l.style.background='#fff'; g.style.background='transparent'; }
+}
+
+function getReservationCount(giftId) { return reservations.filter(r => r.gift_id === giftId).length; }
+
+function renderGiftGrid() {
+  const grid = document.getElementById('gift-grid');
+  const empty = document.getElementById('empty-guest');
+  if (GIFTS.length === 0) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  grid.className = currentViewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5' : 'grid grid-cols-1 sm:grid-cols-2 gap-3';
+
+  const existingIds = new Set(GIFTS.map(g => g.id));
+  [...grid.children].forEach(el => { if (!existingIds.has(el.dataset.giftId)) el.remove(); });
+
+  GIFTS.forEach(gift => {
+    const count = getReservationCount(gift.id);
+    const isFull = count >= gift.maxChoices;
+    const guestHasReserved = currentGuestName && reservations.some(r => r.gift_id === gift.id && r.guest_name.toLowerCase() === currentGuestName.toLowerCase());
+    let card = grid.querySelector(`[data-gift-id="${gift.id}"]`);
+    if (!card) { card = document.createElement('div'); card.dataset.giftId = gift.id; grid.appendChild(card); }
+
+    if (currentViewMode === 'grid') {
+      card.className = 'rounded-2xl overflow-hidden shadow-sm border relative' ; card.style.borderColor='#e7bfb3'; card.style.background='#fffaf7';
+      const imgHtml = gift.img ? `<img src="${gift.img}" alt="${gift.name}" class="w-full h-44 object-cover" loading="lazy">` : `<div class="w-full h-44 flex items-center justify-center" style="background:#f7dccb"><span class="text-3xl">🎁</span></div>`;
+      card.innerHTML = `${imgHtml}<div class="p-4 ${isFull || guestHasReserved?'blur-sm':''}">
+        ${gift.category?`<p class="text-xs mb-1 opacity-60">${gift.category}</p>`:''}
+        <h3 class="font-medium text-sm mb-2" style="color:#8b7355">${gift.name}</h3>
+        <p class="text-xs mb-3" style="color:#b89a7a">${count}/${gift.maxChoices} reservado(s)</p>
+        <button class="w-full py-2.5 rounded-lg text-sm font-medium transition ${(isFull || guestHasReserved)?'opacity-50 cursor-not-allowed':'hover:opacity-90 active:scale-95'}" style="background:${(isFull || guestHasReserved)?'#ddd':'#e7bfb3'};color:#8b7355" ${(isFull || guestHasReserved)?'disabled':''} onclick="openModal('${gift.id}')">${guestHasReserved?'Já Ofereceu':(isFull?'Indisponível':'Oferecer')}</button>
+      </div>${(isFull || guestHasReserved)?`<div class="absolute inset-0 flex items-center justify-center rounded-2xl pointer-events-none"><span class="text-base font-semibold px-4 py-2 rounded-lg text-white" style="background:#8b7355">${guestHasReserved?'Sua Escolha':'Já escolhido'}</span></div>`:''}`;
+    } else {
+      card.className = 'flex items-start gap-3 p-3 rounded-lg border'; card.style.borderColor='#e7bfb3'; card.style.background='#fffaf7';
+      const imgHtml = gift.img ? `<img src="${gift.img}" alt="${gift.name}" class="w-20 h-20 object-cover rounded" loading="lazy">` : `<div class="w-20 h-20 flex items-center justify-center rounded flex-shrink-0" style="background:#f7dccb"><span class="text-2xl">🎁</span></div>`;
+      card.innerHTML = `${imgHtml}<div class="flex-1 min-w-0 ${(isFull || guestHasReserved)?'opacity-60':''}">
+        ${gift.category?`<p class="text-xs mb-1 opacity-60">${gift.category}</p>`:''}
+        <h3 class="font-medium text-sm mb-1" style="color:#8b7355">${gift.name}</h3>
+        <p class="text-xs mb-2" style="color:#b89a7a">${count}/${gift.maxChoices} reservado(s)</p>
+        <button class="w-full py-2 rounded-lg text-xs font-medium transition ${(isFull || guestHasReserved)?'opacity-50 cursor-not-allowed':'hover:opacity-90 active:scale-95'}" style="background:${(isFull || guestHasReserved)?'#ddd':'#e7bfb3'};color:#8b7355" ${(isFull || guestHasReserved)?'disabled':''} onclick="openModal('${gift.id}')">${guestHasReserved?'Já Ofereceu':(isFull?'Indisponível':'Oferecer')}</button>
+      </div>`;
+    }
+  });
+}
+
+function renderGiftGrid() {
+  const grid = document.getElementById('gift-grid');
+  const empty = document.getElementById('empty-guest');
+  if (GIFTS.length === 0) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  grid.className = 'space-y-8';
+
+  const groups = GIFTS.reduce((acc, gift) => {
+    const category = gift.category || 'Outros presentes';
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(gift);
+    return acc;
+  }, {});
+
+  grid.innerHTML = Object.entries(groups).map(([category, gifts]) => `
+    <section>
+      <div class="flex items-end justify-between gap-3 mb-3">
+        <h3 class="font-display text-xl sm:text-2xl" style="color:#8b7355">${escapeHtml(category)}</h3>
+        <span class="text-xs" style="color:#b89a7a">${gifts.length} presente(s)</span>
+      </div>
+      <div class="${currentViewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' : 'grid grid-cols-1 gap-3'}">
+        ${gifts.map(gift => renderGiftCard(gift)).join('')}
+      </div>
+    </section>
+  `).join('');
+}
+
+function renderGiftCard(gift) {
+  const count = getReservationCount(gift.id);
+  const isFull = count >= gift.maxChoices;
+  const guestHasReserved = currentGuestName && reservations.some(r => r.gift_id === gift.id && r.guest_name.toLowerCase() === currentGuestName.toLowerCase());
+  const disabled = isFull || guestHasReserved;
+  const buttonText = guestHasReserved ? 'Já Ofereceu' : (isFull ? 'Indisponível' : 'Oferecer');
+  const badgeText = guestHasReserved ? 'Sua Escolha' : 'Já escolhido';
+  const safeName = escapeHtml(gift.name);
+  const safeCategory = escapeHtml(gift.category || '');
+  const safeId = escapeHtml(gift.id);
+
+  if (currentViewMode === 'list') {
+    const imgHtml = gift.img ? `<img src="${escapeHtml(gift.img)}" alt="${safeName}" class="w-20 h-20 object-cover rounded flex-shrink-0" loading="lazy">` : `<div class="w-20 h-20 flex items-center justify-center rounded flex-shrink-0" style="background:#f7dccb"><span class="text-2xl">🎁</span></div>`;
+    return `<div data-gift-id="${safeId}" class="flex items-start gap-3 p-3 rounded-lg border" style="border-color:#e7bfb3;background:#fffaf7">
+      ${imgHtml}<div class="flex-1 min-w-0 ${disabled?'opacity-60':''}">
+        ${safeCategory?`<p class="text-xs mb-1 opacity-60">${safeCategory}</p>`:''}
+        <h4 class="font-medium text-sm mb-1" style="color:#8b7355">${safeName}</h4>
+        <p class="text-xs mb-2" style="color:#b89a7a">${count}/${gift.maxChoices} reservado(s)</p>
+        <button class="w-full py-2 rounded-lg text-xs font-medium transition ${disabled?'opacity-50 cursor-not-allowed':'hover:opacity-90 active:scale-95'}" style="background:${disabled?'#ddd':'#e7bfb3'};color:#8b7355" ${disabled?'disabled':''} onclick="openModal('${safeId}')">${buttonText}</button>
+      </div>
+    </div>`;
+  }
+
+  const imgHtml = gift.img ? `<img src="${escapeHtml(gift.img)}" alt="${safeName}" class="w-full h-40 sm:h-44 object-cover" loading="lazy">` : `<div class="w-full h-36 sm:h-44 flex items-center justify-center" style="background:#f7dccb"><span class="text-3xl">🎁</span></div>`;
+  return `<div data-gift-id="${safeId}" class="rounded-xl sm:rounded-2xl overflow-hidden shadow-sm border relative" style="border-color:#e7bfb3;background:#fffaf7">
+    ${imgHtml}<div class="p-4 ${disabled?'blur-sm':''}">
+      ${safeCategory?`<p class="text-xs mb-1 opacity-60">${safeCategory}</p>`:''}
+      <h4 class="font-medium text-sm mb-2" style="color:#8b7355">${safeName}</h4>
+      <p class="text-xs mb-3" style="color:#b89a7a">${count}/${gift.maxChoices} reservado(s)</p>
+      <button class="w-full py-2.5 rounded-lg text-sm font-medium transition ${disabled?'opacity-50 cursor-not-allowed':'hover:opacity-90 active:scale-95'}" style="background:${disabled?'#ddd':'#e7bfb3'};color:#8b7355" ${disabled?'disabled':''} onclick="openModal('${safeId}')">${buttonText}</button>
+    </div>${disabled?`<div class="absolute inset-0 flex items-center justify-center rounded-2xl pointer-events-none"><span class="text-base font-semibold px-4 py-2 rounded-lg text-white" style="background:#8b7355">${badgeText}</span></div>`:''}
+  </div>`;
+}
+
+function openModal(giftId) {
+  selectedGiftId = giftId;
+  const gift = GIFTS.find(g => g.id === giftId);
+  document.getElementById('modal-gift-name').textContent = gift.name;
+  document.getElementById('guest-name-input').value = '';
+  document.getElementById('guest-phone-input').value = '';
+  document.getElementById('modal-error').classList.add('hidden');
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+
+document.getElementById('btn-modal-cancel').addEventListener('click', () => { document.getElementById('modal-overlay').classList.add('hidden'); });
+
+document.getElementById('btn-modal-confirm').addEventListener('click', async () => {
+  const name = document.getElementById('guest-name-input').value.trim();
+  const phone = document.getElementById('guest-phone-input').value.trim();
+  if (!name || !phone) { document.getElementById('modal-error').classList.remove('hidden'); return; }
+  const btn = document.getElementById('btn-modal-confirm');
+  btn.disabled = true; btn.textContent = '...';
+  if (reservations.length >= 999) { btn.disabled = false; btn.textContent = 'Confirmar'; return; }
+  const gift = GIFTS.find(g => g.id === selectedGiftId);
+  const result = await supabaseClient.from('wedding_reservations').insert({
+    gift_id: selectedGiftId,
+    gift_name: gift.name,
+    gift_category: gift.category || '',
+    guest_name: name,
+    guest_phone: phone,
+    reserved_at: new Date().toISOString()
+  });
+  btn.disabled = false; btn.textContent = 'Confirmar';
+  if (!result.error) {
+    currentGuestName = name;
+    localStorage.setItem('jm_guest_name', name);
+    document.getElementById('modal-overlay').classList.add('hidden');
+    await refreshFromSupabase();
+    updateMessageFormVisibility();
+  } else {
+    console.error(result.error);
+    document.getElementById('modal-error').textContent = 'Não foi possível guardar a reserva.';
+    document.getElementById('modal-error').classList.remove('hidden');
+  }
+});
+
+document.getElementById('btn-admin-access').addEventListener('click', () => {
+  if (isLoggedIn) {
+    showAdminPanel();
+  } else {
+    document.getElementById('password-overlay').classList.remove('hidden');
+    document.getElementById('username-input').value = '';
+    document.getElementById('password-input').value = '';
+    document.getElementById('password-input').type = 'password';
+    document.getElementById('pw-error').classList.add('hidden');
+    document.querySelector('#btn-toggle-password i').setAttribute('data-lucide', 'eye');
+    lucide.createIcons();
+  }
+});
+document.getElementById('btn-pw-cancel').addEventListener('click', () => { document.getElementById('password-overlay').classList.add('hidden'); });
+document.getElementById('btn-pw-ok').addEventListener('click', async () => {
+  const user = document.getElementById('username-input').value.trim();
+  const pw = document.getElementById('password-input').value;
+  const btn = document.getElementById('btn-pw-ok');
+  btn.disabled = true; btn.textContent = '...';
+  const email = user === ADMIN_USERNAME ? ADMIN_EMAIL : user;
+  const { error } = await supabaseClient.auth.signInWithPassword({ email, password: pw });
+  btn.disabled = false; btn.textContent = 'Entrar';
+  if (!error) {
+    document.getElementById('password-overlay').classList.add('hidden');
+    isLoggedIn = true;
+    await refreshFromSupabase();
+    updateHeaderButtons();
+    showAdminPanel();
+  } else { document.getElementById('pw-error').classList.remove('hidden'); }
+});
+
+function showAdminPanel() {
+  document.getElementById('guest-view').classList.add('hidden');
+  document.getElementById('messages-section').classList.add('hidden');
+  document.getElementById('admin-view').classList.remove('hidden');
+  renderAdminDashboard();
+}
+
+document.getElementById('btn-back-guest').addEventListener('click', () => {
+  document.getElementById('admin-view').classList.add('hidden');
+  document.getElementById('guest-view').classList.remove('hidden');
+  document.getElementById('messages-section').classList.remove('hidden');
+  renderGiftGrid();
+  updateHeaderButtons();
+});
+
+document.getElementById('btn-logout').addEventListener('click', async () => {
+  document.getElementById('admin-view').classList.add('hidden');
+  document.getElementById('guest-view').classList.remove('hidden');
+  document.getElementById('messages-section').classList.remove('hidden');
+  isLoggedIn = false;
+  await supabaseClient.auth.signOut();
+  await refreshFromSupabase();
+  updateHeaderButtons();
+  renderGiftGrid();
+});
+
+document.getElementById('toggle-messages').addEventListener('change', async function() {
+  messagesEnabled = this.checked;
+  try {
+    await upsertSetting('messages_enabled', messagesEnabled);
+  } catch (error) {
+    console.error(error);
+    alert('Não foi possível guardar a configuração no Supabase.');
+  }
+  renderMessagesSection();
+  updateMessageFormVisibility();
+});
+
+document.getElementById('btn-save-iban').addEventListener('click', async () => {
+  const btn = document.getElementById('btn-save-iban');
+  const status = document.getElementById('iban-admin-status');
+  contributionIban = document.getElementById('iban-input').value.trim();
+  btn.disabled = true; btn.textContent = '...';
+  try {
+    await upsertSetting('contribution_iban', contributionIban);
+    updateContributionIban();
+    status.textContent = contributionIban ? 'IBAN guardado.' : 'IBAN removido.';
+    status.classList.remove('hidden');
+    setTimeout(() => status.classList.add('hidden'), 2500);
+  } catch (error) {
+    console.error(error);
+    alert('Não foi possível guardar o IBAN no Supabase.');
+  }
+  btn.disabled = false; btn.textContent = 'Guardar IBAN';
+});
+
+document.getElementById('btn-copy-iban').addEventListener('click', async () => {
+  if (!contributionIban) return;
+  const status = document.getElementById('iban-copy-status');
+  try {
+    await navigator.clipboard.writeText(contributionIban);
+  } catch (error) {
+    const temp = document.createElement('textarea');
+    temp.value = contributionIban;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand('copy');
+    temp.remove();
+  }
+  status.classList.remove('hidden');
+  setTimeout(() => status.classList.add('hidden'), 2200);
+});
+
+function parseBulkGifts(rawText) {
+  const lines = rawText.split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean);
+  const gifts = [];
+  let currentCategory = '';
+
+  lines.forEach((line, index) => {
+    const isBullet = /^[•●▪◦\uF0B7*\-–—]+\s*/.test(line);
+    const cleanLine = line
+      .replace(/^[•●▪◦\uF0B7*\-–—]+\s*/, '')
+      .replace(/^\d+[\.)]\s*/, '')
+      .trim();
+    if (!cleanLine) return;
+
+    const nextLine = lines[index + 1] || '';
+    const nextIsBullet = /^[•●▪◦\uF0B7*\-–—]+\s*/.test(nextLine.trim());
+    const looksLikeCategory = !isBullet && (nextIsBullet || !currentCategory);
+
+    if (looksLikeCategory) {
+      currentCategory = cleanLine;
+      return;
+    }
+
+    gifts.push({
+      name: cleanLine,
+      category: currentCategory || 'Outros presentes',
+      max_choices: 1,
+      img: ''
+    });
+  });
+
+  return gifts;
+}
+
+document.getElementById('btn-import-bulk-gifts').addEventListener('click', async () => {
+  const textarea = document.getElementById('bulk-gifts-input');
+  const status = document.getElementById('bulk-gifts-status');
+  const btn = document.getElementById('btn-import-bulk-gifts');
+  const parsed = parseBulkGifts(textarea.value);
+
+  if (!parsed.length) {
+    status.textContent = 'Cole uma lista com categorias e presentes.';
+    status.classList.remove('hidden');
+    return;
+  }
+
+  const existing = new Set(GIFTS.map(g => `${(g.category || '').toLowerCase()}|${g.name.toLowerCase()}`));
+  const toInsert = parsed.filter(g => !existing.has(`${g.category.toLowerCase()}|${g.name.toLowerCase()}`));
+
+  if (!toInsert.length) {
+    status.textContent = `${parsed.length} item(ns) reconhecido(s), mas todos já existem.`;
+    status.classList.remove('hidden');
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Importando...';
+  const { error } = await supabaseClient.from('wedding_gifts').insert(toInsert);
+  btn.disabled = false; btn.textContent = 'Importar lista';
+
+  if (error) {
+    console.error(error);
+    status.textContent = 'Não foi possível importar a lista.';
+    status.classList.remove('hidden');
+    return;
+  }
+
+  textarea.value = '';
+  status.textContent = `${toInsert.length} presente(s) importado(s) em ${new Set(toInsert.map(g => g.category)).size} categoria(s).`;
+  status.classList.remove('hidden');
+  await refreshFromSupabase();
+});
+
+function updateHeaderButtons() {
+  const adminBtn = document.getElementById('btn-admin-access');
+  const logoutBtn = document.getElementById('btn-logout');
+  if (isLoggedIn) {
+    adminBtn.classList.remove('hidden');
+    logoutBtn.classList.remove('hidden');
+  } else {
+    adminBtn.classList.remove('hidden');
+    logoutBtn.classList.add('hidden');
+  }
+}
+
+function renderMessagesSection() {
+  const section = document.getElementById('messages-section');
+  const form = document.getElementById('messages-form-container');
+  const msgList = document.getElementById('messages-list');
+  const empty = document.getElementById('empty-messages');
+
+  // Hide entire section if messages disabled and not logged in
+  if (!messagesEnabled && !isLoggedIn) {
+    section.style.display = 'none';
+    return;
+  } else {
+    section.style.display = 'block';
+  }
+
+  const guestOwnMessage = messages.find(m => m.author_name && m.author_name.toLowerCase() === (currentGuestName || '').toLowerCase());
+  form.style.display = (messagesEnabled && !isLoggedIn && !guestOwnMessage) ? 'block' : 'none';
+  
+  if (messages.length === 0) {
+    msgList.innerHTML = '';
+    empty.style.display = messagesEnabled ? 'block' : 'none';
+    document.getElementById('msg-no-reservation').style.display = (messagesEnabled && !isLoggedIn && !currentGuestName) ? 'block' : 'none';
+  } else {
+    empty.classList.add('hidden');
+    document.getElementById('msg-no-reservation').style.display = 'none';
+    const existingIds = new Set(messages.map(m => m.__backendId));
+    [...msgList.children].forEach(el => { if (!existingIds.has(el.dataset.msgId)) el.remove(); });
+
+    messages.forEach(msg => {
+      let card = msgList.querySelector(`[data-msg-id="${msg.__backendId}"]`);
+      if (!card) { card = document.createElement('div'); card.dataset.msgId = msg.__backendId; msgList.appendChild(card); }
+
+      const likes = msg.likes || 0;
+      const userLiked = msg.liked_by ? msg.liked_by.split(',').includes('guest') : false;
+      const isOwnMessage = msg.author_name && msg.author_name.toLowerCase() === (currentGuestName || '').toLowerCase();
+      
+      card.className = 'p-4 rounded-lg border' ; card.style.borderColor='#e7bfb3'; card.style.background='#fffaf7';
+      card.innerHTML = `
+        <div class="flex items-start justify-between mb-2">
+          <div>
+            <p class="font-medium text-sm" style="color:#8b7355">${msg.author_name}</p>
+            <p class="text-xs opacity-70">${new Date(msg.created_at).toLocaleDateString('pt')}</p>
+          </div>
+          <button class="flex items-center gap-1 text-sm transition ${userLiked?'':'hover:opacity-70'}" style="color:${userLiked?'#e76c6c':'#b89a7a'}" onclick="toggleLikeMessage('${msg.__backendId}')">
+            <i data-lucide="${userLiked?'heart':'heart'}" style="width:16px;height:16px;${userLiked?'fill:currentColor':''};"></i>
+            <span>${likes}</span>
+          </button>
+        </div>
+        <p class="text-sm mb-3" style="color:#8b7355">${msg.message}</p>
+        ${msg.reply ? `<div class="pl-4 border-l-2 mt-3" style="border-color:#e7bfb3"><p class="text-xs font-medium mb-1" style="color:#8b7355">Resposta dos Noivos:</p><p class="text-sm" style="color:#8b7355">${msg.reply}</p></div>` : ''}
+        ${isLoggedIn ? `<div class="flex gap-2 mt-3 pt-3 border-t" style="border-color:#e7bfb3"><button class="text-xs underline" style="color:#8b7355" onclick="openReplyModal('${msg.__backendId}')">${msg.reply ? 'Editar' : 'Responder'}</button><button class="text-xs underline text-red-600" onclick="confirmDeleteMessage('${msg.__backendId}')">Eliminar</button></div>` : isOwnMessage ? `<div class="flex gap-2 mt-3 pt-3 border-t" style="border-color:#e7bfb3"><button class="text-xs underline" style="color:#8b7355" onclick="openEditOwnMessage('${msg.__backendId}')">Editar</button></div>` : ''}
+      `;
+    });
+  }
+  lucide.createIcons();
+}
+
+async function toggleLikeMessage(msgId) {
+  const msg = messages.find(m => m.__backendId === msgId);
+  if (!msg) return;
+  
+  let likedBy = msg.liked_by ? msg.liked_by.split(',') : [];
+  if (likedBy.includes('guest')) {
+    likedBy = likedBy.filter(l => l !== 'guest');
+    msg.likes = Math.max(0, (msg.likes || 1) - 1);
+  } else {
+    likedBy.push('guest');
+    msg.likes = (msg.likes || 0) + 1;
+  }
+  msg.liked_by = likedBy.join(',');
+  const { error } = await supabaseClient
+    .from('wedding_messages')
+    .update({ likes: msg.likes, liked_by: msg.liked_by })
+    .eq('id', msgId);
+  if (error) console.error(error);
+  await refreshFromSupabase();
+}
+
+function openEditOwnMessage(msgId) {
+  const msg = messages.find(m => m.__backendId === msgId);
+  if (!msg) return;
+  editMessageId = msgId;
+  document.getElementById('edit-msg-text').value = msg.message || '';
+  document.getElementById('edit-msg-error').classList.add('hidden');
+  document.getElementById('edit-msg-overlay').classList.remove('hidden');
+  document.getElementById('edit-msg-text').focus();
+}
+
+document.getElementById('btn-edit-msg-cancel').addEventListener('click', () => {
+  document.getElementById('edit-msg-overlay').classList.add('hidden');
+  document.getElementById('edit-msg-text').value = '';
+  document.getElementById('edit-msg-error').classList.add('hidden');
+  editMessageId = null;
+});
+
+document.getElementById('btn-edit-msg-confirm').addEventListener('click', async () => {
+  const msg = document.getElementById('edit-msg-text').value.trim();
+  if (!msg) {
+    document.getElementById('edit-msg-error').classList.remove('hidden');
+    return;
+  }
+  const btn = document.getElementById('btn-edit-msg-confirm');
+  btn.disabled = true; btn.textContent = '...';
+  const record = messages.find(m => m.__backendId === editMessageId);
+  if (record) {
+    await supabaseClient
+      .from('wedding_messages')
+      .update({ message: msg })
+      .eq('id', editMessageId);
+  }
+  btn.disabled = false; btn.textContent = 'Guardar';
+  document.getElementById('edit-msg-overlay').classList.add('hidden');
+  document.getElementById('edit-msg-text').value = '';
+  document.getElementById('edit-msg-error').classList.add('hidden');
+  editMessageId = null;
+});
+
+document.getElementById('gift-img').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) { formImgData = null; document.getElementById('gift-img-name').textContent = ''; return; }
+  document.getElementById('gift-img-name').textContent = file.name;
+  const reader = new FileReader(); reader.onload = ev => { formImgData = ev.target.result; }; reader.readAsDataURL(file);
+});
+
+document.getElementById('gift-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const name = document.getElementById('gift-name').value.trim();
+  const category = document.getElementById('gift-category').value.trim();
+  const max = parseInt(document.getElementById('gift-max').value) || 1;
+  if (!name) return;
+  const submitBtn = document.getElementById('btn-form-submit');
+  submitBtn.disabled = true;
+  if (editGiftId) {
+    const payload = { name, category, max_choices: max, updated_at: new Date().toISOString() };
+    if (formImgData) payload.img = formImgData;
+    await supabaseClient.from('wedding_gifts').update(payload).eq('id', editGiftId);
+    editGiftId = null;
+    document.getElementById('form-label').textContent = 'Adicionar Presente';
+    document.getElementById('btn-form-submit').textContent = 'Adicionar';
+    document.getElementById('btn-form-cancel').classList.add('hidden');
+  } else {
+    await supabaseClient.from('wedding_gifts').insert({
+      name,
+      img: formImgData || '',
+      max_choices: max,
+      category
+    });
+  }
+  formImgData = null;
+  document.getElementById('gift-name').value = ''; document.getElementById('gift-category').value = '';
+  document.getElementById('gift-max').value = '1'; document.getElementById('gift-img').value = '';
+  document.getElementById('gift-img-name').textContent = '';
+  submitBtn.disabled = false;
+  await saveGifts();
+  renderGiftGrid(); renderAdminDashboard();
+});
+
+document.getElementById('btn-form-cancel').addEventListener('click', () => {
+  editGiftId = null;
+  document.getElementById('form-label').textContent = 'Adicionar Presente';
+  document.getElementById('btn-form-submit').textContent = 'Adicionar';
+  document.getElementById('btn-form-cancel').classList.add('hidden');
+  document.getElementById('gift-name').value = ''; document.getElementById('gift-category').value = '';
+  document.getElementById('gift-max').value = '1'; document.getElementById('gift-img').value = '';
+  document.getElementById('gift-img-name').textContent = ''; formImgData = null;
+});
+
+function startEditGift(giftId) {
+  const gift = GIFTS.find(g => g.id === giftId); if (!gift) return;
+  editGiftId = giftId;
+  document.getElementById('gift-name').value = gift.name;
+  document.getElementById('gift-category').value = gift.category || '';
+  document.getElementById('gift-max').value = gift.maxChoices;
+  document.getElementById('form-label').textContent = 'Editar Presente';
+  document.getElementById('btn-form-submit').textContent = 'Guardar';
+  document.getElementById('btn-form-cancel').classList.remove('hidden');
+  document.getElementById('gift-img-name').textContent = ''; formImgData = null;
+  document.getElementById('gift-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+document.getElementById('btn-del-cancel').addEventListener('click', () => { document.getElementById('delete-overlay').classList.add('hidden'); });
+document.getElementById('btn-del-confirm').addEventListener('click', async () => {
+  if (!deleteGiftId) return;
+  const btn = document.getElementById('btn-del-confirm');
+  btn.disabled = true; btn.textContent = '...';
+  await supabaseClient.from('wedding_reservations').delete().eq('gift_id', deleteGiftId);
+  await supabaseClient.from('wedding_gifts').delete().eq('id', deleteGiftId);
+  deleteGiftId = null;
+  btn.disabled = false; btn.textContent = 'Eliminar';
+  document.getElementById('delete-overlay').classList.add('hidden');
+  await saveGifts();
+  renderGiftGrid(); renderAdminDashboard();
+  updateMessageFormVisibility();
+});
+
+function confirmDeleteGift(giftId) { deleteGiftId = giftId; document.getElementById('delete-overlay').classList.remove('hidden'); }
+
+// Reply Modal handlers
+document.getElementById('btn-reply-cancel').addEventListener('click', () => {
+  document.getElementById('reply-overlay').classList.add('hidden');
+  document.getElementById('reply-text').value = '';
+  document.getElementById('reply-error').classList.add('hidden');
+  replyMessageId = null;
+});
+
+document.getElementById('btn-reply-confirm').addEventListener('click', async () => {
+  const reply = document.getElementById('reply-text').value.trim();
+  if (!reply) {
+    document.getElementById('reply-error').classList.remove('hidden');
+    return;
+  }
+  const btn = document.getElementById('btn-reply-confirm');
+  btn.disabled = true; btn.textContent = '...';
+  const msg = messages.find(m => m.__backendId === replyMessageId);
+  if (msg) {
+    await supabaseClient
+      .from('wedding_messages')
+      .update({ reply })
+      .eq('id', replyMessageId);
+  }
+  btn.disabled = false; btn.textContent = 'Responder';
+  document.getElementById('reply-overlay').classList.add('hidden');
+  document.getElementById('reply-text').value = '';
+  document.getElementById('reply-error').classList.add('hidden');
+  replyMessageId = null;
+});
+
+function openReplyModal(msgId) {
+  const msg = messages.find(m => m.__backendId === msgId);
+  if (!msg) return;
+  replyMessageId = msgId;
+  document.getElementById('reply-text').value = msg.reply || '';
+  document.getElementById('reply-error').classList.add('hidden');
+  document.getElementById('reply-overlay').classList.remove('hidden');
+  document.getElementById('reply-text').focus();
+}
+
+// Delete Message Modal handlers
+document.getElementById('btn-del-msg-cancel').addEventListener('click', () => {
+  document.getElementById('delete-msg-overlay').classList.add('hidden');
+  deleteMessageId = null;
+});
+
+document.getElementById('btn-del-msg-confirm').addEventListener('click', async () => {
+  if (!deleteMessageId) return;
+  const btn = document.getElementById('btn-del-msg-confirm');
+  btn.disabled = true; btn.textContent = '...';
+  await supabaseClient.from('wedding_messages').delete().eq('id', deleteMessageId);
+  btn.disabled = false; btn.textContent = 'Eliminar';
+  document.getElementById('delete-msg-overlay').classList.add('hidden');
+  deleteMessageId = null;
+  await refreshFromSupabase();
+});
+
+function confirmDeleteMessage(msgId) {
+  deleteMessageId = msgId;
+  document.getElementById('delete-msg-overlay').classList.remove('hidden');
+}
+
+function renderAdminDashboard() {
+  const totalSlots = GIFTS.reduce((s, g) => s + g.maxChoices, 0);
+  const reserved = reservations.length;
+  document.getElementById('metric-total').textContent = GIFTS.length;
+  document.getElementById('metric-reserved').textContent = reserved;
+  document.getElementById('metric-progress').textContent = totalSlots ? Math.round((reserved / totalSlots) * 100) + '%' : '0%';
+
+  const gb = document.getElementById('admin-gifts-body'); gb.innerHTML = '';
+  GIFTS.forEach(g => {
+    const count = getReservationCount(g.id);
+    const tr = document.createElement('tr'); tr.className = 'border-t'; tr.style.borderColor = '#f7dccb';
+    tr.innerHTML = `<td class="p-3">${g.name}</td><td class="p-3">${g.category||'-'}</td><td class="p-3">${count}</td><td class="p-3">${g.maxChoices}</td><td class="p-3 flex gap-2"><button class="text-xs underline" style="color:#8b7355" onclick="startEditGift('${g.id}')">Editar</button><button class="text-xs underline text-red-600" onclick="confirmDeleteGift('${g.id}')">Eliminar</button></td>`;
+    gb.appendChild(tr);
+  });
+
+  const tbody = document.getElementById('admin-table-body'); tbody.innerHTML = '';
+  reservations.forEach(r => {
+    const tr = document.createElement('tr'); tr.className = 'border-t'; tr.style.borderColor = '#f7dccb';
+    tr.innerHTML = `<td class="p-3">${r.gift_name}</td><td class="p-3">${r.guest_name}</td><td class="p-3">${r.guest_phone||'-'}</td><td class="p-3 text-xs">${new Date(r.reserved_at).toLocaleDateString('pt')}</td><td class="p-3"><button class="text-xs underline text-red-600" onclick="cancelReservation('${r.__backendId}')">Cancelar</button></td>`;
+    tbody.appendChild(tr);
+  });
+
+  const msgBody = document.getElementById('admin-messages-body'); msgBody.innerHTML = '';
+  messages.forEach(m => {
+    const tr = document.createElement('tr'); tr.className = 'border-t'; tr.style.borderColor = '#f7dccb';
+    const likes = m.likes || 0;
+    const adminLiked = m.liked_by ? m.liked_by.split(',').includes('admin') : false;
+    tr.innerHTML = `
+      <td class="p-3">${m.author_name}</td>
+      <td class="p-3 text-sm">${m.message.substring(0, 50)}${m.message.length > 50 ? '...' : ''}</td>
+      <td class="p-3 text-xs">${new Date(m.created_at).toLocaleDateString('pt')}</td>
+      <td class="p-3 flex gap-2 flex-wrap">
+        <button class="text-xs underline" style="color:#8b7355" onclick="replyToMessage('${m.__backendId}')">${m.reply ? 'Editar' : 'Responder'}</button>
+        <button class="text-xs underline" style="color:#e76c6c" onclick="toggleLikeMessageAdmin('${m.__backendId}')">❤️ ${likes}</button>
+        <button class="text-xs underline text-red-600" onclick="deleteMessage('${m.__backendId}')">Eliminar</button>
+      </td>
+    `;
+    msgBody.appendChild(tr);
+  });
+}
+
+async function cancelReservation(backendId) {
+  const record = reservations.find(r => r.__backendId === backendId);
+  if (record) {
+    await supabaseClient.from('wedding_reservations').delete().eq('id', backendId);
+    if (currentGuestName && record.guest_name.toLowerCase() === currentGuestName.toLowerCase()) {
+      currentGuestName = null;
+      localStorage.removeItem('jm_guest_name');
+      updateMessageFormVisibility();
+    }
+    await refreshFromSupabase();
+  }
+}
+
+function updateMessageFormVisibility() {
+  const formContent = document.getElementById('msg-form-content');
+  const noReservation = document.getElementById('msg-no-reservation');
+  
+  if (currentGuestName && messagesEnabled) {
+    formContent.classList.remove('hidden');
+    noReservation.classList.add('hidden');
+  } else {
+    formContent.classList.add('hidden');
+    noReservation.classList.remove('hidden');
+  }
+}
+
+document.getElementById('btn-msg-submit').addEventListener('click', async () => {
+  const msg = document.getElementById('guest-message').value.trim();
+  const errorEl = document.getElementById('msg-error');
+  
+  if (!msg) { 
+    errorEl.textContent = 'Por favor, escreva uma mensagem.';
+    errorEl.classList.remove('hidden'); 
+    return; 
+  }
+  
+  const btn = document.getElementById('btn-msg-submit');
+  btn.disabled = true; btn.textContent = '...';
+  errorEl.classList.add('hidden');
+  
+  if (messages.length >= 999) { btn.disabled = false; btn.textContent = 'Enviar Recado'; return; }
+  
+  const result = await supabaseClient.from('wedding_messages').insert({
+    author_name: currentGuestName,
+    message: msg,
+    created_at: new Date().toISOString(),
+    likes: 0,
+    liked_by: '',
+    reply: ''
+  });
+  
+  btn.disabled = false; btn.textContent = 'Enviar Recado';
+  if (!result.error) {
+    document.getElementById('guest-message').value = '';
+    await refreshFromSupabase();
+  } else {
+    console.error(result.error);
+    errorEl.textContent = 'Não foi possível enviar o recado.';
+    errorEl.classList.remove('hidden');
+  }
+});
+
+async function replyToMessage(msgId) {
+  openReplyModal(msgId);
+}
+
+async function toggleLikeMessageAdmin(msgId) {
+  const msg = messages.find(m => m.__backendId === msgId);
+  if (!msg) return;
+  
+  let likedBy = msg.liked_by ? msg.liked_by.split(',') : [];
+  if (likedBy.includes('admin')) {
+    likedBy = likedBy.filter(l => l !== 'admin');
+    msg.likes = Math.max(0, (msg.likes || 1) - 1);
+  } else {
+    likedBy.push('admin');
+    msg.likes = (msg.likes || 0) + 1;
+  }
+  msg.liked_by = likedBy.join(',');
+  await supabaseClient
+    .from('wedding_messages')
+    .update({ likes: msg.likes, liked_by: msg.liked_by })
+    .eq('id', msgId);
+  await refreshFromSupabase();
+}
+
+async function deleteMessage(msgId) {
+  deleteMessageId = msgId;
+  document.getElementById('delete-msg-overlay').classList.remove('hidden');
+}
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0566fc8b98c66b7',t:'MTc4MDQwMzA4Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
