@@ -140,21 +140,18 @@
   </nav>
 
   <!-- Header -->
-  <header class="text-center relative z-10 pt-20 pb-4 px-4">
-    <div id="cover-photo-container" class="w-full h-48 sm:h-56 overflow-hidden bg-gray-200 rounded-2xl relative group mb-3">
+  <header class="text-center relative z-10 pt-20 pb-8 px-4">
+    <div id="cover-photo-container" class="w-full h-48 sm:h-56 overflow-hidden bg-gray-200 rounded-2xl relative group mb-8">
       <img id="cover-photo" class="hidden w-full h-full object-cover" alt="Foto de Capa">
       <div id="cover-placeholder" class="w-full h-full flex items-center justify-center" style="background: #f7dccb;">
         <span class="text-5xl">💍</span>
       </div>
       <button id="btn-edit-cover" class="hidden absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-medium text-sm rounded-2xl" style="background: rgba(139, 115, 85, 0.5);">Editar Capa</button>
     </div>
-
-    <!-- Profile photo + couple name -->
-    <div class="flex flex-col items-center mb-3 relative z-10">
-      <div id="couple-name-display" class="font-display text-2xl sm:text-3xl font-bold" style="color: #8b7355;">Lista de Presentes</div>
-      <div id="wedding-date-display" class="text-sm opacity-60 mt-1"></div>
+    <div class="py-8">
+      <h1 id="page-title" class="font-display text-3xl sm:text-4xl font-bold mb-3" style="color: #8b7355;">Lista de Presentes</h1>
+      <p id="page-subtitle" class="text-base sm:text-lg opacity-70">Ajude-nos a construir nosso lar com amor</p>
     </div>
-    <p id="page-subtitle" class="text-base sm:text-lg opacity-70 mb-2">Ajude-nos a construir nosso lar com amor</p>
   </header>
 
   <!-- Main Content -->
@@ -164,85 +161,36 @@
     <section id="guest-view">
       
       <!-- Welcome Card -->
-      <div id="welcome-card" class="card-base mb-8 sm:mb-10">
-        <p id="welcome-label" class="text-xs uppercase tracking-widest font-semibold mb-3" style="color: #b89a7a;">Bem-vindo(a)</p>
-        <h2 id="welcome-title" class="font-display text-2xl sm:text-3xl mb-4" style="color: #8b7355;">Lista de Presentes de Casamento</h2>
-        <p id="welcome-text1" class="text-sm leading-relaxed mb-4">Querido(a) convidado(a), a vossa presença neste dia tão especial é, para nós, o maior presente. Ainda assim, para quem nos quiser mimar com um gesto adicional, deixamos algumas opções, inteiramente facultativas e sem qualquer obrigação.</p>
-        <p id="welcome-text2" class="text-sm leading-relaxed mb-4">A nossa lista foi pensada com muito carinho e reflete o estilo que queremos dar ao nosso lar, privilegiando tons suaves e harmoniosos.</p>
+      <div class="card-base mb-8 sm:mb-10">
+        <p class="text-xs uppercase tracking-widest font-semibold mb-3" style="color: #b89a7a;">Bem-vindo(a)</p>
+        <h2 class="font-display text-2xl sm:text-3xl mb-4" style="color: #8b7355;">Lista de Presentes de Casamento</h2>
+        <p class="text-sm leading-relaxed mb-4">Querido(a) convidado(a), a vossa presença neste dia tão especial é, para nós, o maior presente. Ainda assim, para quem nos quiser mimar com um gesto adicional, deixamos algumas opções, inteiramente facultativas e sem qualquer obrigação.</p>
+        <p class="text-sm leading-relaxed mb-4">A nossa lista foi pensada com muito carinho e reflete o estilo que queremos dar ao nosso lar, privilegiando tons suaves e harmoniosos.</p>
         
         <!-- Quick Options -->
-        <div id="options-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-          <div id="option1-box" class="p-4 rounded-lg" style="background: #fff; border: 1px solid #f7dccb;">
-            <p id="option1-title" class="text-sm font-semibold mb-2">🎁 Lista de Presentes</p>
-            <p id="option1-desc" class="text-xs opacity-70">Consulte abaixo a seleção cuidadosa de presentes</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+          <div class="p-4 rounded-lg" style="background: #fff; border: 1px solid #f7dccb;">
+            <p class="text-sm font-semibold mb-2">🎁 Lista de Presentes</p>
+            <p class="text-xs opacity-70">Consulte abaixo a seleção cuidadosa de presentes</p>
           </div>
-          <div id="option2-box" class="p-4 rounded-lg" style="background: #fff; border: 1px solid #f7dccb;">
-            <p id="option2-title" class="text-sm font-semibold mb-2">🏪 Lojas Parceiras</p>
-            <p id="option2-desc" class="text-xs opacity-70">Disponíveis em Luanda e outras cidades</p>
+          <div class="p-4 rounded-lg" style="background: #fff; border: 1px solid #f7dccb;">
+            <p class="text-sm font-semibold mb-2">🏪 Lojas Parceiras</p>
+            <p class="text-xs opacity-70">Disponíveis em Luanda e outras cidades</p>
           </div>
-          <div id="option3-box" class="p-4 rounded-lg" style="background: #fff; border: 1px solid #f7dccb;">
-            <p id="option3-title" class="text-sm font-semibold mb-2">💳 Contribuição Livre</p>
-            <p id="option3-desc" class="text-xs opacity-70">Ou transferência bancária via IBAN</p>
+          <div class="p-4 rounded-lg" style="background: #fff; border: 1px solid #f7dccb;">
+            <p class="text-sm font-semibold mb-2">💳 Contribuição Livre</p>
+            <p class="text-xs opacity-70">Ou transferência bancária via IBAN</p>
           </div>
         </div>
 
-        <!-- Bank Accounts Section -->
-        <div id="bank-accounts-box" class="hidden mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-          <!-- National Account -->
-          <div id="national-account-box" class="hidden p-4 rounded-lg" style="background: #fff; border: 1px solid #f7dccb;">
-            <p class="text-xs font-semibold mb-3" style="color: #b89a7a;">Conta Nacional</p>
-            <div class="space-y-2 text-sm mb-3">
-              <div><span class="opacity-60 text-xs">Titular:</span><br><span id="nat-holder" class="font-medium"></span></div>
-              <div><span class="opacity-60 text-xs">Nº de Conta:</span>
-                <div class="flex items-center gap-2 mt-1">
-                  <code id="nat-account" class="flex-1 text-xs break-all p-1.5 rounded" style="background: #fdf8f5;"></code>
-                  <button onclick="copyText('nat-account','nat-copy-status')" class="btn-primary text-xs px-3 py-1.5">Copiar</button>
-                </div>
-              </div>
-              <div><span class="opacity-60 text-xs">IBAN:</span>
-                <div class="flex items-center gap-2 mt-1">
-                  <code id="nat-iban" class="flex-1 text-xs break-all p-1.5 rounded" style="background: #fdf8f5;"></code>
-                  <button onclick="copyText('nat-iban','nat-copy-status')" class="btn-primary text-xs px-3 py-1.5">Copiar</button>
-                </div>
-              </div>
-            </div>
-            <p id="nat-copy-status" class="hidden text-xs text-green-600">✓ Copiado!</p>
+        <!-- IBAN Section -->
+        <div id="iban-box" class="hidden mt-6 p-4 rounded-lg" style="background: #fff; border: 1px solid #f7dccb;">
+          <p class="text-xs font-semibold mb-2" style="color: #b89a7a;">IBAN para Contribuição</p>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <code id="iban-value" class="flex-1 text-sm break-all p-2 rounded" style="background: #fdf8f5;">-</code>
+            <button id="btn-copy-iban" class="btn-primary sm:w-auto">Copiar</button>
           </div>
-
-          <!-- International Account -->
-          <div id="intl-account-box" class="hidden p-4 rounded-lg" style="background: #fff; border: 1px solid #f7dccb;">
-            <p class="text-xs font-semibold mb-3" style="color: #b89a7a;">Conta Internacional</p>
-            <div class="space-y-2 text-sm mb-3">
-              <div><span class="opacity-60 text-xs">Titular:</span><br><span id="intl-holder" class="font-medium"></span></div>
-              <div><span class="opacity-60 text-xs">IBAN:</span>
-                <div class="flex items-center gap-2 mt-1">
-                  <code id="intl-iban" class="flex-1 text-xs break-all p-1.5 rounded" style="background: #fdf8f5;"></code>
-                  <button onclick="copyText('intl-iban','intl-copy-status')" class="btn-primary text-xs px-3 py-1.5">Copiar</button>
-                </div>
-              </div>
-              <div><span class="opacity-60 text-xs">Nº de Conta:</span>
-                <div class="flex items-center gap-2 mt-1">
-                  <code id="intl-account" class="flex-1 text-xs break-all p-1.5 rounded" style="background: #fdf8f5;"></code>
-                  <button onclick="copyText('intl-account','intl-copy-status')" class="btn-primary text-xs px-3 py-1.5">Copiar</button>
-                </div>
-              </div>
-              <div id="intl-nib-row" class="hidden"><span class="opacity-60 text-xs">NIB:</span>
-                <div class="flex items-center gap-2 mt-1">
-                  <code id="intl-nib" class="flex-1 text-xs break-all p-1.5 rounded" style="background: #fdf8f5;"></code>
-                  <button onclick="copyText('intl-nib','intl-copy-status')" class="btn-primary text-xs px-3 py-1.5">Copiar</button>
-                </div>
-              </div>
-              <div id="intl-swift-row" class="hidden"><span class="opacity-60 text-xs">BIC/SWIFT:</span>
-                <div class="flex items-center gap-2 mt-1">
-                  <code id="intl-swift" class="flex-1 text-xs break-all p-1.5 rounded" style="background: #fdf8f5;"></code>
-                  <button onclick="copyText('intl-swift','intl-copy-status')" class="btn-primary text-xs px-3 py-1.5">Copiar</button>
-                </div>
-              </div>
-            </div>
-            <p id="intl-copy-status" class="hidden text-xs text-green-600">✓ Copiado!</p>
-          </div>
-
+          <p id="iban-copy-status" class="hidden text-xs mt-2 text-green-600">✓ IBAN copiado!</p>
         </div>
       </div>
 
@@ -293,139 +241,36 @@
         <button id="btn-back-guest" class="btn-secondary">← Voltar</button>
       </div>
 
-      <!-- Settings Section Row 1: Cover + Couple Info -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <!-- Settings Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         
         <!-- Cover Photo -->
         <div class="card-base">
           <h3 class="font-semibold mb-4">📸 Foto de Capa</h3>
           <div class="flex flex-col gap-3">
             <label class="btn-primary cursor-pointer text-center">
-              Carregar Foto de Capa
+              Carregar Foto
               <input type="file" id="cover-upload" accept="image/*" class="hidden">
             </label>
-            <button id="btn-remove-cover" class="hidden btn-secondary text-red-600">Remover Capa</button>
+            <button id="btn-remove-cover" class="hidden btn-secondary text-red-600">Remover Foto</button>
           </div>
         </div>
 
-        <!-- Couple Info -->
+        <!-- IBAN Configuration -->
         <div class="card-base">
-          <h3 class="font-semibold mb-4">💑 Informações do Casal</h3>
+          <h3 class="font-semibold mb-4">💳 Contribuição Livre</h3>
           <div class="flex flex-col gap-3">
-            <input type="text" id="admin-couple-name" class="input-base" placeholder="Ex: Ivana & João">
-            <input type="text" id="admin-wedding-date" class="input-base" placeholder="Ex: 14 de Fevereiro de 2026">
-            <button id="btn-save-couple" class="btn-primary">Guardar Informações</button>
-            <p id="couple-admin-status" class="text-xs text-green-600 hidden">✓ Guardado!</p>
+            <input type="text" id="iban-input" placeholder="Ex: PT50 0068 0011 0000 0009 001" class="input-base">
+            <button id="btn-save-iban" class="btn-primary">Guardar IBAN</button>
           </div>
-        </div>
-
-      </div>
-
-      <!-- Share Link -->
-      <div class="card-base mb-6">
-        <h3 class="font-semibold mb-3">🔗 Link de Partilha</h3>
-        <p class="text-xs opacity-60 mb-3">Copie este link e partilhe com os vossos convidados.</p>
-        <div class="flex gap-2">
-          <code id="share-link-value" class="flex-1 text-xs break-all p-2 rounded" style="background: #fdf8f5;"></code>
-          <button onclick="copyShareLink()" class="btn-primary whitespace-nowrap">Copiar Link</button>
-        </div>
-        <p id="share-copy-status" class="hidden text-xs text-green-600 mt-2">✓ Link copiado!</p>
-      </div>
-
-      <!-- Section Visibility Toggles -->
-      <div class="card-base mb-6">
-        <h3 class="font-semibold mb-4">👁️ Visibilidade das Secções</h3>
-        <p class="text-xs opacity-60 mb-4">Ative ou desative partes da página de boas-vindas para os convidados.</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="visibility-toggles">
-          <!-- Rendered by JS -->
-        </div>
-      </div>
-
-      <!-- Page Texts -->
-      <div class="card-base mb-6">
-        <h3 class="font-semibold mb-4">✏️ Editar Textos da Página</h3>
-        <div class="flex flex-col gap-3">
-          <div>
-            <label class="text-xs font-medium opacity-70 block mb-1">Etiqueta "Bem-vindo(a)"</label>
-            <input type="text" id="admin-welcome-label" class="input-base w-full" placeholder="Bem-vindo(a)">
-          </div>
-          <div>
-            <label class="text-xs font-medium opacity-70 block mb-1">Título principal do card</label>
-            <input type="text" id="admin-welcome-title" class="input-base w-full" placeholder="Lista de Presentes de Casamento">
-          </div>
-          <div>
-            <label class="text-xs font-medium opacity-70 block mb-1">Parágrafo 1</label>
-            <textarea id="admin-welcome-text1" class="input-base w-full" rows="3" placeholder="Querido(a) convidado(a)..."></textarea>
-          </div>
-          <div>
-            <label class="text-xs font-medium opacity-70 block mb-1">Parágrafo 2</label>
-            <textarea id="admin-welcome-text2" class="input-base w-full" rows="2" placeholder="A nossa lista foi pensada..."></textarea>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="text-xs font-medium opacity-70 block mb-1">Caixa 1 – Título</label>
-              <input type="text" id="admin-option1-title" class="input-base w-full" placeholder="🎁 Lista de Presentes">
-            </div>
-            <div>
-              <label class="text-xs font-medium opacity-70 block mb-1">Caixa 1 – Descrição</label>
-              <input type="text" id="admin-option1-desc" class="input-base w-full" placeholder="Consulte abaixo...">
-            </div>
-            <div>
-              <label class="text-xs font-medium opacity-70 block mb-1">Caixa 2 – Título</label>
-              <input type="text" id="admin-option2-title" class="input-base w-full" placeholder="🏪 Lojas Parceiras">
-            </div>
-            <div>
-              <label class="text-xs font-medium opacity-70 block mb-1">Caixa 2 – Descrição</label>
-              <input type="text" id="admin-option2-desc" class="input-base w-full" placeholder="Disponíveis em Luanda...">
-            </div>
-            <div>
-              <label class="text-xs font-medium opacity-70 block mb-1">Caixa 3 – Título</label>
-              <input type="text" id="admin-option3-title" class="input-base w-full" placeholder="💳 Contribuição Livre">
-            </div>
-            <div>
-              <label class="text-xs font-medium opacity-70 block mb-1">Caixa 3 – Descrição</label>
-              <input type="text" id="admin-option3-desc" class="input-base w-full" placeholder="Ou transferência bancária...">
-            </div>
-          </div>
-          <button id="btn-save-texts" class="btn-primary">Guardar Textos</button>
-          <p id="texts-admin-status" class="text-xs text-green-600 hidden">✓ Textos guardados!</p>
-        </div>
-      </div>
-
-      <!-- Bank Accounts Config -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-
-        <!-- National Account -->
-        <div class="card-base">
-          <h3 class="font-semibold mb-4">🏦 Conta Nacional</h3>
-          <div class="flex flex-col gap-3">
-            <input type="text" id="nat-holder-input" class="input-base" placeholder="Titular da conta">
-            <input type="text" id="nat-account-input" class="input-base" placeholder="Número de Conta">
-            <input type="text" id="nat-iban-input" class="input-base" placeholder="IBAN Nacional">
-            <button id="btn-save-nat" class="btn-primary">Guardar Conta Nacional</button>
-            <p id="nat-admin-status" class="text-xs text-green-600 hidden">✓ Guardado!</p>
-          </div>
-        </div>
-
-        <!-- International Account -->
-        <div class="card-base">
-          <h3 class="font-semibold mb-4">🌍 Conta Internacional</h3>
-          <div class="flex flex-col gap-3">
-            <input type="text" id="intl-holder-input" class="input-base" placeholder="Titular da conta">
-            <input type="text" id="intl-iban-input" class="input-base" placeholder="IBAN Internacional">
-            <input type="text" id="intl-account-input" class="input-base" placeholder="Número de Conta">
-            <input type="text" id="intl-nib-input" class="input-base" placeholder="NIB (opcional)">
-            <input type="text" id="intl-swift-input" class="input-base" placeholder="BIC/SWIFT (opcional)">
-            <button id="btn-save-intl" class="btn-primary">Guardar Conta Internacional</button>
-            <p id="intl-admin-status" class="text-xs text-green-600 hidden">✓ Guardado!</p>
-          </div>
+          <p id="iban-admin-status" class="text-xs text-green-600 mt-2 hidden">✓ IBAN guardado com sucesso!</p>
         </div>
 
       </div>
 
       <!-- Gift Management -->
       <div class="card-base mb-8">
-        <h3 id="form-label" class="font-semibold mb-4">🎁 Gerenciar Presentes</h3>
+        <h3 class="font-semibold mb-4">🎁 Gerenciar Presentes</h3>
         
         <form id="gift-form" class="flex flex-col gap-3 mb-6">
           <input type="text" id="gift-name" placeholder="Nome do presente" class="input-base" required>
@@ -452,24 +297,6 @@
           <button id="btn-import-bulk-gifts" class="btn-primary mt-3 w-full">Importar Lista</button>
           <p id="bulk-gifts-status" class="text-xs mt-2 hidden"></p>
         </div>
-      </div>
-
-      <!-- Gifts Table -->
-      <div class="card-base mb-8 overflow-x-auto">
-        <h3 class="font-semibold mb-4">🎁 Lista de Presentes</h3>
-        <table class="w-full text-sm">
-          <thead style="background: #f7dccb;">
-            <tr>
-              <th class="p-3 text-left">Nome</th>
-              <th class="p-3 text-left">Categoria</th>
-              <th class="p-3 text-left">Reservas</th>
-              <th class="p-3 text-left">Limite</th>
-              <th class="p-3 text-left">Ações</th>
-            </tr>
-          </thead>
-          <tbody id="admin-gifts-body"></tbody>
-        </table>
-        <p id="empty-gifts-admin" class="text-center py-6 opacity-60 text-sm">Nenhum presente ainda</p>
       </div>
 
       <!-- Metrics -->
@@ -658,15 +485,6 @@
     let messages = [];
     let messagesEnabled = false;
     let contributionIban = '';
-    // bank account data
-    let bankNational = { holder: '', account: '', iban: '' };
-    let bankIntl = { holder: '', iban: '', account: '', nib: '', swift: '' };
-    // editable texts
-    let pageTexts = {};
-    // couple info
-    let coupleInfo = { name: '', date: '', profilePhoto: '' };
-    // section visibility (true = visible)
-    let sectionVisibility = {};
     let selectedGiftId = null;
     let deleteGiftId = null;
     let editGiftId = null;
@@ -777,25 +595,9 @@
         const settings = Object.fromEntries((settingsRes.data || []).map(s => [s.key, s.value]));
         messagesEnabled = settings.messages_enabled === true || settings.messages_enabled === 'true';
         contributionIban = String(settings.contribution_iban || '').trim();
-
-        // bank accounts
-        try { bankNational = JSON.parse(settings.bank_national || '{}'); } catch(e) { bankNational = {}; }
-        try { bankIntl = JSON.parse(settings.bank_intl || '{}'); } catch(e) { bankIntl = {}; }
-
-        // page texts
-        try { pageTexts = JSON.parse(settings.page_texts || '{}'); } catch(e) { pageTexts = {}; }
-
-        // couple info
-        try { coupleInfo = JSON.parse(settings.couple_info || '{}'); } catch(e) { coupleInfo = {}; }
-
-        // section visibility
-        try { sectionVisibility = JSON.parse(settings.section_visibility || '{}'); } catch(e) { sectionVisibility = {}; }
-
+        
         applyCoverPhoto(settings.cover_photo || '');
-        updateBankAccounts();
-        applyPageTexts();
-        applyCoupleInfo();
-        applySectionVisibility();
+        updateContributionIban();
 
         return true;
       } catch (error) {
@@ -832,16 +634,14 @@
 
       const reader = new FileReader();
       reader.onload = async (ev) => {
-        compressImage(ev.target.result, 1200, 0.8, async (compressed) => {
-          try {
-            await upsertSetting('cover_photo', compressed);
-            applyCoverPhoto(compressed);
-            showToast('✓ Capa atualizada!');
-          } catch (error) {
-            console.error(error);
-            showToast('❌ Erro ao guardar capa');
-          }
-        });
+        try {
+          await upsertSetting('cover_photo', ev.target.result);
+          applyCoverPhoto(ev.target.result);
+          showToast('✓ Capa atualizada!');
+        } catch (error) {
+          console.error(error);
+          showToast('❌ Erro ao guardar capa');
+        }
       };
       reader.readAsDataURL(file);
     });
@@ -882,331 +682,64 @@
     }
 
     // ============================================================================
-    // TEXTOS EDITÁVEIS
+    // IBANFICAR IBANFICAR IBAN
     // ============================================================================
 
-    const TEXT_FIELDS = [
-      { id: 'welcome-label',  key: 'welcomeLabel',  def: 'Bem-vindo(a)' },
-      { id: 'welcome-title',  key: 'welcomeTitle',  def: 'Lista de Presentes de Casamento' },
-      { id: 'welcome-text1',  key: 'welcomeText1',  def: 'Querido(a) convidado(a), a vossa presença neste dia tão especial é, para nós, o maior presente. Ainda assim, para quem nos quiser mimar com um gesto adicional, deixamos algumas opções, inteiramente facultativas e sem qualquer obrigação.' },
-      { id: 'welcome-text2',  key: 'welcomeText2',  def: 'A nossa lista foi pensada com muito carinho e reflete o estilo que queremos dar ao nosso lar, privilegiando tons suaves e harmoniosos.' },
-      { id: 'option1-title',  key: 'option1Title',  def: '🎁 Lista de Presentes' },
-      { id: 'option1-desc',   key: 'option1Desc',   def: 'Consulte abaixo a seleção cuidadosa de presentes' },
-      { id: 'option2-title',  key: 'option2Title',  def: '🏪 Lojas Parceiras' },
-      { id: 'option2-desc',   key: 'option2Desc',   def: 'Disponíveis em Luanda e outras cidades' },
-      { id: 'option3-title',  key: 'option3Title',  def: '💳 Contribuição Livre' },
-      { id: 'option3-desc',   key: 'option3Desc',   def: 'Ou transferência bancária via IBAN' },
-    ];
+    function updateContributionIban() {
+      const box = document.getElementById('iban-box');
+      const value = document.getElementById('iban-value');
+      const adminInput = document.getElementById('iban-input');
 
-    function applyPageTexts() {
-      TEXT_FIELDS.forEach(f => {
-        const el = document.getElementById(f.id);
-        if (el) el.textContent = pageTexts[f.key] || f.def;
-      });
-      // also fill admin inputs
-      TEXT_FIELDS.forEach(f => {
-        const adminEl = document.getElementById('admin-' + f.id);
-        if (adminEl) adminEl.value = pageTexts[f.key] || f.def;
-      });
-    }
+      if (adminInput) adminInput.value = contributionIban;
 
-    document.getElementById('btn-save-texts').addEventListener('click', async () => {
-      const btn = document.getElementById('btn-save-texts');
-      const status = document.getElementById('texts-admin-status');
-      btn.disabled = true;
-      btn.textContent = '...';
-
-      TEXT_FIELDS.forEach(f => {
-        const adminEl = document.getElementById('admin-' + f.id);
-        if (adminEl) pageTexts[f.key] = adminEl.value.trim() || f.def;
-      });
-
-      try {
-        await upsertSetting('page_texts', JSON.stringify(pageTexts));
-        applyPageTexts();
-        status.classList.remove('hidden');
-        setTimeout(() => status.classList.add('hidden'), 2500);
-        showToast('✓ Textos guardados!');
-      } catch (error) {
-        console.error(error);
-        showToast('❌ Erro ao guardar textos');
-      }
-
-      btn.disabled = false;
-      btn.textContent = 'Guardar Textos';
-    });
-
-    // ============================================================================
-    // COUPLE INFO
-    // ============================================================================
-
-    function applyCoupleInfo() {
-      const nameEl = document.getElementById('couple-name-display');
-      const dateEl = document.getElementById('wedding-date-display');
-
-      if (nameEl) nameEl.textContent = coupleInfo.name || 'Lista de Presentes';
-      if (dateEl) {
-        dateEl.textContent = coupleInfo.date || '';
-        dateEl.style.display = coupleInfo.date ? '' : 'none';
-      }
-
-      // fill admin inputs
-      const adminName = document.getElementById('admin-couple-name');
-      const adminDate = document.getElementById('admin-wedding-date');
-      if (adminName) adminName.value = coupleInfo.name || '';
-      if (adminDate) adminDate.value = coupleInfo.date || '';
-    }
-
-    // Click profile photo to upload (guest view) - removed
-
-    function compressImage(dataUrl, maxWidth, quality, callback) {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let w = img.width, h = img.height;
-        if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        callback(canvas.toDataURL('image/jpeg', quality));
-      };
-      img.src = dataUrl;
-    }
-
-    document.getElementById('btn-save-couple').addEventListener('click', async () => {
-      const btn = document.getElementById('btn-save-couple');
-      const status = document.getElementById('couple-admin-status');
-      btn.disabled = true; btn.textContent = '...';
-
-      coupleInfo.name = document.getElementById('admin-couple-name').value.trim();
-      coupleInfo.date = document.getElementById('admin-wedding-date').value.trim();
-
-      try {
-        await upsertSetting('couple_info', JSON.stringify(coupleInfo));
-        applyCoupleInfo();
-        status.classList.remove('hidden');
-        setTimeout(() => status.classList.add('hidden'), 2500);
-        showToast('✓ Informações guardadas!');
-      } catch (e) {
-        console.error(e);
-        showToast('❌ Erro ao guardar');
-      }
-      btn.disabled = false; btn.textContent = 'Guardar Informações';
-    });
-
-    // ============================================================================
-    // LINK DE PARTILHA
-    // ============================================================================
-
-    function initShareLink() {
-      const el = document.getElementById('share-link-value');
-      if (el) el.textContent = window.location.href;
-    }
-
-    function copyShareLink() {
-      const link = window.location.href;
-      navigator.clipboard.writeText(link).catch(() => {
-        const ta = document.createElement('textarea');
-        ta.value = link; document.body.appendChild(ta); ta.select();
-        document.execCommand('copy'); ta.remove();
-      });
-      const status = document.getElementById('share-copy-status');
-      if (status) { status.classList.remove('hidden'); setTimeout(() => status.classList.add('hidden'), 2000); }
-      showToast('✓ Link copiado!');
-    }
-
-    // ============================================================================
-    // VISIBILIDADE DE SECÇÕES
-    // ============================================================================
-
-    const SECTIONS = [
-      { key: 'showWelcomeCard',  label: 'Card de Boas-Vindas (inteiro)',  targetId: 'welcome-card' },
-      { key: 'showWelcomeLabel', label: 'Etiqueta "Bem-vindo(a)"',        targetId: 'welcome-label' },
-      { key: 'showWelcomeTitle', label: 'Título do card',                 targetId: 'welcome-title' },
-      { key: 'showWelcomeText1', label: 'Parágrafo 1',                    targetId: 'welcome-text1' },
-      { key: 'showWelcomeText2', label: 'Parágrafo 2',                    targetId: 'welcome-text2' },
-      { key: 'showOptionsGrid',  label: 'Caixinhas de opções (3)',        targetId: 'options-grid' },
-      { key: 'showOption1',      label: '↳ Caixa 1 (Presentes)',          targetId: 'option1-box' },
-      { key: 'showOption2',      label: '↳ Caixa 2 (Lojas)',              targetId: 'option2-box' },
-      { key: 'showOption3',      label: '↳ Caixa 3 (Contribuição)',       targetId: 'option3-box' },
-      { key: 'showBankAccounts', label: 'Contas Bancárias',               targetId: null },
-    ];
-
-    function getSectionVisible(key) {
-      return sectionVisibility[key] !== false; // default true
-    }
-
-    function applySectionVisibility() {
-      SECTIONS.forEach(s => {
-        if (!s.targetId) return;
-        const el = document.getElementById(s.targetId);
-        if (!el) return;
-        const visible = getSectionVisible(s.key);
-        el.style.display = visible ? '' : 'none';
-      });
-      // bank accounts special case
-      if (!getSectionVisible('showBankAccounts')) {
-        const box = document.getElementById('bank-accounts-box');
-        if (box) box.style.display = 'none';
-      }
-    }
-
-    function renderVisibilityToggles() {
-      const container = document.getElementById('visibility-toggles');
-      if (!container) return;
-
-      container.innerHTML = SECTIONS.map(s => {
-        const checked = getSectionVisible(s.key) ? 'checked' : '';
-        return `
-          <label class="flex items-center justify-between p-3 rounded-lg cursor-pointer gap-3" style="background: #fff; border: 1px solid #f7dccb;">
-            <span class="text-sm">${s.label}</span>
-            <input type="checkbox" ${checked} onchange="toggleSection('${s.key}', this.checked)" class="w-5 h-5 cursor-pointer flex-shrink-0">
-          </label>
-        `;
-      }).join('');
-    }
-
-    async function toggleSection(key, visible) {
-      sectionVisibility[key] = visible;
-      applySectionVisibility();
-      try {
-        await upsertSetting('section_visibility', JSON.stringify(sectionVisibility));
-        showToast(visible ? '✓ Secção ativada!' : '✓ Secção desativada!');
-      } catch(e) {
-        console.error(e);
-        showToast('❌ Erro ao guardar');
-      }
-    }
-
-    // ============================================================================
-    // CONTAS BANCÁRIAS
-    // ============================================================================
-
-    function updateBankAccounts() {
-      const box = document.getElementById('bank-accounts-box');
-      const natBox = document.getElementById('national-account-box');
-      const intlBox = document.getElementById('intl-account-box');
-
-      const hasNat = bankNational.iban || bankNational.account;
-      const hasIntl = bankIntl.iban || bankIntl.account;
-
-      if (hasNat || hasIntl) {
+      if (contributionIban) {
+        value.textContent = contributionIban;
         box.classList.remove('hidden');
-        box.className = 'mt-6 grid grid-cols-1 sm:grid-cols-' + (hasNat && hasIntl ? '2' : '1') + ' gap-4';
       } else {
         box.classList.add('hidden');
       }
-
-      if (hasNat) {
-        natBox.classList.remove('hidden');
-        setElText('nat-holder', bankNational.holder || '');
-        setElText('nat-account', bankNational.account || '');
-        setElText('nat-iban', bankNational.iban || '');
-      } else {
-        natBox.classList.add('hidden');
-      }
-
-      if (hasIntl) {
-        intlBox.classList.remove('hidden');
-        setElText('intl-holder', bankIntl.holder || '');
-        setElText('intl-iban', bankIntl.iban || '');
-        setElText('intl-account', bankIntl.account || '');
-        setElText('intl-nib', bankIntl.nib || '');
-        setElText('intl-swift', bankIntl.swift || '');
-        toggleRow('intl-nib-row', !!bankIntl.nib);
-        toggleRow('intl-swift-row', !!bankIntl.swift);
-      } else {
-        intlBox.classList.add('hidden');
-      }
-
-      // fill admin inputs
-      document.getElementById('nat-holder-input').value = bankNational.holder || '';
-      document.getElementById('nat-account-input').value = bankNational.account || '';
-      document.getElementById('nat-iban-input').value = bankNational.iban || '';
-      document.getElementById('intl-holder-input').value = bankIntl.holder || '';
-      document.getElementById('intl-iban-input').value = bankIntl.iban || '';
-      document.getElementById('intl-account-input').value = bankIntl.account || '';
-      document.getElementById('intl-nib-input').value = bankIntl.nib || '';
-      document.getElementById('intl-swift-input').value = bankIntl.swift || '';
     }
 
-    function setElText(id, val) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = val;
-    }
+    document.getElementById('btn-save-iban').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-save-iban');
+      const status = document.getElementById('iban-admin-status');
+      const iban = document.getElementById('iban-input').value.trim();
 
-    function toggleRow(id, show) {
-      const el = document.getElementById(id);
-      if (el) el.classList.toggle('hidden', !show);
-    }
-
-    function copyText(sourceId, statusId) {
-      const el = document.getElementById(sourceId);
-      const statusEl = document.getElementById(statusId);
-      if (!el) return;
-      const val = el.textContent.trim();
-      navigator.clipboard.writeText(val).catch(() => {
-        const ta = document.createElement('textarea');
-        ta.value = val;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
-      });
-      if (statusEl) {
-        statusEl.classList.remove('hidden');
-        setTimeout(() => statusEl.classList.add('hidden'), 2000);
-      }
-      showToast('✓ Copiado!');
-    }
-
-    document.getElementById('btn-save-nat').addEventListener('click', async () => {
-      const btn = document.getElementById('btn-save-nat');
-      const status = document.getElementById('nat-admin-status');
-      btn.disabled = true; btn.textContent = '...';
-
-      bankNational = {
-        holder: document.getElementById('nat-holder-input').value.trim(),
-        account: document.getElementById('nat-account-input').value.trim(),
-        iban: document.getElementById('nat-iban-input').value.trim(),
-      };
+      btn.disabled = true;
+      btn.textContent = '...';
 
       try {
-        await upsertSetting('bank_national', JSON.stringify(bankNational));
-        updateBankAccounts();
+        await upsertSetting('contribution_iban', iban);
+        contributionIban = iban;
+        updateContributionIban();
+        status.textContent = iban ? '✓ IBAN guardado!' : '✓ IBAN removido!';
         status.classList.remove('hidden');
         setTimeout(() => status.classList.add('hidden'), 2500);
-        showToast('✓ Conta Nacional guardada!');
+        showToast('✓ IBAN atualizado!');
       } catch (error) {
         console.error(error);
-        showToast('❌ Erro ao guardar');
+        showToast('❌ Erro ao guardar IBAN');
       }
-      btn.disabled = false; btn.textContent = 'Guardar Conta Nacional';
+
+      btn.disabled = false;
+      btn.textContent = 'Guardar IBAN';
     });
 
-    document.getElementById('btn-save-intl').addEventListener('click', async () => {
-      const btn = document.getElementById('btn-save-intl');
-      const status = document.getElementById('intl-admin-status');
-      btn.disabled = true; btn.textContent = '...';
-
-      bankIntl = {
-        holder: document.getElementById('intl-holder-input').value.trim(),
-        iban: document.getElementById('intl-iban-input').value.trim(),
-        account: document.getElementById('intl-account-input').value.trim(),
-        nib: document.getElementById('intl-nib-input').value.trim(),
-        swift: document.getElementById('intl-swift-input').value.trim(),
-      };
+    document.getElementById('btn-copy-iban').addEventListener('click', async () => {
+      if (!contributionIban) return;
 
       try {
-        await upsertSetting('bank_intl', JSON.stringify(bankIntl));
-        updateBankAccounts();
-        status.classList.remove('hidden');
-        setTimeout(() => status.classList.add('hidden'), 2500);
-        showToast('✓ Conta Internacional guardada!');
-      } catch (error) {
-        console.error(error);
-        showToast('❌ Erro ao guardar');
+        await navigator.clipboard.writeText(contributionIban);
+        showToast('✓ IBAN copiado!');
+      } catch (e) {
+        const textarea = document.createElement('textarea');
+        textarea.value = contributionIban;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        textarea.remove();
+        showToast('✓ IBAN copiado!');
       }
-      btn.disabled = false; btn.textContent = 'Guardar Conta Internacional';
     });
 
     // ============================================================================
@@ -1239,7 +772,7 @@
       grid.innerHTML = Object.entries(groups).map(([category, gifts]) => {
         const cardsHtml = gifts.map(gift => renderGiftCard(gift)).join('');
         const gridClass = currentViewMode === 'grid' 
-          ? 'grid grid-cols-2 gap-4'
+          ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'
           : 'grid grid-cols-1 gap-3';
 
         return `
@@ -1469,8 +1002,6 @@
       document.getElementById('messages-section').classList.add('hidden');
       document.getElementById('admin-view').classList.remove('hidden');
       renderAdminDashboard();
-      renderVisibilityToggles();
-      initShareLink();
       lucide.createIcons();
     }
 
@@ -2061,9 +1592,6 @@
     // ============================================================================
 
     function renderAdminDashboard() {
-      // Guard: only run if admin panel is visible
-      if (document.getElementById('admin-view').classList.contains('hidden')) return;
-
       const totalSlots = GIFTS.reduce((sum, g) => sum + g.maxChoices, 0);
       const reserved = reservations.length;
       const progress = totalSlots ? Math.round((reserved / totalSlots) * 100) : 0;
@@ -2089,7 +1617,6 @@
           </tr>
         `;
       }).join('');
-      document.getElementById('empty-gifts-admin').style.display = GIFTS.length ? 'none' : 'block';
 
       // Reservations Table
       const resBody = document.getElementById('admin-table-body');
