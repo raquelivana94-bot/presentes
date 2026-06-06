@@ -1363,6 +1363,15 @@
     function updateMessageFormVisibility() {
       const form = document.getElementById('msg-form-content');
       const noRes = document.getElementById('msg-no-reservation');
+      const container = document.getElementById('messages-form-container');
+
+      // Se recados desativados e não é admin: esconde o container todo
+      if (!messagesEnabled && !isLoggedIn) {
+        if (container) container.style.display = 'none';
+        return;
+      }
+      if (container) container.style.display = 'block';
+
       const guestOwnMsg = messages.find(m => m.author_name && m.author_name.toLowerCase() === (currentGuestName || '').toLowerCase());
       if (currentGuestName && messagesEnabled && !guestOwnMsg) {
         form.classList.remove('hidden'); noRes.classList.add('hidden');
@@ -1375,8 +1384,13 @@
       const section = document.getElementById('messages-section');
       const msgList = document.getElementById('messages-list');
       const empty = document.getElementById('empty-messages');
-      if (!messagesEnabled && !isLoggedIn) { section.style.display = 'none'; return; }
-      else { section.style.display = 'block'; }
+
+      // Se recados desativados e não é admin: esconde tudo completamente
+      if (!messagesEnabled && !isLoggedIn) {
+        section.style.display = 'none';
+        return;
+      }
+      section.style.display = 'block';
 
       if (messages.length === 0) {
         msgList.innerHTML = '';
