@@ -1,0 +1,1515 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Lista de Presentes J&amp;M</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { overflow-x: hidden; }
+    body {
+      font-family: 'Raleway', sans-serif;
+      background: #fdf6f1;
+      color: #a0694f;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+    }
+    .font-display { font-family: 'Playfair Display', serif; }
+
+    /* Botanical decorations — smaller on mobile */
+    .botanical-leaf {
+      position: fixed; top: -30px; right: -30px; width: 140px; height: 140px;
+      background: radial-gradient(ellipse at 70% 30%, rgba(231,191,179,0.35) 0%, transparent 70%);
+      border-radius: 0 0 0 100%;
+      pointer-events: none; z-index: 0;
+    }
+    .botanical-leaf-bl {
+      position: fixed; bottom: -30px; left: -30px; width: 120px; height: 120px;
+      background: radial-gradient(ellipse at 30% 70%, rgba(247,220,203,0.4) 0%, transparent 70%);
+      border-radius: 0 100% 0 0;
+      pointer-events: none; z-index: 0;
+    }
+    @media (min-width: 640px) {
+      .botanical-leaf { width: 220px; height: 220px; top: -40px; right: -40px; }
+      .botanical-leaf-bl { width: 180px; height: 180px; bottom: -40px; left: -40px; }
+    }
+
+    /* Toast — full width on mobile, fixed width on desktop */
+    .toast {
+      position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+      background: #a0694f; color: white;
+      padding: 12px 20px; border-radius: 10px;
+      z-index: 9999; animation: slideUp 0.3s ease-out;
+      font-size: 14px; white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    @media (min-width: 640px) {
+      .toast { left: auto; right: 20px; transform: none; animation: slideIn 0.3s ease-out; }
+    }
+    @keyframes slideUp { from { transform: translateX(-50%) translateY(60px); opacity:0; } to { transform: translateX(-50%) translateY(0); opacity:1; } }
+    @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    /* All inputs — comfortable tap targets on mobile */
+    input, textarea, select, button {
+      font-family: 'Raleway', sans-serif;
+      -webkit-appearance: none;
+    }
+    input[type="text"], input[type="tel"], input[type="number"], input[type="password"], textarea {
+      font-size: 16px; /* prevents iOS zoom on focus */
+      width: 100%;
+    }
+    button { touch-action: manipulation; }
+
+    /* Tables scroll on mobile */
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; border: 1px solid #e7bfb3; }
+    .table-wrap table { min-width: 480px; width: 100%; text-align: left; font-size: 13px; }
+
+    /* Gift card hover only on non-touch */
+    @media (hover: hover) {
+      .gift-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    }
+    .gift-btn:active { transform: scale(0.98); }
+
+    /* Smooth transitions */
+    .transition-smooth { transition: all 0.2s ease; }
+  </style>
+</head>
+<body class="min-h-screen relative">
+  <div class="botanical-leaf"></div>
+  <div class="botanical-leaf-bl"></div>
+
+  <!-- NAV — fixed, full width, comfortable height -->
+  <nav class="fixed top-0 left-0 right-0 z-50 h-14 sm:h-16 flex items-center justify-end px-3 sm:px-6 gap-2" style="background:#fdf6f1;border-bottom:1px solid #e7bfb3;">
+    <button id="btn-admin-access" class="text-xs sm:text-sm px-3 py-2 sm:py-1.5 rounded-lg font-medium transition-smooth" style="color:#a0694f;border:1px solid #e7bfb3;min-height:36px;">Área dos Noivos</button>
+    <button id="btn-logout" class="hidden text-xs sm:text-sm px-3 py-2 sm:py-1.5 rounded-lg font-medium transition-smooth" style="color:#a0694f;border:1px solid #e7bfb3;min-height:36px;">Sair</button>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="text-center relative z-10 pt-14 sm:pt-16">
+    <div id="cover-photo-container" class="w-full overflow-hidden relative" style="height:180px;">
+      <img id="cover-photo" class="hidden w-full h-full object-cover" alt="Foto de Capa">
+      <div id="cover-placeholder" class="w-full h-full flex items-center justify-center" style="background:#f7dccb;"></div>
+      <button id="btn-edit-cover" class="hidden absolute inset-0 w-full h-full flex items-center justify-center text-white font-medium text-sm opacity-80 hover:opacity-100 transition-smooth" style="background:rgba(160,105,79,0.5);">Editar Capa</button>
+    </div>
+    <div class="py-8 sm:py-12 px-4">
+      <h1 class="font-display text-2xl sm:text-3xl lg:text-4xl font-bold" style="color:#a0694f;">Lista de Presentes de Casamento</h1>
+      <p class="mt-2 text-sm sm:text-base opacity-70">A nossa lista foi pensada com muito carinho </p>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="w-full max-w-5xl mx-auto px-3 sm:px-5 lg:px-4 pb-12 relative z-10">
+
+    <!-- GUEST VIEW -->
+    <section id="guest-view">
+
+      <!-- Welcome card -->
+      <div class="mb-6 sm:mb-8 p-4 sm:p-6 rounded-2xl border" style="border-color:#e7bfb3;background:#fff9f5;">
+        <p class="text-xs uppercase tracking-widest font-semibold mb-2" style="color:#c9a898;">Querido(a) convidado(a)</p>
+        <p class="text-sm leading-relaxed mb-3">A vossa presença neste dia tão especial é, para nós, o maior presente. Ainda assim, para quem nos quiser mimar com um gesto adicional, deixamos algumas opções, inteiramente facultativas e sem qualquer obrigação.</p>
+        <p class="text-sm leading-relaxed mb-4">A nossa lista foi pensada com muito carinho e reflete o estilo que queremos dar ao nosso lar, privilegiando tons suaves e harmoniosos, com especial preferência por <strong>branco, bege e azul claro</strong>.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <div class="p-3 sm:p-4 rounded-xl" style="background:#fdf6f1;border:1px solid #f7dccb;">
+            <p class="text-sm font-semibold mb-1" style="color:#a0694f;">Lista de Presentes</p>
+            <p class="text-xs leading-relaxed opacity-70">Consulte abaixo a nossa seleção cuidadosamente preparada</p>
+          </div>
+          <div class="p-3 sm:p-4 rounded-xl" style="background:#fdf6f1;border:1px solid #f7dccb;">
+            <p class="text-sm font-semibold mb-1" style="color:#a0694f;">Lojas Parceiras em Luanda</p>
+            <ul id="stores-list" class="text-xs leading-relaxed opacity-70 space-y-0.5 mt-1"></ul>
+            <p id="stores-empty" class="text-xs opacity-50 italic hidden">Em breve</p>
+          </div>
+          <div class="p-3 sm:p-4 rounded-xl" style="background:#fdf6f1;border:1px solid #f7dccb;">
+            <p class="text-sm font-semibold mb-1" style="color:#a0694f;">Contribuição Livre</p>
+            <p class="text-xs opacity-70 mb-2">Transferência bancária via IBAN</p>
+            <div id="bank-accounts-guest" class="space-y-2"></div>
+            <p id="bank-empty-msg" class="text-xs opacity-50 italic">Dados bancários em breve</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- View toggle -->
+      <div class="flex items-center justify-end mb-4 sm:mb-5">
+        <div class="flex items-center gap-1 rounded-full p-1" style="background:#e7bfb3;">
+          <button id="btn-view-grid" class="px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-smooth" style="background:#fff9f5;color:#a0694f;">Grelha</button>
+          <button id="btn-view-list" class="px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-smooth" style="color:#a0694f;">Lista</button>
+        </div>
+      </div>
+
+      <div id="gift-grid"></div>
+      <p id="empty-guest" class="text-center py-12 opacity-60 text-sm">Nenhum presente na lista ainda.</p>
+    </section>
+
+    <!-- MESSAGES SECTION -->
+    <section id="messages-section" class="mt-12 sm:mt-16">
+      <h2 class="font-display text-xl sm:text-2xl mb-4 sm:mb-6" style="color:#a0694f;">Recados &amp; Bênçãos</h2>
+      <div id="messages-form-container" class="mb-6 sm:mb-8 p-4 sm:p-5 rounded-2xl border" style="border-color:#e7bfb3;background:#fff9f5;">
+        <p id="msg-no-reservation" class="text-center py-5 text-sm" style="color:#c9a898;">Escolha um presente primeiro para deixar um recado.</p>
+        <div id="msg-form-content" class="hidden">
+          <p class="text-sm font-medium block mb-2" style="color:#a0694f;">Deixe um recado *</p>
+          <textarea id="guest-message" placeholder="Escreva aqui os seus desejos e bênçãos..." class="w-full border rounded-xl px-3 py-3 mb-3 focus:outline-none focus:ring-2 focus:ring-[#e7bfb3] text-sm" style="border-color:#e7bfb3;min-height:90px;resize:vertical;"></textarea>
+          <button id="btn-msg-submit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl text-white text-sm font-medium transition-smooth gift-btn" style="background:#a0694f;">Enviar Recado</button>
+          <p id="msg-error" class="text-red-500 text-xs mt-2 hidden">Por favor, escreva uma mensagem.</p>
+        </div>
+      </div>
+      <div id="messages-list" class="space-y-3 sm:space-y-4"></div>
+      <p id="empty-messages" class="text-center py-8 opacity-60 text-sm">Ainda não há recados. Seja o primeiro a deixar um!</p>
+    </section>
+
+    <!-- ADMIN VIEW -->
+    <section id="admin-view" class="hidden">
+      <div class="flex items-center justify-between mb-5 flex-wrap gap-2">
+        <h2 class="font-display text-xl sm:text-2xl" style="color:#a0694f;">Painel dos Noivos</h2>
+        <button id="btn-back-guest" class="text-sm underline px-2 py-1" style="color:#a0694f;">← Voltar à Lista</button>
+      </div>
+
+      <!-- Cover photo -->
+      <div class="mb-5 p-4 rounded-2xl border" style="border-color:#e7bfb3;background:#fff9f5;">
+        <p class="text-sm font-medium mb-3" style="color:#a0694f;">Foto de Capa</p>
+        <div class="flex flex-wrap items-center gap-2">
+          <label class="cursor-pointer px-4 py-2.5 rounded-xl text-sm text-white font-medium transition-smooth gift-btn" style="background:#a0694f;">
+            Carregar Foto
+            <input type="file" id="cover-upload" accept="image/*" class="hidden">
+          </label>
+          <button id="btn-remove-cover" class="hidden text-sm underline" style="color:#e76c6c;">Remover foto</button>
+        </div>
+      </div>
+
+      <!-- Lojas Parceiras -->
+      <div class="mb-5 p-4 rounded-2xl border" style="border-color:#e7bfb3;background:#fff9f5;">
+        <p class="text-sm font-medium mb-3" style="color:#a0694f;">Lojas Parceiras</p>
+        <div id="admin-stores-list" class="space-y-2 mb-3"></div>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <input type="text" id="store-name-input" placeholder="Nome da loja (ex: Dakaza)" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
+          <input type="text" id="store-location-input" placeholder="Localização (ex: Belas Shopping)" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
+          <button id="btn-add-store" class="px-4 py-2.5 rounded-xl text-white text-sm font-medium transition-smooth gift-btn whitespace-nowrap" style="background:#a0694f;">+ Adicionar</button>
+        </div>
+        <p id="stores-admin-status" class="text-xs text-green-600 mt-2 hidden">Guardado!</p>
+      </div>
+
+      <!-- Contas Bancárias -->
+      <div class="mb-5 p-4 rounded-2xl border" style="border-color:#e7bfb3;background:#fff9f5;">
+        <p class="text-sm font-medium mb-3" style="color:#a0694f;">Contas Bancárias</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div class="p-3 rounded-xl" style="border:1px solid #f7dccb;">
+            <p class="text-xs font-semibold mb-2" style="color:#c9a898;">Conta Nacional</p>
+            <div class="flex flex-col gap-2">
+              <input type="text" id="bank-national-holder" placeholder="Titular" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
+              <input type="text" id="bank-national-account" placeholder="Número de conta" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
+              <input type="text" id="bank-national-iban" placeholder="IBAN Nacional" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
+            </div>
+          </div>
+          <div class="p-3 rounded-xl" style="border:1px solid #f7dccb;">
+            <p class="text-xs font-semibold mb-2" style="color:#c9a898;">Conta Internacional</p>
+            <div class="flex flex-col gap-2">
+              <input type="text" id="bank-intl-holder" placeholder="Titular" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
+              <input type="text" id="bank-intl-iban" placeholder="IBAN Internacional" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
+              <input type="text" id="bank-intl-account" placeholder="Número de conta" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
+              <input type="text" id="bank-intl-nib" placeholder="NIB" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
+              <input type="text" id="bank-intl-swift" placeholder="BIC/SWIFT" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
+            </div>
+          </div>
+        </div>
+        <button id="btn-save-bank" class="w-full py-3 rounded-xl text-white text-sm font-medium transition-smooth gift-btn" style="background:#a0694f;">Guardar Dados Bancários</button>
+        <p id="bank-admin-status" class="text-xs text-green-600 mt-2 hidden">Dados guardados!</p>
+        <input type="hidden" id="iban-input">
+      </div>
+
+      <!-- Gift Form -->
+      <div class="mb-5 p-4 rounded-2xl border" style="border-color:#e7bfb3;background:#fff9f5;">
+        <p id="form-label" class="text-sm font-medium mb-3" style="color:#a0694f;">Adicionar Presente</p>
+        <form id="gift-form" class="flex flex-col gap-3">
+          <input type="text" id="gift-name" placeholder="Nome do presente" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;" required>
+          <input type="text" id="gift-category" placeholder="Categoria (ex: Cozinha)" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
+          <div class="flex flex-wrap gap-2">
+            <input type="number" id="gift-max" placeholder="Limite" min="1" value="1" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;width:80px;">
+            <label class="cursor-pointer px-3 py-2.5 rounded-xl text-sm border flex items-center gap-1 transition-smooth" style="border-color:#e7bfb3;color:#a0694f;">
+              <i data-lucide="image" style="width:15px;height:15px;"></i> Foto
+              <input type="file" id="gift-img" accept="image/*" class="hidden">
+            </label>
+            <button type="submit" id="btn-form-submit" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-white text-sm font-medium transition-smooth gift-btn" style="background:#a0694f;">Adicionar</button>
+            <button type="button" id="btn-form-cancel" class="hidden flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-sm border transition-smooth" style="border-color:#e7bfb3;color:#a0694f;">Cancelar</button>
+          </div>
+        </form>
+        <p id="gift-img-name" class="text-xs mt-1 opacity-60"></p>
+
+        <!-- Bulk Import -->
+        <div class="mt-4 p-3 sm:p-4 rounded-xl" style="background:#fdf6f1;border:1px solid #f7dccb;">
+          <p class="text-sm font-semibold mb-2" style="color:#a0694f;">Importar Lista em Massa</p>
+          <textarea id="bulk-gifts-input" placeholder="Ex:&#10;Pequenos Eletrodomésticos&#10;• Torradeira&#10;• Chaleira&#10;&#10;Essenciais&#10;• Panelas" class="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;min-height:100px;resize:vertical;"></textarea>
+          <button id="btn-import-bulk-gifts" class="mt-2 w-full py-2.5 rounded-xl text-white text-sm font-medium transition-smooth gift-btn" style="background:#a0694f;">Importar Lista</button>
+          <p id="bulk-gifts-status" class="text-xs mt-2 hidden"></p>
+        </div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-5">
+        <div class="rounded-2xl p-3 sm:p-5 text-center border" style="border-color:#e7bfb3;background:#fff9f5;">
+          <p class="text-xs sm:text-sm opacity-70 mb-1">Total</p>
+          <p id="metric-total" class="text-2xl sm:text-3xl font-bold" style="color:#a0694f;">0</p>
+        </div>
+        <div class="rounded-2xl p-3 sm:p-5 text-center border" style="border-color:#e7bfb3;background:#fff9f5;">
+          <p class="text-xs sm:text-sm opacity-70 mb-1">Reservados</p>
+          <p id="metric-reserved" class="text-2xl sm:text-3xl font-bold" style="color:#a0694f;">0</p>
+        </div>
+        <div class="rounded-2xl p-3 sm:p-5 text-center border" style="border-color:#e7bfb3;background:#fff9f5;">
+          <p class="text-xs sm:text-sm opacity-70 mb-1">Progresso</p>
+          <p id="metric-progress" class="text-2xl sm:text-3xl font-bold" style="color:#a0694f;">0%</p>
+        </div>
+      </div>
+
+      <!-- Gifts Table -->
+      <p class="text-sm font-medium mb-2" style="color:#a0694f;">Lista de Presentes</p>
+      <div class="table-wrap mb-5">
+        <table>
+          <thead style="background:#f7dccb;">
+            <tr>
+              <th class="p-3">Presente</th>
+              <th class="p-3">Categoria</th>
+              <th class="p-3">Reservas</th>
+              <th class="p-3">Limite</th>
+              <th class="p-3">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="admin-gifts-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Reservations Table -->
+      <p class="text-sm font-medium mb-2" style="color:#a0694f;">Reservas</p>
+      <div class="table-wrap mb-5">
+        <table>
+          <thead style="background:#f7dccb;">
+            <tr>
+              <th class="p-3">Presente</th>
+              <th class="p-3">Convidado</th>
+              <th class="p-3">Telefone</th>
+              <th class="p-3">Data</th>
+              <th class="p-3">Ação</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body"></tbody>
+        </table>
+        <p id="empty-reservations" class="text-center py-5 opacity-60 text-sm">Nenhuma reserva ainda</p>
+      </div>
+
+      <!-- Messages toggle -->
+      <div class="mb-5 p-4 rounded-2xl border flex items-center justify-between gap-3" style="border-color:#e7bfb3;background:#fff9f5;">
+        <div>
+          <p class="text-sm font-medium" style="color:#a0694f;">Ativar Recados</p>
+          <p class="text-xs opacity-70 mt-0.5">Convidados podem deixar mensagens</p>
+        </div>
+        <label class="cursor-pointer flex items-center gap-2 flex-shrink-0">
+          <input type="checkbox" id="toggle-messages" class="w-5 h-5 cursor-pointer">
+          <span class="text-sm" style="color:#a0694f;">Ativado</span>
+        </label>
+      </div>
+
+      <!-- Messages Table -->
+      <p class="text-sm font-medium mb-2" style="color:#a0694f;">Recados dos Convidados</p>
+      <div class="table-wrap mb-8">
+        <table>
+          <thead style="background:#f7dccb;">
+            <tr>
+              <th class="p-3">Autor</th>
+              <th class="p-3">Recado</th>
+              <th class="p-3">Data</th>
+              <th class="p-3">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="admin-messages-body"></tbody>
+        </table>
+        <p id="empty-messages-admin" class="text-center py-5 opacity-60 text-sm">Nenhuma mensagem ainda</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODALS — bottom sheet on mobile, centered on desktop -->
+
+  <!-- Reservation -->
+  <div id="modal-overlay" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" style="background:rgba(0,0,0,0.35);" onclick="if(event.target.id==='modal-overlay') document.getElementById('modal-overlay').classList.add('hidden')">
+    <div class="rounded-t-3xl sm:rounded-2xl w-full sm:max-w-sm shadow-2xl p-5 sm:p-6" style="background:#fff9f5;" onclick="event.stopPropagation()">
+      <div class="w-10 h-1 rounded-full mx-auto mb-4 sm:hidden" style="background:#e7bfb3;"></div>
+      <h3 class="font-display text-lg text-center mb-1" style="color:#a0694f;">Reservar Presente</h3>
+      <p id="modal-gift-name" class="text-center text-sm mb-4 opacity-70"></p>
+      <label class="text-sm font-medium block mb-1" style="color:#a0694f;">Seu nome *</label>
+      <input id="guest-name-input" type="text" class="w-full border rounded-xl px-3 py-3 mb-3 focus:outline-none focus:ring-2 focus:ring-[#e7bfb3] text-sm" style="border-color:#e7bfb3;" placeholder="Ex: Tia Maria">
+      <label class="text-sm font-medium block mb-1" style="color:#a0694f;">Número de telefone *</label>
+      <input id="guest-phone-input" type="tel" class="w-full border rounded-xl px-3 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-[#e7bfb3] text-sm" style="border-color:#e7bfb3;" placeholder="Ex: 923 456 789">
+      <div class="flex gap-3">
+        <button id="btn-modal-cancel" class="flex-1 py-3 rounded-xl border text-sm font-medium" style="border-color:#e7bfb3;color:#a0694f;">Cancelar</button>
+        <button id="btn-modal-confirm" class="flex-1 py-3 rounded-xl text-white text-sm font-medium transition-smooth gift-btn" style="background:#a0694f;">Confirmar</button>
+      </div>
+      <p id="modal-error" class="text-red-500 text-xs mt-2 hidden text-center">Por favor, preencha o nome e o telefone.</p>
+    </div>
+  </div>
+
+  <!-- Login -->
+  <div id="password-overlay" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" style="background:rgba(0,0,0,0.35);" onclick="if(event.target.id==='password-overlay') document.getElementById('password-overlay').classList.add('hidden')">
+    <div class="rounded-t-3xl sm:rounded-2xl w-full sm:max-w-xs shadow-2xl p-5 sm:p-6" style="background:#fff9f5;" onclick="event.stopPropagation()">
+      <div class="w-10 h-1 rounded-full mx-auto mb-4 sm:hidden" style="background:#e7bfb3;"></div>
+      <h3 class="font-display text-lg mb-4 text-center" style="color:#a0694f;">Área dos Noivos</h3>
+      <input id="username-input" type="text" class="w-full border rounded-xl px-3 py-3 mb-3 focus:outline-none focus:ring-2 focus:ring-[#e7bfb3] text-sm" style="border-color:#e7bfb3;" placeholder="Utilizador">
+      <div class="relative mb-3">
+        <input id="password-input" type="password" class="w-full border rounded-xl px-3 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-[#e7bfb3] text-sm" style="border-color:#e7bfb3;" placeholder="Senha">
+        <button type="button" id="btn-toggle-password" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100 p-1">
+          <i data-lucide="eye" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+      <p id="pw-error" class="text-red-500 text-xs mb-3 hidden text-center">Credenciais incorretas.</p>
+      <div class="flex gap-3">
+        <button id="btn-pw-cancel" class="flex-1 py-3 rounded-xl border text-sm font-medium" style="border-color:#e7bfb3;color:#a0694f;">Cancelar</button>
+        <button id="btn-pw-ok" class="flex-1 py-3 rounded-xl text-white text-sm font-medium transition-smooth gift-btn" style="background:#a0694f;">Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete gift -->
+  <div id="delete-overlay" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" style="background:rgba(0,0,0,0.35);" onclick="if(event.target.id==='delete-overlay') document.getElementById('delete-overlay').classList.add('hidden')">
+    <div class="rounded-t-3xl sm:rounded-2xl w-full sm:max-w-xs shadow-2xl p-5 sm:p-6 text-center" style="background:#fff9f5;" onclick="event.stopPropagation()">
+      <div class="w-10 h-1 rounded-full mx-auto mb-4 sm:hidden" style="background:#e7bfb3;"></div>
+      <p class="text-sm mb-5" style="color:#a0694f;">Tem certeza que deseja eliminar este presente?</p>
+      <div class="flex gap-3">
+        <button id="btn-del-cancel" class="flex-1 py-3 rounded-xl border text-sm font-medium" style="border-color:#e7bfb3;color:#a0694f;">Cancelar</button>
+        <button id="btn-del-confirm" class="flex-1 py-3 rounded-xl text-white text-sm font-medium bg-red-500">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reply -->
+  <div id="reply-overlay" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" style="background:rgba(0,0,0,0.35);" onclick="if(event.target.id==='reply-overlay') document.getElementById('reply-overlay').classList.add('hidden')">
+    <div class="rounded-t-3xl sm:rounded-2xl w-full sm:max-w-sm shadow-2xl p-5 sm:p-6" style="background:#fff9f5;" onclick="event.stopPropagation()">
+      <div class="w-10 h-1 rounded-full mx-auto mb-4 sm:hidden" style="background:#e7bfb3;"></div>
+      <h3 class="font-display text-lg mb-3" style="color:#a0694f;">Responder ao Recado</h3>
+      <textarea id="reply-text" placeholder="Digite a resposta dos noivos..." class="w-full border rounded-xl px-3 py-3 mb-3 focus:outline-none focus:ring-2 focus:ring-[#e7bfb3] text-sm" style="border-color:#e7bfb3;min-height:80px;resize:vertical;"></textarea>
+      <p id="reply-error" class="text-red-500 text-xs mb-2 hidden">Por favor, escreva uma resposta.</p>
+      <div class="flex gap-3">
+        <button id="btn-reply-cancel" class="flex-1 py-3 rounded-xl border text-sm font-medium" style="border-color:#e7bfb3;color:#a0694f;">Cancelar</button>
+        <button id="btn-reply-confirm" class="flex-1 py-3 rounded-xl text-white text-sm font-medium transition-smooth gift-btn" style="background:#a0694f;">Responder</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit own message -->
+  <div id="edit-msg-overlay" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" style="background:rgba(0,0,0,0.35);" onclick="if(event.target.id==='edit-msg-overlay') document.getElementById('edit-msg-overlay').classList.add('hidden')">
+    <div class="rounded-t-3xl sm:rounded-2xl w-full sm:max-w-sm shadow-2xl p-5 sm:p-6" style="background:#fff9f5;" onclick="event.stopPropagation()">
+      <div class="w-10 h-1 rounded-full mx-auto mb-4 sm:hidden" style="background:#e7bfb3;"></div>
+      <h3 class="font-display text-lg mb-3" style="color:#a0694f;">Editar Recado</h3>
+      <textarea id="edit-msg-text" placeholder="Escreva o seu recado..." class="w-full border rounded-xl px-3 py-3 mb-3 focus:outline-none focus:ring-2 focus:ring-[#e7bfb3] text-sm" style="border-color:#e7bfb3;min-height:80px;resize:vertical;"></textarea>
+      <p id="edit-msg-error" class="text-red-500 text-xs mb-2 hidden">Por favor, escreva uma mensagem.</p>
+      <div class="flex gap-3">
+        <button id="btn-edit-msg-cancel" class="flex-1 py-3 rounded-xl border text-sm font-medium" style="border-color:#e7bfb3;color:#a0694f;">Cancelar</button>
+        <button id="btn-edit-msg-confirm" class="flex-1 py-3 rounded-xl text-white text-sm font-medium transition-smooth gift-btn" style="background:#a0694f;">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete message -->
+  <div id="delete-msg-overlay" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" style="background:rgba(0,0,0,0.35);" onclick="if(event.target.id==='delete-msg-overlay') document.getElementById('delete-msg-overlay').classList.add('hidden')">
+    <div class="rounded-t-3xl sm:rounded-2xl w-full sm:max-w-xs shadow-2xl p-5 sm:p-6 text-center" style="background:#fff9f5;" onclick="event.stopPropagation()">
+      <div class="w-10 h-1 rounded-full mx-auto mb-4 sm:hidden" style="background:#e7bfb3;"></div>
+      <p class="text-sm mb-5" style="color:#a0694f;">Deseja eliminar este recado?</p>
+      <div class="flex gap-3">
+        <button id="btn-del-msg-cancel" class="flex-1 py-3 rounded-xl border text-sm font-medium" style="border-color:#e7bfb3;color:#a0694f;">Cancelar</button>
+        <button id="btn-del-msg-confirm" class="flex-1 py-3 rounded-xl text-white text-sm font-medium bg-red-500">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================================
+    // CONFIGURAÇÃO SUPABASE (do Layout V2)
+    // ============================================================================
+    const SUPABASE_URL = 'https://uspirobzmeywizilmokn.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzcGlyb2J6bWV5d2l6aWxtb2tuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MzYxNjcsImV4cCI6MjA5NjExMjE2N30.TCZnoIACHt2zPCv5wag3E0S4IfJNrC6n1Mehyvj99DQ';
+    const ADMIN_USERNAME = 'IvanaR2026';
+    const ADMIN_EMAIL = 'ivanar2026@admin.local';
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ============================================================================
+    // ESTADO GLOBAL
+    // ============================================================================
+    let GIFTS = [];
+    let reservations = [];
+    let messages = [];
+    let messagesEnabled = false;
+    let contributionIban = '';
+    let selectedGiftId = null;
+    let deleteGiftId = null;
+    let editGiftId = null;
+    let formImgData = null;
+    let currentViewMode = localStorage.getItem('jm_view_mode') || 'grid';
+    let isLoggedIn = false;
+    let replyMessageId = null;
+    let editMessageId = null;
+    let deleteMessageId = null;
+    let currentGuestName = localStorage.getItem('jm_guest_name') || null;
+
+    // ============================================================================
+    // UTILITÁRIOS
+    // ============================================================================
+
+    function escapeHtml(text) {
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+      return String(text || '').replace(/[&<>"']/g, char => map[char]);
+    }
+
+    function showToast(message, duration = 3000) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), duration);
+    }
+
+    function formatDate(dateString) {
+      return new Date(dateString).toLocaleDateString('pt-PT');
+    }
+
+    // ============================================================================
+    // SUPABASE DATA LOADING
+    // ============================================================================
+
+    async function loadSupabaseData() {
+      try {
+        const [giftsRes, reservationsRes, messagesRes, settingsRes] = await Promise.all([
+          supabaseClient.from('wedding_gifts').select('*').order('created_at', { ascending: true }),
+          supabaseClient.from('wedding_reservations_public').select('*').order('reserved_at', { ascending: false }),
+          supabaseClient.from('wedding_messages').select('*').order('created_at', { ascending: false }),
+          supabaseClient.from('wedding_settings').select('key,value')
+        ]);
+
+        if (giftsRes.error) throw giftsRes.error;
+        if (reservationsRes.error) throw reservationsRes.error;
+        if (messagesRes.error) throw messagesRes.error;
+        if (settingsRes.error) throw settingsRes.error;
+
+        GIFTS = (giftsRes.data || []).map(g => ({
+          id: g.id, name: g.name, img: g.img || '',
+          maxChoices: g.max_choices || 1, category: g.category || ''
+        }));
+
+        reservations = (reservationsRes.data || []).map(r => ({ ...r, __backendId: r.id }));
+        messages = (messagesRes.data || []).map(m => ({ ...m, __backendId: m.id }));
+
+        const settings = Object.fromEntries((settingsRes.data || []).map(s => [s.key, s.value]));
+        messagesEnabled = settings.messages_enabled === true || settings.messages_enabled === 'true';
+        contributionIban = String(settings.contribution_iban || '').trim();
+
+        applyCoverPhoto(settings.cover_photo || '');
+
+        // Lojas
+        try { storesList = settings.stores_list ? JSON.parse(settings.stores_list) : []; } catch(e) { storesList = []; }
+        if (!settings.stores_list) {
+          storesList = [
+            {name:'Dakaza', location:'Luanda Centro e Maxi'},
+            {name:'Vista Alegre', location:'Belas Shopping'},
+            {name:'Casa Ferreira', location:'Shopping Talatona'},
+            {name:'Kinda Home', location:'Belas Shopping'},
+            {name:'Luxury', location:'Belas Shopping'},
+            {name:'Espaço Coisas', location:'Belas Shopping'}
+          ];
+        }
+        renderStoresGuest();
+
+        // Dados bancários
+        try { bankData = settings.bank_data ? JSON.parse(settings.bank_data) : { national:{holder:'',account:'',iban:''}, international:{holder:'',iban:'',account:'',nib:'',swift:''} }; }
+        catch(e) { bankData = { national:{holder:'',account:'',iban:''}, international:{holder:'',iban:'',account:'',nib:'',swift:''} }; }
+        // Pre-fill defaults if empty (primeira vez)
+        if (!settings.bank_data) {
+          bankData = {
+            national: { holder: 'IVANA RAQUEL MADEIRA DE ALMEIDA', account: '1004 2661 97', iban: 'AO06 0060 0146 0100 4266 1976 2' },
+            international: { holder: 'IVANA RAQUEL MADEIRA ALMEIDA', iban: 'PT50003300004548473531005', account: '45484735310', nib: '0033 0000 45484735310 05', swift: 'BCOMPTPL' }
+          };
+        }
+        renderBankGuest();
+
+        return true;
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+        showToast('Erro: Erro ao conectar com Supabase');
+        return false;
+      }
+    }
+
+    async function refreshFromSupabase() {
+      const success = await loadSupabaseData();
+      if (success) {
+        renderGiftGrid();
+        renderMessagesSection();
+        updateMessageFormVisibility();
+        if (isLoggedIn) renderAdminDashboard();
+      }
+    }
+
+    async function upsertSetting(key, value) {
+      const { error } = await supabaseClient
+        .from('wedding_settings')
+        .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+      if (error) throw error;
+    }
+
+    // ============================================================================
+    // FOTO DE CAPA
+    // ============================================================================
+
+    function applyCoverPhoto(photoUrl) {
+      const img = document.getElementById('cover-photo');
+      const placeholder = document.getElementById('cover-placeholder');
+      const editBtn = document.getElementById('btn-edit-cover');
+      const removeBtn = document.getElementById('btn-remove-cover');
+      if (photoUrl) {
+        img.src = photoUrl;
+        img.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+      } else {
+        img.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+      }
+      // Botões de editar/remover só visíveis para os noivos (admin)
+      if (isLoggedIn && photoUrl) {
+        editBtn.classList.remove('hidden');
+        removeBtn.classList.remove('hidden');
+      } else {
+        editBtn.classList.add('hidden');
+        removeBtn.classList.add('hidden');
+      }
+    }
+
+    document.getElementById('cover-upload').addEventListener('change', async function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async (ev) => {
+        try {
+          await upsertSetting('cover_photo', ev.target.result);
+          applyCoverPhoto(ev.target.result);
+          showToast('Capa atualizada!');
+        } catch (error) {
+          console.error(error);
+          showToast('Erro: Erro ao guardar capa');
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('btn-remove-cover').addEventListener('click', async () => {
+      try {
+        await upsertSetting('cover_photo', '');
+        applyCoverPhoto('');
+        showToast('Capa removida!');
+      } catch (error) {
+        console.error(error);
+        showToast('Erro: Erro ao remover capa');
+      }
+    });
+
+    document.getElementById('btn-edit-cover').addEventListener('click', () => {
+      document.getElementById('cover-upload').click();
+    });
+
+    // ============================================================================
+    // IBAN
+    // ============================================================================
+
+    // ============================================================================
+    // LOJAS PARCEIRAS
+    // ============================================================================
+
+    let storesList = []; // [{name, location}]
+
+    function renderStoresGuest() {
+      const ul = document.getElementById('stores-list');
+      const empty = document.getElementById('stores-empty');
+      if (!ul) return;
+      if (!storesList.length) {
+        ul.innerHTML = '';
+        if (empty) empty.classList.remove('hidden');
+        return;
+      }
+      if (empty) empty.classList.add('hidden');
+      ul.innerHTML = storesList.map(s =>
+        `<li>• ${escapeHtml(s.name)}${s.location ? ` <span class="opacity-60">(${escapeHtml(s.location)})</span>` : ''}</li>`
+      ).join('');
+    }
+
+    function renderStoresAdmin() {
+      const container = document.getElementById('admin-stores-list');
+      if (!container) return;
+      if (!storesList.length) { container.innerHTML = '<p class="text-xs opacity-50 italic">Nenhuma loja adicionada ainda</p>'; return; }
+      container.innerHTML = storesList.map((s, i) => `
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 p-2 rounded-lg" style="background:#fdf6f1;border:1px solid #f7dccb">
+          <input type="text" value="${escapeHtml(s.name)}" onchange="updateStore(${i},'name',this.value)"
+            class="flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-[#e7bfb3] w-full sm:w-auto" style="border-color:#e7bfb3;" placeholder="Nome da loja">
+          <input type="text" value="${escapeHtml(s.location || '')}" onchange="updateStore(${i},'location',this.value)"
+            class="flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-[#e7bfb3] w-full sm:w-auto" style="border-color:#e7bfb3;" placeholder="Localização">
+          <div class="flex gap-2 flex-shrink-0">
+            <button onclick="saveStoreEdit(${i})" class="text-xs px-2 py-1 rounded text-white" style="background:#a0694f">Guardar</button>
+            <button onclick="removeStore(${i})" class="text-xs px-2 py-1 rounded text-white bg-red-500">Remover</button>
+          </div>
+        </div>`
+      ).join('');
+    }
+
+    function updateStore(index, field, value) {
+      storesList[index][field] = value;
+    }
+
+    async function saveStoreEdit(index) {
+      try {
+        await saveStores();
+        renderStoresGuest();
+        showToast('Loja atualizada!');
+      } catch(e) { console.error(e); showToast('Erro: Erro ao guardar'); }
+    }
+
+    async function saveStores() {
+      await upsertSetting('stores_list', JSON.stringify(storesList));
+    }
+
+    async function removeStore(index) {
+      storesList.splice(index, 1);
+      await saveStores();
+      renderStoresGuest();
+      renderStoresAdmin();
+      showToast('Loja removida!');
+    }
+
+    document.getElementById('btn-add-store').addEventListener('click', async () => {
+      const nameEl = document.getElementById('store-name-input');
+      const locEl = document.getElementById('store-location-input');
+      const status = document.getElementById('stores-admin-status');
+      const name = nameEl.value.trim();
+      const location = locEl.value.trim();
+      if (!name) { showToast('Erro: Escreva o nome da loja'); return; }
+      storesList.push({ name, location });
+      nameEl.value = ''; locEl.value = '';
+      try {
+        await saveStores();
+        renderStoresGuest();
+        renderStoresAdmin();
+        status.classList.remove('hidden');
+        setTimeout(() => status.classList.add('hidden'), 2000);
+        showToast('Loja adicionada!');
+      } catch(e) { console.error(e); showToast('Erro: Erro ao guardar loja'); }
+    });
+
+    // ============================================================================
+    // CONTAS BANCÁRIAS
+    // ============================================================================
+
+    let bankData = {
+      national: { holder: '', account: '', iban: '' },
+      international: { holder: '', iban: '', account: '', nib: '', swift: '' }
+    };
+
+    function copyToClipboard(text, btnEl) {
+      const original = btnEl.textContent;
+      const copy = async () => {
+        try { await navigator.clipboard.writeText(text); }
+        catch(e) {
+          const ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          document.execCommand('copy'); ta.remove();
+        }
+        btnEl.textContent = 'Copiado!';
+        setTimeout(() => { btnEl.textContent = original; }, 2000);
+      };
+      copy();
+    }
+
+    function renderBankGuest() {
+      const container = document.getElementById('bank-accounts-guest');
+      const emptyMsg = document.getElementById('bank-empty-msg');
+      if (!container) return;
+
+      const nat = bankData.national;
+      const intl = bankData.international;
+      const hasNat = nat.iban || nat.account;
+      const hasIntl = intl.iban || intl.account;
+
+      if (!hasNat && !hasIntl) {
+        container.innerHTML = '';
+        if (emptyMsg) emptyMsg.classList.remove('hidden');
+        return;
+      }
+      if (emptyMsg) emptyMsg.classList.add('hidden');
+
+      let html = '';
+
+      if (hasNat) {
+        html += `<div class="mb-3">
+          <p class="text-xs font-semibold mb-2" style="color:#a0694f">Conta Nacional</p>
+          <div class="space-y-1">`;
+        if (nat.holder) html += bankRow('Titular', nat.holder);
+        if (nat.account) html += bankRow('N.º Conta', nat.account);
+        if (nat.iban) html += bankRow('IBAN', nat.iban);
+        html += `</div></div>`;
+      }
+
+      if (hasIntl) {
+        html += `<div>
+          <p class="text-xs font-semibold mb-2" style="color:#a0694f">Conta Internacional</p>
+          <div class="space-y-1">`;
+        if (intl.holder) html += bankRow('Titular', intl.holder);
+        if (intl.iban) html += bankRow('IBAN', intl.iban);
+        if (intl.account) html += bankRow('N.º Conta', intl.account);
+        if (intl.nib) html += bankRow('NIB', intl.nib);
+        if (intl.swift) html += bankRow('BIC/SWIFT', intl.swift);
+        html += `</div></div>`;
+      }
+
+      container.innerHTML = html;
+
+      // attach copy listeners
+      container.querySelectorAll('[data-copy]').forEach(btn => {
+        btn.addEventListener('click', () => copyToClipboard(btn.dataset.copy, btn));
+      });
+    }
+
+    function bankRow(label, value) {
+      return `<div class="flex items-center justify-between gap-2 p-2 rounded text-xs" style="background:#fdf6f1">
+        <span class="opacity-60 flex-shrink-0">${label}:</span>
+        <span class="font-medium text-right break-all flex-1">${escapeHtml(value)}</span>
+        <button data-copy="${escapeHtml(value)}" class="flex-shrink-0 px-2 py-1 rounded text-white text-xs" style="background:#a0694f">Copiar</button>
+      </div>`;
+    }
+
+    function loadBankToAdminForm() {
+      const f = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+      f('bank-national-holder', bankData.national.holder);
+      f('bank-national-account', bankData.national.account);
+      f('bank-national-iban', bankData.national.iban);
+      f('bank-intl-holder', bankData.international.holder);
+      f('bank-intl-iban', bankData.international.iban);
+      f('bank-intl-account', bankData.international.account);
+      f('bank-intl-nib', bankData.international.nib);
+      f('bank-intl-swift', bankData.international.swift);
+    }
+
+    document.getElementById('btn-save-bank').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-save-bank');
+      const status = document.getElementById('bank-admin-status');
+      btn.disabled = true; btn.textContent = '...';
+      const g = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+      bankData = {
+        national: { holder: g('bank-national-holder'), account: g('bank-national-account'), iban: g('bank-national-iban') },
+        international: { holder: g('bank-intl-holder'), iban: g('bank-intl-iban'), account: g('bank-intl-account'), nib: g('bank-intl-nib'), swift: g('bank-intl-swift') }
+      };
+      try {
+        await upsertSetting('bank_data', JSON.stringify(bankData));
+        renderBankGuest();
+        status.classList.remove('hidden');
+        setTimeout(() => status.classList.add('hidden'), 2500);
+        showToast('Dados bancários guardados!');
+      } catch(e) { console.error(e); showToast('Erro: Erro ao guardar dados'); }
+      btn.disabled = false; btn.textContent = 'Guardar Dados Bancários';
+    });
+
+    function updateIbanDisplay() { renderBankGuest(); } // compat alias
+
+    // ============================================================================
+    // MODO DE VISUALIZAÇÃO
+    // ============================================================================
+
+    document.getElementById('btn-view-grid').addEventListener('click', () => {
+      currentViewMode = 'grid';
+      localStorage.setItem('jm_view_mode', 'grid');
+      updateViewModeButtons();
+      renderGiftGrid();
+    });
+
+    document.getElementById('btn-view-list').addEventListener('click', () => {
+      currentViewMode = 'list';
+      localStorage.setItem('jm_view_mode', 'list');
+      updateViewModeButtons();
+      renderGiftGrid();
+    });
+
+    function updateViewModeButtons() {
+      const g = document.getElementById('btn-view-grid');
+      const l = document.getElementById('btn-view-list');
+      if (currentViewMode === 'grid') { g.style.background = '#fff9f5'; l.style.background = 'transparent'; }
+      else { l.style.background = '#fff9f5'; g.style.background = 'transparent'; }
+    }
+
+    // ============================================================================
+    // PRESENTES - RENDERIZAÇÃO (Layout 1 card style)
+    // ============================================================================
+
+    function getReservationCount(giftId) {
+      return reservations.filter(r => r.gift_id === giftId).length;
+    }
+
+    function renderGiftGrid() {
+      const grid = document.getElementById('gift-grid');
+      const empty = document.getElementById('empty-guest');
+
+      if (GIFTS.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+      grid.className = ''; // categories handle their own layout
+
+      // Group by category
+      const grouped = {};
+      GIFTS.forEach(gift => {
+        const cat = gift.category || 'Outros Presentes';
+        if (!grouped[cat]) grouped[cat] = [];
+        grouped[cat].push(gift);
+      });
+
+      grid.innerHTML = Object.entries(grouped).map(([category, gifts]) => {
+        const cardsHtml = gifts.map(gift => renderGiftCard(gift)).join('');
+        const gridClass = currentViewMode === 'grid'
+          ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'
+          : 'grid grid-cols-1 sm:grid-cols-2 gap-3';
+        return `
+          <div class="mb-10">
+            <div class="flex items-end justify-between mb-4 pb-2 border-b" style="border-color:#e7bfb3;">
+              <h3 class="font-display text-xl font-bold" style="color:#a0694f;">${escapeHtml(category)}</h3>
+              <span class="text-xs opacity-60">${gifts.length} presente(s)</span>
+            </div>
+            <div class="${gridClass}">${cardsHtml}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderGiftCard(gift) {
+      const count = getReservationCount(gift.id);
+      const isFull = count >= gift.maxChoices;
+      const guestHasReserved = currentGuestName && reservations.some(
+        r => r.gift_id === gift.id && r.guest_name.toLowerCase() === currentGuestName.toLowerCase()
+      );
+      const disabled = isFull || guestHasReserved;
+
+      if (currentViewMode === 'grid') {
+        const imgHtml = gift.img
+          ? `<img src="${escapeHtml(gift.img)}" alt="${escapeHtml(gift.name)}" class="w-full h-44 object-cover" loading="lazy">`
+          : `<div class="w-full h-44 flex items-center justify-center" style="background:#f7dccb"><span style="font-size:1.5rem;opacity:0.4;">•</span></div>`;
+        return `<div class="rounded-2xl overflow-hidden shadow-sm border relative" style="border-color:#e7bfb3;background:#fff9f5;">
+          ${imgHtml}
+          <div class="p-4 ${disabled ? 'blur-sm' : ''}">
+            <h3 class="font-medium text-sm mb-2" style="color:#a0694f">${escapeHtml(gift.name)}</h3>
+            <p class="text-xs mb-3" style="color:#c9a898">${count}/${gift.maxChoices} reservado(s)</p>
+            <button class="w-full py-2.5 rounded-lg text-sm font-medium transition ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90 active:scale-95'}"
+              style="background:${disabled ? '#d9ccc6' : '#e7bfb3'};color:#a0694f"
+              ${disabled ? 'disabled' : ''} onclick="openModal('${escapeHtml(gift.id)}')">
+              ${guestHasReserved ? 'Já Ofereceu' : (isFull ? 'Indisponível' : 'Oferecer')}
+            </button>
+          </div>
+          ${disabled ? `<div class="absolute inset-0 flex items-center justify-center rounded-2xl pointer-events-none"><span class="text-base font-semibold px-4 py-2 rounded-lg text-white" style="background:#a0694f">${guestHasReserved ? 'Sua Escolha' : 'Já escolhido'}</span></div>` : ''}
+        </div>`;
+      } else {
+        const imgHtml = gift.img
+          ? `<img src="${escapeHtml(gift.img)}" alt="${escapeHtml(gift.name)}" class="w-20 h-20 object-cover rounded flex-shrink-0" loading="lazy">`
+          : `<div class="w-20 h-20 flex items-center justify-center rounded flex-shrink-0" style="background:#f7dccb"><span style="opacity:0.3;">•</span></div>`;
+        return `<div class="flex items-start gap-3 p-3 rounded-lg border" style="border-color:#e7bfb3;background:#fff9f5;">
+          ${imgHtml}
+          <div class="flex-1 min-w-0 ${disabled ? 'opacity-60' : ''}">
+            <h3 class="font-medium text-sm mb-1" style="color:#a0694f">${escapeHtml(gift.name)}</h3>
+            <p class="text-xs mb-2" style="color:#c9a898">${count}/${gift.maxChoices} reservado(s)</p>
+            <button class="w-full py-2 rounded-lg text-xs font-medium transition ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90 active:scale-95'}"
+              style="background:${disabled ? '#d9ccc6' : '#e7bfb3'};color:#a0694f"
+              ${disabled ? 'disabled' : ''} onclick="openModal('${escapeHtml(gift.id)}')">
+              ${guestHasReserved ? 'Já Ofereceu' : (isFull ? 'Indisponível' : 'Oferecer')}
+            </button>
+          </div>
+        </div>`;
+      }
+    }
+
+    // ============================================================================
+    // MODAL DE RESERVA
+    // ============================================================================
+
+    function openModal(giftId) {
+      selectedGiftId = giftId;
+      const gift = GIFTS.find(g => g.id === giftId);
+      document.getElementById('modal-gift-name').textContent = gift.name;
+      document.getElementById('guest-name-input').value = currentGuestName || '';
+      document.getElementById('guest-phone-input').value = '';
+      document.getElementById('modal-error').classList.add('hidden');
+      document.getElementById('modal-overlay').classList.remove('hidden');
+      document.getElementById('guest-name-input').focus();
+    }
+
+    document.getElementById('btn-modal-cancel').addEventListener('click', () => {
+      document.getElementById('modal-overlay').classList.add('hidden');
+      selectedGiftId = null;
+    });
+
+    document.getElementById('btn-modal-confirm').addEventListener('click', async () => {
+      const name = document.getElementById('guest-name-input').value.trim();
+      const phone = document.getElementById('guest-phone-input').value.trim();
+      if (!name || !phone) { document.getElementById('modal-error').classList.remove('hidden'); return; }
+
+      const btn = document.getElementById('btn-modal-confirm');
+      btn.disabled = true; btn.textContent = '...';
+
+      try {
+        const gift = GIFTS.find(g => g.id === selectedGiftId);
+        const { error } = await supabaseClient.from('wedding_reservations').insert({
+          gift_id: selectedGiftId, gift_name: gift.name, gift_category: gift.category || '',
+          guest_name: name, guest_phone: phone, reserved_at: new Date().toISOString()
+        });
+        if (error) throw error;
+        currentGuestName = name;
+        localStorage.setItem('jm_guest_name', name);
+        document.getElementById('modal-overlay').classList.add('hidden');
+        selectedGiftId = null;
+        await refreshFromSupabase();
+        updateMessageFormVisibility();
+        showToast('Presente reservado com sucesso!');
+      } catch (error) {
+        console.error(error);
+        document.getElementById('modal-error').textContent = 'Erro ao reservar presente.';
+        document.getElementById('modal-error').classList.remove('hidden');
+      }
+
+      btn.disabled = false; btn.textContent = 'Confirmar';
+    });
+
+    // ============================================================================
+    // AUTENTICAÇÃO (Supabase do V2)
+    // ============================================================================
+
+    document.getElementById('btn-admin-access').addEventListener('click', () => {
+      if (isLoggedIn) {
+        showAdminPanel();
+      } else {
+        document.getElementById('password-overlay').classList.remove('hidden');
+        document.getElementById('username-input').value = '';
+        document.getElementById('password-input').value = '';
+        document.getElementById('password-input').type = 'password';
+        document.getElementById('pw-error').classList.add('hidden');
+        document.getElementById('username-input').focus();
+      }
+    });
+
+    document.getElementById('btn-toggle-password').addEventListener('click', function() {
+      const input = document.getElementById('password-input');
+      const icon = this.querySelector('i');
+      if (input.type === 'password') { input.type = 'text'; icon.setAttribute('data-lucide', 'eye-off'); }
+      else { input.type = 'password'; icon.setAttribute('data-lucide', 'eye'); }
+      lucide.createIcons();
+    });
+
+    document.getElementById('btn-pw-cancel').addEventListener('click', () => {
+      document.getElementById('password-overlay').classList.add('hidden');
+    });
+
+    document.getElementById('btn-pw-ok').addEventListener('click', async () => {
+      const user = document.getElementById('username-input').value.trim();
+      const pw = document.getElementById('password-input').value;
+      const btn = document.getElementById('btn-pw-ok');
+      btn.disabled = true; btn.textContent = '...';
+      try {
+        const email = user === ADMIN_USERNAME ? ADMIN_EMAIL : user;
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password: pw });
+        if (error) throw error;
+        isLoggedIn = true;
+        document.getElementById('password-overlay').classList.add('hidden');
+        updateHeaderButtons();
+        await refreshFromSupabase();
+        showAdminPanel();
+        showToast('Login bem-sucedido!');
+      } catch (error) {
+        console.error(error);
+        document.getElementById('pw-error').classList.remove('hidden');
+      }
+      btn.disabled = false; btn.textContent = 'Entrar';
+    });
+
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      isLoggedIn = false;
+      updateHeaderButtons();
+      document.getElementById('admin-view').classList.add('hidden');
+      document.getElementById('guest-view').classList.remove('hidden');
+      document.getElementById('messages-section').classList.remove('hidden');
+      await refreshFromSupabase();
+      showToast('Logout realizado!');
+    });
+
+    function updateHeaderButtons() {
+      const adminBtn = document.getElementById('btn-admin-access');
+      const logoutBtn = document.getElementById('btn-logout');
+      if (isLoggedIn) { adminBtn.textContent = 'Painel'; logoutBtn.classList.remove('hidden'); }
+      else { adminBtn.textContent = 'Área dos Noivos'; logoutBtn.classList.add('hidden'); }
+      // Atualizar visibilidade dos botões da capa
+      const img = document.getElementById('cover-photo');
+      const hasPhoto = img && !img.classList.contains('hidden');
+      const editBtn = document.getElementById('btn-edit-cover');
+      const removeBtn = document.getElementById('btn-remove-cover');
+      if (isLoggedIn && hasPhoto) {
+        editBtn.classList.remove('hidden');
+        removeBtn.classList.remove('hidden');
+      } else {
+        editBtn.classList.add('hidden');
+        removeBtn.classList.add('hidden');
+      }
+    }
+
+    function showAdminPanel() {
+      document.getElementById('guest-view').classList.add('hidden');
+      document.getElementById('messages-section').classList.add('hidden');
+      document.getElementById('admin-view').classList.remove('hidden');
+      renderAdminDashboard();
+      renderStoresAdmin();
+      loadBankToAdminForm();
+      lucide.createIcons();
+    }
+
+    document.getElementById('btn-back-guest').addEventListener('click', () => {
+      document.getElementById('admin-view').classList.add('hidden');
+      document.getElementById('guest-view').classList.remove('hidden');
+      document.getElementById('messages-section').classList.remove('hidden');
+      updateHeaderButtons();
+    });
+
+    // ============================================================================
+    // PRESENTES - ADMIN (Supabase do V2)
+    // ============================================================================
+
+    document.getElementById('gift-img').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) { formImgData = null; document.getElementById('gift-img-name').textContent = ''; return; }
+      document.getElementById('gift-img-name').textContent = `${file.name}`;
+      const reader = new FileReader();
+      reader.onload = (ev) => { formImgData = ev.target.result; };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('gift-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('gift-name').value.trim();
+      const category = document.getElementById('gift-category').value.trim();
+      const max = parseInt(document.getElementById('gift-max').value) || 1;
+      if (!name) { showToast('Erro: Digite o nome do presente'); return; }
+
+      const btn = document.getElementById('btn-form-submit');
+      btn.disabled = true; btn.textContent = '...';
+
+      try {
+        if (editGiftId) {
+          const payload = { name, category, max_choices: max, updated_at: new Date().toISOString() };
+          if (formImgData) payload.img = formImgData;
+          const { error } = await supabaseClient.from('wedding_gifts').update(payload).eq('id', editGiftId);
+          if (error) throw error;
+          showToast('Presente atualizado!');
+          editGiftId = null;
+          document.getElementById('form-label').textContent = 'Adicionar Presente';
+          document.getElementById('btn-form-submit').textContent = 'Adicionar';
+          document.getElementById('btn-form-cancel').classList.add('hidden');
+        } else {
+          const { error } = await supabaseClient.from('wedding_gifts').insert({ name, img: formImgData || '', max_choices: max, category });
+          if (error) throw error;
+          showToast('Presente adicionado!');
+        }
+        formImgData = null;
+        document.getElementById('gift-name').value = '';
+        document.getElementById('gift-category').value = '';
+        document.getElementById('gift-max').value = '1';
+        document.getElementById('gift-img').value = '';
+        document.getElementById('gift-img-name').textContent = '';
+        await refreshFromSupabase();
+        renderAdminDashboard();
+      } catch (error) {
+        console.error(error);
+        showToast('Erro: Erro ao salvar presente');
+      }
+      btn.disabled = false; btn.textContent = editGiftId ? 'Guardar' : 'Adicionar';
+    });
+
+    document.getElementById('btn-form-cancel').addEventListener('click', () => {
+      editGiftId = null;
+      document.getElementById('form-label').textContent = 'Adicionar Presente';
+      document.getElementById('btn-form-submit').textContent = 'Adicionar';
+      document.getElementById('btn-form-cancel').classList.add('hidden');
+      document.getElementById('gift-name').value = '';
+      document.getElementById('gift-category').value = '';
+      document.getElementById('gift-max').value = '1';
+      document.getElementById('gift-img').value = '';
+      document.getElementById('gift-img-name').textContent = '';
+      formImgData = null;
+    });
+
+    function startEditGift(giftId) {
+      const gift = GIFTS.find(g => g.id === giftId);
+      if (!gift) return;
+      editGiftId = giftId;
+      document.getElementById('gift-name').value = gift.name;
+      document.getElementById('gift-category').value = gift.category || '';
+      document.getElementById('gift-max').value = gift.maxChoices;
+      document.getElementById('form-label').textContent = 'Editar Presente';
+      document.getElementById('btn-form-submit').textContent = 'Guardar';
+      document.getElementById('btn-form-cancel').classList.remove('hidden');
+      document.getElementById('gift-img-name').textContent = '';
+      formImgData = null;
+      document.getElementById('gift-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function confirmDeleteGift(giftId) {
+      deleteGiftId = giftId;
+      document.getElementById('delete-overlay').classList.remove('hidden');
+    }
+
+    document.getElementById('btn-del-cancel').addEventListener('click', () => {
+      document.getElementById('delete-overlay').classList.add('hidden');
+      deleteGiftId = null;
+    });
+
+    document.getElementById('btn-del-confirm').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-del-confirm');
+      btn.disabled = true; btn.textContent = '...';
+      try {
+        const { error: resError } = await supabaseClient.from('wedding_reservations').delete().eq('gift_id', deleteGiftId);
+        if (resError) throw resError;
+        const { error: giftError } = await supabaseClient.from('wedding_gifts').delete().eq('id', deleteGiftId);
+        if (giftError) throw giftError;
+        document.getElementById('delete-overlay').classList.add('hidden');
+        deleteGiftId = null;
+        await refreshFromSupabase();
+        renderAdminDashboard();
+        showToast('Presente eliminado!');
+      } catch (error) {
+        console.error(error);
+        showToast('Erro: Erro ao eliminar presente');
+      }
+      btn.disabled = false; btn.textContent = 'Eliminar';
+    });
+
+    // ============================================================================
+    // IMPORTAÇÃO EM MASSA (do V2)
+    // ============================================================================
+
+    function parseBulkGifts(text) {
+      const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      const gifts = [];
+      let currentCategory = '';
+      lines.forEach((line, index) => {
+        const isBullet = /^[•*\-–—]+\s*/.test(line);
+        const cleanLine = line.replace(/^[•*\-–—]+\s*/, '').replace(/^\d+[\.)]\s*/, '').trim();
+        if (!cleanLine) return;
+        const nextLine = lines[index + 1] || '';
+        const nextIsBullet = /^[•*\-–—]+\s*/.test(nextLine.trim());
+        const looksLikeCategory = !isBullet && (nextIsBullet || !currentCategory);
+        if (looksLikeCategory) { currentCategory = cleanLine; return; }
+        gifts.push({ name: cleanLine, category: currentCategory || 'Outros Presentes', max_choices: 1, img: '' });
+      });
+      return gifts;
+    }
+
+    document.getElementById('btn-import-bulk-gifts').addEventListener('click', async () => {
+      const textarea = document.getElementById('bulk-gifts-input');
+      const status = document.getElementById('bulk-gifts-status');
+      const btn = document.getElementById('btn-import-bulk-gifts');
+      const parsed = parseBulkGifts(textarea.value);
+      if (!parsed.length) { status.textContent = 'Erro: Cole uma lista com categorias e presentes'; status.classList.remove('hidden'); return; }
+      const existing = new Set(GIFTS.map(g => `${(g.category || '').toLowerCase()}|${g.name.toLowerCase()}`));
+      const toInsert = parsed.filter(g => !existing.has(`${g.category.toLowerCase()}|${g.name.toLowerCase()}`));
+      if (!toInsert.length) { status.textContent = `${parsed.length} item(ns) já existem`; status.classList.remove('hidden'); return; }
+      btn.disabled = true; btn.textContent = 'Importando...';
+      try {
+        const { error } = await supabaseClient.from('wedding_gifts').insert(toInsert);
+        if (error) throw error;
+        textarea.value = '';
+        const catCount = new Set(toInsert.map(g => g.category)).size;
+        status.textContent = `${toInsert.length} presente(s) em ${catCount} categoria(s)!`;
+        status.classList.remove('hidden');
+        await refreshFromSupabase();
+        renderAdminDashboard();
+      } catch (error) {
+        console.error(error);
+        status.textContent = 'Erro: Erro ao importar lista';
+        status.classList.remove('hidden');
+      }
+      btn.disabled = false; btn.textContent = 'Importar Lista';
+    });
+
+    // ============================================================================
+    // MENSAGENS
+    // ============================================================================
+
+    function updateMessageFormVisibility() {
+      const form = document.getElementById('msg-form-content');
+      const noRes = document.getElementById('msg-no-reservation');
+      const guestOwnMsg = messages.find(m => m.author_name && m.author_name.toLowerCase() === (currentGuestName || '').toLowerCase());
+      if (currentGuestName && messagesEnabled && !guestOwnMsg) {
+        form.classList.remove('hidden'); noRes.classList.add('hidden');
+      } else {
+        form.classList.add('hidden'); noRes.classList.remove('hidden');
+      }
+    }
+
+    function renderMessagesSection() {
+      const section = document.getElementById('messages-section');
+      const msgList = document.getElementById('messages-list');
+      const empty = document.getElementById('empty-messages');
+      if (!messagesEnabled && !isLoggedIn) { section.style.display = 'none'; return; }
+      else { section.style.display = 'block'; }
+
+      if (messages.length === 0) {
+        msgList.innerHTML = '';
+        empty.style.display = messagesEnabled ? 'block' : 'none';
+      } else {
+        empty.classList.add('hidden');
+        msgList.innerHTML = messages.map(msg => {
+          const isOwnMessage = msg.author_name && msg.author_name.toLowerCase() === (currentGuestName || '').toLowerCase();
+          const likes = msg.likes || 0;
+          const userLiked = msg.liked_by ? msg.liked_by.split(',').includes('guest') : false;
+          const adminLiked = msg.liked_by ? msg.liked_by.split(',').includes('admin') : false;
+          let actions = '';
+          if (isLoggedIn) {
+            actions = `<div class="flex gap-2 mt-3 pt-3 border-t" style="border-color:#e7bfb3;">
+              <button onclick="openReplyModal('${msg.__backendId}')" class="text-xs underline" style="color:#a0694f;">${msg.reply ? 'Editar' : 'Responder'}</button>
+              <button onclick="confirmDeleteMessage('${msg.__backendId}')" class="text-xs underline text-red-600">Eliminar</button>
+            </div>`;
+          } else if (isOwnMessage) {
+            actions = `<div class="flex gap-2 mt-3 pt-3 border-t" style="border-color:#e7bfb3;">
+              <button onclick="openEditOwnMessage('${msg.__backendId}')" class="text-xs underline" style="color:#a0694f;">Editar</button>
+            </div>`;
+          }
+          return `<div class="p-4 rounded-xl border" style="border-color:#e7bfb3;background:#fff9f5">
+            <div class="flex items-start justify-between mb-2">
+              <div>
+                <p class="font-medium text-sm" style="color:#a0694f">${escapeHtml(msg.author_name)}</p>
+                <p class="text-xs opacity-60">${formatDate(msg.created_at)}</p>
+              </div>
+              <button onclick="toggleLikeMessage('${msg.__backendId}')" class="flex items-center gap-1 text-sm" style="color:${userLiked || adminLiked ? '#e76c6c' : '#c9a898'};">
+                <span>${likes}</span> Gosto
+              </button>
+            </div>
+            <p class="text-sm mb-2">${escapeHtml(msg.message)}</p>
+            ${msg.reply ? `<div class="pl-4 border-l-2 mt-2" style="border-color:#e7bfb3;"><p class="text-xs font-semibold mb-1" style="color:#a0694f;">Resposta dos Noivos:</p><p class="text-sm">${escapeHtml(msg.reply)}</p></div>` : ''}
+            ${actions}
+          </div>`;
+        }).join('');
+      }
+      lucide.createIcons();
+    }
+
+    async function toggleLikeMessage(msgId) {
+      const msg = messages.find(m => m.__backendId === msgId);
+      if (!msg) return;
+      let likedBy = msg.liked_by ? msg.liked_by.split(',').filter(l => l) : [];
+      const wasLiked = likedBy.includes('guest');
+      if (wasLiked) { likedBy = likedBy.filter(l => l !== 'guest'); msg.likes = Math.max(0, (msg.likes || 1) - 1); }
+      else { likedBy.push('guest'); msg.likes = (msg.likes || 0) + 1; }
+      msg.liked_by = likedBy.join(',');
+      try {
+        const { error } = await supabaseClient.from('wedding_messages').update({ likes: msg.likes, liked_by: msg.liked_by }).eq('id', msgId);
+        if (error) throw error;
+        renderMessagesSection();
+      } catch (error) { console.error(error); showToast('Erro: Erro ao atualizar like'); }
+    }
+
+    document.getElementById('btn-msg-submit').addEventListener('click', async () => {
+      const text = document.getElementById('guest-message').value.trim();
+      const errorEl = document.getElementById('msg-error');
+      if (!text) { errorEl.textContent = 'Por favor, escreva uma mensagem.'; errorEl.classList.remove('hidden'); return; }
+      const btn = document.getElementById('btn-msg-submit');
+      btn.disabled = true; btn.textContent = '...'; errorEl.classList.add('hidden');
+      try {
+        const { error } = await supabaseClient.from('wedding_messages').insert({
+          author_name: currentGuestName, message: text,
+          created_at: new Date().toISOString(), likes: 0, liked_by: '', reply: ''
+        });
+        if (error) throw error;
+        document.getElementById('guest-message').value = '';
+        await refreshFromSupabase();
+        showToast('Recado enviado!');
+      } catch (error) {
+        console.error(error);
+        errorEl.textContent = 'Erro ao enviar recado.';
+        errorEl.classList.remove('hidden');
+      }
+      btn.disabled = false; btn.textContent = 'Enviar Recado';
+    });
+
+    // ============================================================================
+    // MODAIS DE MENSAGENS
+    // ============================================================================
+
+    function openReplyModal(msgId) {
+      const msg = messages.find(m => m.__backendId === msgId);
+      if (!msg) return;
+      replyMessageId = msgId;
+      document.getElementById('reply-text').value = msg.reply || '';
+      document.getElementById('reply-error').classList.add('hidden');
+      document.getElementById('reply-overlay').classList.remove('hidden');
+      document.getElementById('reply-text').focus();
+    }
+
+    document.getElementById('btn-reply-cancel').addEventListener('click', () => {
+      document.getElementById('reply-overlay').classList.add('hidden');
+      replyMessageId = null;
+    });
+
+    document.getElementById('btn-reply-confirm').addEventListener('click', async () => {
+      const reply = document.getElementById('reply-text').value.trim();
+      if (!reply) { document.getElementById('reply-error').classList.remove('hidden'); return; }
+      const btn = document.getElementById('btn-reply-confirm');
+      btn.disabled = true; btn.textContent = '...';
+      try {
+        const { error } = await supabaseClient.from('wedding_messages').update({ reply }).eq('id', replyMessageId);
+        if (error) throw error;
+        document.getElementById('reply-overlay').classList.add('hidden');
+        replyMessageId = null;
+        await refreshFromSupabase();
+        showToast('Resposta guardada!');
+      } catch (error) { console.error(error); showToast('Erro: Erro ao guardar resposta'); }
+      btn.disabled = false; btn.textContent = 'Responder';
+    });
+
+    function openEditOwnMessage(msgId) {
+      const msg = messages.find(m => m.__backendId === msgId);
+      if (!msg) return;
+      editMessageId = msgId;
+      document.getElementById('edit-msg-text').value = msg.message || '';
+      document.getElementById('edit-msg-error').classList.add('hidden');
+      document.getElementById('edit-msg-overlay').classList.remove('hidden');
+      document.getElementById('edit-msg-text').focus();
+    }
+
+    document.getElementById('btn-edit-msg-cancel').addEventListener('click', () => {
+      document.getElementById('edit-msg-overlay').classList.add('hidden');
+      editMessageId = null;
+    });
+
+    document.getElementById('btn-edit-msg-confirm').addEventListener('click', async () => {
+      const text = document.getElementById('edit-msg-text').value.trim();
+      if (!text) { document.getElementById('edit-msg-error').classList.remove('hidden'); return; }
+      const btn = document.getElementById('btn-edit-msg-confirm');
+      btn.disabled = true; btn.textContent = '...';
+      try {
+        const { error } = await supabaseClient.from('wedding_messages').update({ message: text }).eq('id', editMessageId);
+        if (error) throw error;
+        document.getElementById('edit-msg-overlay').classList.add('hidden');
+        editMessageId = null;
+        await refreshFromSupabase();
+        showToast('Recado atualizado!');
+      } catch (error) { console.error(error); showToast('Erro: Erro ao atualizar recado'); }
+      btn.disabled = false; btn.textContent = 'Guardar';
+    });
+
+    function confirmDeleteMessage(msgId) {
+      deleteMessageId = msgId;
+      document.getElementById('delete-msg-overlay').classList.remove('hidden');
+    }
+
+    document.getElementById('btn-del-msg-cancel').addEventListener('click', () => {
+      document.getElementById('delete-msg-overlay').classList.add('hidden');
+      deleteMessageId = null;
+    });
+
+    document.getElementById('btn-del-msg-confirm').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-del-msg-confirm');
+      btn.disabled = true; btn.textContent = '...';
+      try {
+        const { error } = await supabaseClient.from('wedding_messages').delete().eq('id', deleteMessageId);
+        if (error) throw error;
+        document.getElementById('delete-msg-overlay').classList.add('hidden');
+        deleteMessageId = null;
+        await refreshFromSupabase();
+        showToast('Recado eliminado!');
+      } catch (error) { console.error(error); showToast('Erro: Erro ao eliminar recado'); }
+      btn.disabled = false; btn.textContent = 'Eliminar';
+    });
+
+    // ============================================================================
+    // TOGGLE MENSAGENS
+    // ============================================================================
+
+    document.getElementById('toggle-messages').addEventListener('change', async function() {
+      messagesEnabled = this.checked;
+      try {
+        await upsertSetting('messages_enabled', messagesEnabled);
+        renderMessagesSection();
+        updateMessageFormVisibility();
+        showToast(`Recados ${messagesEnabled ? 'ativados' : 'desativados'}!`);
+      } catch (error) { console.error(error); showToast('Erro: Erro ao atualizar configuração'); }
+    });
+
+    // ============================================================================
+    // ADMIN DASHBOARD
+    // ============================================================================
+
+    function renderAdminDashboard() {
+      const totalSlots = GIFTS.reduce((s, g) => s + g.maxChoices, 0);
+      const reserved = reservations.length;
+      document.getElementById('metric-total').textContent = GIFTS.length;
+      document.getElementById('metric-reserved').textContent = reserved;
+      document.getElementById('metric-progress').textContent = totalSlots ? Math.round((reserved / totalSlots) * 100) + '%' : '0%';
+      document.getElementById('toggle-messages').checked = messagesEnabled;
+
+      const gb = document.getElementById('admin-gifts-body'); gb.innerHTML = '';
+      GIFTS.forEach(g => {
+        const count = getReservationCount(g.id);
+        const tr = document.createElement('tr'); tr.className = 'border-t'; tr.style.borderColor = '#f7dccb';
+        tr.innerHTML = `<td class="p-3">${escapeHtml(g.name)}</td><td class="p-3">${escapeHtml(g.category || '-')}</td><td class="p-3">${count}</td><td class="p-3">${g.maxChoices}</td><td class="p-3 flex gap-2"><button class="text-xs underline" style="color:#a0694f" onclick="startEditGift('${g.id}')">Editar</button><button class="text-xs underline text-red-600" onclick="confirmDeleteGift('${g.id}')">Eliminar</button></td>`;
+        gb.appendChild(tr);
+      });
+
+      const tbody = document.getElementById('admin-table-body'); tbody.innerHTML = '';
+      reservations.forEach(r => {
+        const tr = document.createElement('tr'); tr.className = 'border-t'; tr.style.borderColor = '#f7dccb';
+        tr.innerHTML = `<td class="p-3">${escapeHtml(r.gift_name)}</td><td class="p-3">${escapeHtml(r.guest_name)}</td><td class="p-3">${escapeHtml(r.guest_phone || '-')}</td><td class="p-3 text-xs">${formatDate(r.reserved_at)}</td><td class="p-3"><button class="text-xs underline text-red-600" onclick="cancelReservation('${r.__backendId}')">Cancelar</button></td>`;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('empty-reservations').style.display = reservations.length ? 'none' : 'block';
+
+      const msgBody = document.getElementById('admin-messages-body'); msgBody.innerHTML = '';
+      messages.forEach(m => {
+        const likes = m.likes || 0;
+        const tr = document.createElement('tr'); tr.className = 'border-t'; tr.style.borderColor = '#f7dccb';
+        tr.innerHTML = `<td class="p-3">${escapeHtml(m.author_name)}</td><td class="p-3 text-sm">${escapeHtml(m.message.substring(0, 50))}${m.message.length > 50 ? '...' : ''}</td><td class="p-3 text-xs">${formatDate(m.created_at)}</td><td class="p-3 flex gap-2 flex-wrap"><button class="text-xs underline" style="color:#a0694f" onclick="openReplyModal('${m.__backendId}')">${m.reply ? 'Editar' : 'Responder'}</button><button class="text-xs underline text-red-600" onclick="confirmDeleteMessage('${m.__backendId}')">Eliminar</button></td>`;
+        msgBody.appendChild(tr);
+      });
+      document.getElementById('empty-messages-admin').style.display = messages.length ? 'none' : 'block';
+    }
+
+    async function cancelReservation(backendId) {
+      if (!confirm('Deseja cancelar esta reserva?')) return;
+      try {
+        const { error } = await supabaseClient.from('wedding_reservations').delete().eq('id', backendId);
+        if (error) throw error;
+        const record = reservations.find(r => r.__backendId === backendId);
+        if (currentGuestName && record && record.guest_name.toLowerCase() === currentGuestName.toLowerCase()) {
+          currentGuestName = null; localStorage.removeItem('jm_guest_name'); updateMessageFormVisibility();
+        }
+        await refreshFromSupabase();
+        showToast('Reserva cancelada!');
+      } catch (error) { console.error(error); showToast('Erro: Erro ao cancelar reserva'); }
+    }
+
+    // ============================================================================
+    // INICIALIZAÇÃO
+    // ============================================================================
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const { data: authData } = await supabaseClient.auth.getSession();
+        isLoggedIn = Boolean(authData.session);
+        await refreshFromSupabase();
+        updateViewModeButtons();
+        updateHeaderButtons();
+        lucide.createIcons();
+        if (isLoggedIn) { showAdminPanel(); }
+      } catch (error) {
+        console.error('Erro na inicialização:', error);
+        showToast('Erro: Erro ao carregar dados');
+      }
+    });
+  </script>
+</body>
+</html>
