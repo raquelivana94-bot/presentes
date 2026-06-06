@@ -76,6 +76,18 @@
 
     /* Smooth transitions */
     .transition-smooth { transition: all 0.2s ease; }
+
+    /* Image lazy load fade-in */
+    .img-fade { opacity: 0; transition: opacity 0.35s ease; background: #f7dccb; }
+    .img-fade.loaded { opacity: 1; }
+
+    /* Skeleton shimmer for image placeholder */
+    .img-skeleton {
+      background: linear-gradient(90deg, #f7dccb 25%, #fde8d8 50%, #f7dccb 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
   </style>
 </head>
 <body class="min-h-screen relative">
@@ -587,18 +599,16 @@
     document.getElementById('cover-upload').addEventListener('change', async function(e) {
       const file = e.target.files[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = async (ev) => {
-        try {
-          await upsertSetting('cover_photo', ev.target.result);
-          applyCoverPhoto(ev.target.result);
-          showToast('Capa atualizada!');
-        } catch (error) {
-          console.error(error);
-          showToast('Erro: Erro ao guardar capa');
-        }
-      };
-      reader.readAsDataURL(file);
+      showToast('A processar imagem...');
+      try {
+        const compressed = await compressImage(file, 1200, 0.82);
+        await upsertSetting('cover_photo', compressed);
+        applyCoverPhoto(compressed);
+        showToast('Capa atualizada!');
+      } catch (error) {
+        console.error(error);
+        showToast('Erro: Erro ao guardar capa');
+      }
     });
 
     document.getElementById('btn-remove-cover').addEventListener('click', async () => {
@@ -980,8 +990,8 @@
 
       if (currentViewMode === 'grid') {
         const imgHtml = gift.img
-          ? `<img src="${escapeHtml(gift.img)}" alt="${escapeHtml(gift.name)}" class="w-full h-44 object-cover" loading="lazy">`
-          : `<div class="w-full h-44 flex items-center justify-center" style="background:#f7dccb"><span style="font-size:1.5rem;opacity:0.4;">•</span></div>`;
+          ? `<img src="${escapeHtml(gift.img)}" alt="${escapeHtml(gift.name)}" class="w-full h-44 object-cover img-fade" loading="lazy" decoding="async" onload="this.classList.add('loaded')">`
+          : `<div class="w-full h-44 img-skeleton rounded-none"></div>`;
         return `<div class="rounded-2xl overflow-hidden shadow-sm border relative" style="border-color:#e7bfb3;background:#fff9f5;">
           ${imgHtml}
           <div class="p-4 ${disabled ? 'blur-sm' : ''}">
@@ -997,8 +1007,8 @@
         </div>`;
       } else {
         const imgHtml = gift.img
-          ? `<img src="${escapeHtml(gift.img)}" alt="${escapeHtml(gift.name)}" class="w-20 h-20 object-cover rounded flex-shrink-0" loading="lazy">`
-          : `<div class="w-20 h-20 flex items-center justify-center rounded flex-shrink-0" style="background:#f7dccb"><span style="opacity:0.3;">•</span></div>`;
+          ? `<img src="${escapeHtml(gift.img)}" alt="${escapeHtml(gift.name)}" class="w-20 h-20 object-cover rounded flex-shrink-0 img-fade" loading="lazy" decoding="async" onload="this.classList.add('loaded')">`
+          : `<div class="w-20 h-20 img-skeleton rounded flex-shrink-0"></div>`;
         return `<div class="flex items-start gap-3 p-3 rounded-lg border" style="border-color:#e7bfb3;background:#fff9f5;">
           ${imgHtml}
           <div class="flex-1 min-w-0 ${disabled ? 'opacity-60' : ''}">
@@ -1170,11 +1180,34 @@
     document.getElementById('gift-img').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) { formImgData = null; document.getElementById('gift-img-name').textContent = ''; return; }
-      document.getElementById('gift-img-name').textContent = `${file.name}`;
-      const reader = new FileReader();
-      reader.onload = (ev) => { formImgData = ev.target.result; };
-      reader.readAsDataURL(file);
+      document.getElementById('gift-img-name').textContent = `A processar imagem...`;
+      compressImage(file, 800, 0.78).then(compressed => {
+        formImgData = compressed;
+        const kb = Math.round((compressed.length * 3/4) / 1024);
+        document.getElementById('gift-img-name').textContent = `${file.name} (${kb} KB)`;
+      });
     });
+
+    // Compress image to max width and quality before storing
+    function compressImage(file, maxWidth, quality) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let w = img.width, h = img.height;
+            if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
+            canvas.width = w; canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
     document.getElementById('gift-form').addEventListener('submit', async (e) => {
       e.preventDefault();
