@@ -132,6 +132,7 @@
         </div>
       </div>
 
+      <div id="gifts-anchor"></div>
       <!-- View toggle -->
       <div class="flex items-center justify-end mb-4 sm:mb-5">
         <div class="flex items-center gap-1 rounded-full p-1" style="background:#e7bfb3;">
@@ -141,6 +142,7 @@
       </div>
 
       <div id="gift-grid"></div>
+      <div id="pagination-container"></div>
       <p id="empty-guest" class="text-center py-12 opacity-60 text-sm">Nenhum presente na lista ainda.</p>
     </section>
 
@@ -537,9 +539,10 @@
       }
     }
 
-    async function refreshFromSupabase() {
+    async function refreshFromSupabase(resetPage = false) {
       const success = await loadSupabaseData();
       if (success) {
+        if (resetPage) currentPage = 1;
         renderGiftGrid();
         renderMessagesSection();
         updateMessageFormVisibility();
@@ -746,7 +749,7 @@
         html += `<div class="mb-3">
           <p class="text-xs font-semibold mb-2" style="color:#a0694f">Conta Nacional</p>
           <div class="space-y-1">`;
-        if (nat.holder) html += bankRow('Titular', nat.holder);
+        if (nat.holder) html += bankRowInfo('Titular', nat.holder);
         if (nat.account) html += bankRow('N.º Conta', nat.account);
         if (nat.iban) html += bankRow('IBAN', nat.iban);
         html += `</div></div>`;
@@ -756,7 +759,7 @@
         html += `<div>
           <p class="text-xs font-semibold mb-2" style="color:#a0694f">Conta Internacional</p>
           <div class="space-y-1">`;
-        if (intl.holder) html += bankRow('Titular', intl.holder);
+        if (intl.holder) html += bankRowInfo('Titular', intl.holder);
         if (intl.iban) html += bankRow('IBAN', intl.iban);
         if (intl.account) html += bankRow('N.º Conta', intl.account);
         if (intl.nib) html += bankRow('NIB', intl.nib);
@@ -777,6 +780,13 @@
         <span class="opacity-60 flex-shrink-0">${label}:</span>
         <span class="font-medium text-right break-all flex-1">${escapeHtml(value)}</span>
         <button data-copy="${escapeHtml(value)}" class="flex-shrink-0 px-2 py-1 rounded text-white text-xs" style="background:#a0694f">Copiar</button>
+      </div>`;
+    }
+
+    function bankRowInfo(label, value) {
+      return `<div class="flex items-center justify-between gap-2 p-2 rounded text-xs" style="background:#fdf6f1">
+        <span class="opacity-60 flex-shrink-0">${label}:</span>
+        <span class="font-medium text-right break-all flex-1">${escapeHtml(value)}</span>
       </div>`;
     }
 
@@ -821,6 +831,7 @@
       currentViewMode = 'grid';
       localStorage.setItem('jm_view_mode', 'grid');
       updateViewModeButtons();
+      currentPage = 1;
       renderGiftGrid();
     });
 
@@ -828,6 +839,7 @@
       currentViewMode = 'list';
       localStorage.setItem('jm_view_mode', 'list');
       updateViewModeButtons();
+      currentPage = 1;
       renderGiftGrid();
     });
 
@@ -846,6 +858,16 @@
       return reservations.filter(r => r.gift_id === giftId).length;
     }
 
+    // ============================================================================
+    // PAGINAÇÃO GLOBAL
+    // ============================================================================
+    const ITEMS_PER_PAGE = 8; // 4 linhas de 2 cards
+    let currentPage = 1;
+
+    function getTotalPages() {
+      return Math.max(1, Math.ceil(GIFTS.length / ITEMS_PER_PAGE));
+    }
+
     function renderGiftGrid() {
       const grid = document.getElementById('gift-grid');
       const empty = document.getElementById('empty-guest');
@@ -853,36 +875,101 @@
       if (GIFTS.length === 0) {
         grid.innerHTML = '';
         empty.classList.remove('hidden');
+        document.getElementById('pagination-container').innerHTML = '';
         return;
       }
 
       empty.classList.add('hidden');
-      grid.className = ''; // categories handle their own layout
+      grid.className = '';
 
-      // Group by category
+      // Paginate first
+      const totalPages = getTotalPages();
+      if (currentPage > totalPages) currentPage = totalPages;
+      const start = (currentPage - 1) * ITEMS_PER_PAGE;
+      const pageGifts = GIFTS.slice(start, start + ITEMS_PER_PAGE);
+
+      // Group this page's gifts by category
       const grouped = {};
-      GIFTS.forEach(gift => {
+      const categoryOrder = [];
+      pageGifts.forEach(gift => {
         const cat = gift.category || 'Outros Presentes';
-        if (!grouped[cat]) grouped[cat] = [];
+        if (!grouped[cat]) { grouped[cat] = []; categoryOrder.push(cat); }
         grouped[cat].push(gift);
       });
 
-      grid.innerHTML = Object.entries(grouped).map(([category, gifts]) => {
+      const gridClass = currentViewMode === 'grid'
+        ? 'grid grid-cols-2 gap-3 sm:gap-4'
+        : 'grid grid-cols-1 gap-3';
+
+      grid.innerHTML = categoryOrder.map(category => {
+        const gifts = grouped[category];
         const cardsHtml = gifts.map(gift => renderGiftCard(gift)).join('');
-        const gridClass = currentViewMode === 'grid'
-          ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'
-          : 'grid grid-cols-1 sm:grid-cols-2 gap-3';
         return `
-          <div class="mb-10">
-            <div class="flex items-end justify-between mb-4 pb-2 border-b" style="border-color:#e7bfb3;">
-              <h3 class="font-display text-xl font-bold" style="color:#a0694f;">${escapeHtml(category)}</h3>
-              <span class="text-xs opacity-60">${gifts.length} presente(s)</span>
+          <div class="mb-8">
+            <div class="flex items-end justify-between mb-3 pb-2 border-b" style="border-color:#e7bfb3;">
+              <h3 class="font-display text-lg sm:text-xl font-bold" style="color:#a0694f;">${escapeHtml(category)}</h3>
             </div>
             <div class="${gridClass}">${cardsHtml}</div>
           </div>`;
       }).join('');
+
+      renderPagination(totalPages);
     }
 
+    function renderPagination(totalPages) {
+      const container = document.getElementById('pagination-container');
+      if (!container) return;
+      if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+      const page = currentPage;
+
+      // Build page number range: always show first, last, current ±1
+      const range = new Set([1, totalPages]);
+      for (let i = Math.max(1, page - 1); i <= Math.min(totalPages, page + 1); i++) range.add(i);
+      const sorted = [...range].sort((a, b) => a - b);
+
+      let pagesHtml = '';
+      let prev = 0;
+      sorted.forEach(p => {
+        if (p - prev > 1) pagesHtml += `<span class="px-1 text-xs" style="color:#c9a898;">...</span>`;
+        const active = p === page;
+        pagesHtml += `<button onclick="goToPage(${p})"
+          class="w-8 h-8 rounded-full text-xs font-semibold transition-smooth"
+          style="background:${active ? '#a0694f' : 'transparent'};color:${active ? '#fff' : '#a0694f'};border:1px solid ${active ? '#a0694f' : '#e7bfb3'};">
+          ${p}
+        </button>`;
+        prev = p;
+      });
+
+      container.innerHTML = `
+        <div class="flex items-center justify-center gap-1 sm:gap-2 mt-6 mb-2 flex-wrap">
+          <button onclick="goToPage(${page - 1})"
+            class="px-3 py-1.5 rounded-lg text-xs font-medium transition-smooth"
+            style="background:transparent;color:${page === 1 ? '#d9ccc6' : '#a0694f'};border:1px solid ${page === 1 ? '#d9ccc6' : '#e7bfb3'};"
+            ${page === 1 ? 'disabled' : ''}>Anterior</button>
+          ${pagesHtml}
+          <button onclick="goToPage(${page + 1})"
+            class="px-3 py-1.5 rounded-lg text-xs font-medium transition-smooth"
+            style="background:transparent;color:${page === totalPages ? '#d9ccc6' : '#a0694f'};border:1px solid ${page === totalPages ? '#d9ccc6' : '#e7bfb3'};"
+            ${page === totalPages ? 'disabled' : ''}>Próximo</button>
+        </div>`;
+    }
+
+    function goToPage(page) {
+      const total = getTotalPages();
+      if (page < 1 || page > total) return;
+      currentPage = page;
+      // Clear immediately so old cards never show alongside new ones
+      const grid = document.getElementById('gift-grid');
+      grid.innerHTML = '';
+      document.getElementById('pagination-container').innerHTML = '';
+      renderGiftGrid();
+      // Scroll to gifts anchor (accounts for fixed navbar height)
+      const anchor = document.getElementById('gifts-anchor');
+      const navH = document.querySelector('nav') ? document.querySelector('nav').offsetHeight : 56;
+      const top = anchor.getBoundingClientRect().top + window.scrollY - navH - 12;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
     function renderGiftCard(gift) {
       const count = getReservationCount(gift.id);
       const isFull = count >= gift.maxChoices;
