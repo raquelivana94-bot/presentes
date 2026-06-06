@@ -553,12 +553,18 @@ async function loadSupabaseData() {
     ];
     renderStoresGuest();
 
-    // Bank
-    try { bankData=settings.bank_data?JSON.parse(settings.bank_data):bankData; } catch(e){}
-    if(!settings.bank_data) bankData={
+    // Bank — always ensure national and international keys exist
+    const defaultBank = {
       national:{holder:'IVANA RAQUEL MADEIRA DE ALMEIDA',account:'1004 2661 97',iban:'AO06 0060 0146 0100 4266 1976 2'},
       international:{holder:'IVANA RAQUEL MADEIRA ALMEIDA',iban:'PT50003300004548473531005',account:'45484735310',nib:'0033 0000 45484735310 05',swift:'BCOMPTPL'}
     };
+    try {
+      const parsed = settings.bank_data ? JSON.parse(settings.bank_data) : {};
+      bankData = {
+        national:      Object.assign({}, defaultBank.national,      parsed.national      || {}),
+        international: Object.assign({}, defaultBank.international, parsed.international || {})
+      };
+    } catch(e) { bankData = defaultBank; }
     renderBankGuest();
 
     return true;
