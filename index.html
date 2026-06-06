@@ -93,11 +93,11 @@
     <div id="cover-photo-container" class="w-full overflow-hidden relative" style="height:180px;">
       <img id="cover-photo" class="hidden w-full h-full object-cover" alt="Foto de Capa">
       <div id="cover-placeholder" class="w-full h-full flex items-center justify-center" style="background:#f7dccb;"></div>
-      <button id="btn-edit-cover" class="hidden absolute inset-0 w-full h-full flex items-center justify-center text-white font-medium text-sm opacity-80 hover:opacity-100 transition-smooth" style="background:rgba(160,105,79,0.5);">✏️ Editar Capa</button>
+      <button id="btn-edit-cover" class="hidden absolute inset-0 w-full h-full flex items-center justify-center text-white font-medium text-sm opacity-80 hover:opacity-100 transition-smooth" style="background:rgba(160,105,79,0.5);">Editar Capa</button>
     </div>
     <div class="py-8 sm:py-12 px-4">
       <h1 class="font-display text-2xl sm:text-3xl lg:text-4xl font-bold" style="color:#a0694f;">Lista de Presentes de Casamento</h1>
-      <p class="mt-2 text-sm sm:text-base opacity-70">A nossa lista foi pensada com muito carinho ✨</p>
+      <p class="mt-2 text-sm sm:text-base opacity-70">A nossa lista foi pensada com muito carinho </p>
     </div>
   </header>
 
@@ -115,16 +115,16 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           <div class="p-3 sm:p-4 rounded-xl" style="background:#fdf6f1;border:1px solid #f7dccb;">
-            <p class="text-sm font-semibold mb-1" style="color:#a0694f;">🎁 Lista de Presentes</p>
+            <p class="text-sm font-semibold mb-1" style="color:#a0694f;">Lista de Presentes</p>
             <p class="text-xs leading-relaxed opacity-70">Consulte abaixo a nossa seleção cuidadosamente preparada</p>
           </div>
           <div class="p-3 sm:p-4 rounded-xl" style="background:#fdf6f1;border:1px solid #f7dccb;">
-            <p class="text-sm font-semibold mb-1" style="color:#a0694f;">🏪 Lojas Parceiras em Luanda</p>
+            <p class="text-sm font-semibold mb-1" style="color:#a0694f;">Lojas Parceiras em Luanda</p>
             <ul id="stores-list" class="text-xs leading-relaxed opacity-70 space-y-0.5 mt-1"></ul>
             <p id="stores-empty" class="text-xs opacity-50 italic hidden">Em breve</p>
           </div>
           <div class="p-3 sm:p-4 rounded-xl" style="background:#fdf6f1;border:1px solid #f7dccb;">
-            <p class="text-sm font-semibold mb-1" style="color:#a0694f;">💳 Contribuição Livre</p>
+            <p class="text-sm font-semibold mb-1" style="color:#a0694f;">Contribuição Livre</p>
             <p class="text-xs opacity-70 mb-2">Transferência bancária via IBAN</p>
             <div id="bank-accounts-guest" class="space-y-2"></div>
             <p id="bank-empty-msg" class="text-xs opacity-50 italic">Dados bancários em breve</p>
@@ -169,7 +169,7 @@
 
       <!-- Cover photo -->
       <div class="mb-5 p-4 rounded-2xl border" style="border-color:#e7bfb3;background:#fff9f5;">
-        <p class="text-sm font-medium mb-3" style="color:#a0694f;">📷 Foto de Capa</p>
+        <p class="text-sm font-medium mb-3" style="color:#a0694f;">Foto de Capa</p>
         <div class="flex flex-wrap items-center gap-2">
           <label class="cursor-pointer px-4 py-2.5 rounded-xl text-sm text-white font-medium transition-smooth gift-btn" style="background:#a0694f;">
             Carregar Foto
@@ -181,22 +181,22 @@
 
       <!-- Lojas Parceiras -->
       <div class="mb-5 p-4 rounded-2xl border" style="border-color:#e7bfb3;background:#fff9f5;">
-        <p class="text-sm font-medium mb-3" style="color:#a0694f;">🏪 Lojas Parceiras</p>
+        <p class="text-sm font-medium mb-3" style="color:#a0694f;">Lojas Parceiras</p>
         <div id="admin-stores-list" class="space-y-2 mb-3"></div>
         <div class="flex flex-col sm:flex-row gap-2">
           <input type="text" id="store-name-input" placeholder="Nome da loja (ex: Dakaza)" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
           <input type="text" id="store-location-input" placeholder="Localização (ex: Belas Shopping)" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
           <button id="btn-add-store" class="px-4 py-2.5 rounded-xl text-white text-sm font-medium transition-smooth gift-btn whitespace-nowrap" style="background:#a0694f;">+ Adicionar</button>
         </div>
-        <p id="stores-admin-status" class="text-xs text-green-600 mt-2 hidden">✓ Guardado!</p>
+        <p id="stores-admin-status" class="text-xs text-green-600 mt-2 hidden">Guardado!</p>
       </div>
 
       <!-- Contas Bancárias -->
       <div class="mb-5 p-4 rounded-2xl border" style="border-color:#e7bfb3;background:#fff9f5;">
-        <p class="text-sm font-medium mb-3" style="color:#a0694f;">💳 Contas Bancárias</p>
+        <p class="text-sm font-medium mb-3" style="color:#a0694f;">Contas Bancárias</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div class="p-3 rounded-xl" style="border:1px solid #f7dccb;">
-            <p class="text-xs font-semibold mb-2" style="color:#c9a898;">🇦🇴 Conta Nacional</p>
+            <p class="text-xs font-semibold mb-2" style="color:#c9a898;">Conta Nacional</p>
             <div class="flex flex-col gap-2">
               <input type="text" id="bank-national-holder" placeholder="Titular" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
               <input type="text" id="bank-national-account" placeholder="Número de conta" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
@@ -204,7 +204,7 @@
             </div>
           </div>
           <div class="p-3 rounded-xl" style="border:1px solid #f7dccb;">
-            <p class="text-xs font-semibold mb-2" style="color:#c9a898;">🌍 Conta Internacional</p>
+            <p class="text-xs font-semibold mb-2" style="color:#c9a898;">Conta Internacional</p>
             <div class="flex flex-col gap-2">
               <input type="text" id="bank-intl-holder" placeholder="Titular" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
               <input type="text" id="bank-intl-iban" placeholder="IBAN Internacional" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
@@ -215,13 +215,13 @@
           </div>
         </div>
         <button id="btn-save-bank" class="w-full py-3 rounded-xl text-white text-sm font-medium transition-smooth gift-btn" style="background:#a0694f;">Guardar Dados Bancários</button>
-        <p id="bank-admin-status" class="text-xs text-green-600 mt-2 hidden">✓ Dados guardados!</p>
+        <p id="bank-admin-status" class="text-xs text-green-600 mt-2 hidden">Dados guardados!</p>
         <input type="hidden" id="iban-input">
       </div>
 
       <!-- Gift Form -->
       <div class="mb-5 p-4 rounded-2xl border" style="border-color:#e7bfb3;background:#fff9f5;">
-        <p id="form-label" class="text-sm font-medium mb-3" style="color:#a0694f;">🎁 Adicionar Presente</p>
+        <p id="form-label" class="text-sm font-medium mb-3" style="color:#a0694f;">Adicionar Presente</p>
         <form id="gift-form" class="flex flex-col gap-3">
           <input type="text" id="gift-name" placeholder="Nome do presente" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;" required>
           <input type="text" id="gift-category" placeholder="Categoria (ex: Cozinha)" class="border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;">
@@ -239,7 +239,7 @@
 
         <!-- Bulk Import -->
         <div class="mt-4 p-3 sm:p-4 rounded-xl" style="background:#fdf6f1;border:1px solid #f7dccb;">
-          <p class="text-sm font-semibold mb-2" style="color:#a0694f;">📋 Importar Lista em Massa</p>
+          <p class="text-sm font-semibold mb-2" style="color:#a0694f;">Importar Lista em Massa</p>
           <textarea id="bulk-gifts-input" placeholder="Ex:&#10;Pequenos Eletrodomésticos&#10;• Torradeira&#10;• Chaleira&#10;&#10;Essenciais&#10;• Panelas" class="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;min-height:100px;resize:vertical;"></textarea>
           <button id="btn-import-bulk-gifts" class="mt-2 w-full py-2.5 rounded-xl text-white text-sm font-medium transition-smooth gift-btn" style="background:#a0694f;">Importar Lista</button>
           <p id="bulk-gifts-status" class="text-xs mt-2 hidden"></p>
@@ -300,7 +300,7 @@
       <!-- Messages toggle -->
       <div class="mb-5 p-4 rounded-2xl border flex items-center justify-between gap-3" style="border-color:#e7bfb3;background:#fff9f5;">
         <div>
-          <p class="text-sm font-medium" style="color:#a0694f;">💬 Ativar Recados</p>
+          <p class="text-sm font-medium" style="color:#a0694f;">Ativar Recados</p>
           <p class="text-xs opacity-70 mt-0.5">Convidados podem deixar mensagens</p>
         </div>
         <label class="cursor-pointer flex items-center gap-2 flex-shrink-0">
@@ -532,7 +532,7 @@
         return true;
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
-        showToast('❌ Erro ao conectar com Supabase');
+        showToast('Erro: Erro ao conectar com Supabase');
         return false;
       }
     }
@@ -589,10 +589,10 @@
         try {
           await upsertSetting('cover_photo', ev.target.result);
           applyCoverPhoto(ev.target.result);
-          showToast('✓ Capa atualizada!');
+          showToast('Capa atualizada!');
         } catch (error) {
           console.error(error);
-          showToast('❌ Erro ao guardar capa');
+          showToast('Erro: Erro ao guardar capa');
         }
       };
       reader.readAsDataURL(file);
@@ -602,10 +602,10 @@
       try {
         await upsertSetting('cover_photo', '');
         applyCoverPhoto('');
-        showToast('✓ Capa removida!');
+        showToast('Capa removida!');
       } catch (error) {
         console.error(error);
-        showToast('❌ Erro ao remover capa');
+        showToast('Erro: Erro ao remover capa');
       }
     });
 
@@ -664,8 +664,8 @@
       try {
         await saveStores();
         renderStoresGuest();
-        showToast('✓ Loja atualizada!');
-      } catch(e) { console.error(e); showToast('❌ Erro ao guardar'); }
+        showToast('Loja atualizada!');
+      } catch(e) { console.error(e); showToast('Erro: Erro ao guardar'); }
     }
 
     async function saveStores() {
@@ -677,7 +677,7 @@
       await saveStores();
       renderStoresGuest();
       renderStoresAdmin();
-      showToast('✓ Loja removida!');
+      showToast('Loja removida!');
     }
 
     document.getElementById('btn-add-store').addEventListener('click', async () => {
@@ -686,7 +686,7 @@
       const status = document.getElementById('stores-admin-status');
       const name = nameEl.value.trim();
       const location = locEl.value.trim();
-      if (!name) { showToast('❌ Escreva o nome da loja'); return; }
+      if (!name) { showToast('Erro: Escreva o nome da loja'); return; }
       storesList.push({ name, location });
       nameEl.value = ''; locEl.value = '';
       try {
@@ -695,8 +695,8 @@
         renderStoresAdmin();
         status.classList.remove('hidden');
         setTimeout(() => status.classList.add('hidden'), 2000);
-        showToast('✓ Loja adicionada!');
-      } catch(e) { console.error(e); showToast('❌ Erro ao guardar loja'); }
+        showToast('Loja adicionada!');
+      } catch(e) { console.error(e); showToast('Erro: Erro ao guardar loja'); }
     });
 
     // ============================================================================
@@ -717,7 +717,7 @@
           ta.value = text; document.body.appendChild(ta); ta.select();
           document.execCommand('copy'); ta.remove();
         }
-        btnEl.textContent = '✓ Copiado!';
+        btnEl.textContent = 'Copiado!';
         setTimeout(() => { btnEl.textContent = original; }, 2000);
       };
       copy();
@@ -744,7 +744,7 @@
 
       if (hasNat) {
         html += `<div class="mb-3">
-          <p class="text-xs font-semibold mb-2" style="color:#a0694f">🇦🇴 Conta Nacional</p>
+          <p class="text-xs font-semibold mb-2" style="color:#a0694f">Conta Nacional</p>
           <div class="space-y-1">`;
         if (nat.holder) html += bankRow('Titular', nat.holder);
         if (nat.account) html += bankRow('N.º Conta', nat.account);
@@ -754,7 +754,7 @@
 
       if (hasIntl) {
         html += `<div>
-          <p class="text-xs font-semibold mb-2" style="color:#a0694f">🌍 Conta Internacional</p>
+          <p class="text-xs font-semibold mb-2" style="color:#a0694f">Conta Internacional</p>
           <div class="space-y-1">`;
         if (intl.holder) html += bankRow('Titular', intl.holder);
         if (intl.iban) html += bankRow('IBAN', intl.iban);
@@ -806,8 +806,8 @@
         renderBankGuest();
         status.classList.remove('hidden');
         setTimeout(() => status.classList.add('hidden'), 2500);
-        showToast('✓ Dados bancários guardados!');
-      } catch(e) { console.error(e); showToast('❌ Erro ao guardar dados'); }
+        showToast('Dados bancários guardados!');
+      } catch(e) { console.error(e); showToast('Erro: Erro ao guardar dados'); }
       btn.disabled = false; btn.textContent = 'Guardar Dados Bancários';
     });
 
@@ -894,7 +894,7 @@
       if (currentViewMode === 'grid') {
         const imgHtml = gift.img
           ? `<img src="${escapeHtml(gift.img)}" alt="${escapeHtml(gift.name)}" class="w-full h-44 object-cover" loading="lazy">`
-          : `<div class="w-full h-44 flex items-center justify-center" style="background:#f7dccb"><span class="text-3xl">🎁</span></div>`;
+          : `<div class="w-full h-44 flex items-center justify-center" style="background:#f7dccb"><span style="font-size:1.5rem;opacity:0.4;">•</span></div>`;
         return `<div class="rounded-2xl overflow-hidden shadow-sm border relative" style="border-color:#e7bfb3;background:#fff9f5;">
           ${imgHtml}
           <div class="p-4 ${disabled ? 'blur-sm' : ''}">
@@ -911,7 +911,7 @@
       } else {
         const imgHtml = gift.img
           ? `<img src="${escapeHtml(gift.img)}" alt="${escapeHtml(gift.name)}" class="w-20 h-20 object-cover rounded flex-shrink-0" loading="lazy">`
-          : `<div class="w-20 h-20 flex items-center justify-center rounded flex-shrink-0" style="background:#f7dccb"><span class="text-2xl">🎁</span></div>`;
+          : `<div class="w-20 h-20 flex items-center justify-center rounded flex-shrink-0" style="background:#f7dccb"><span style="opacity:0.3;">•</span></div>`;
         return `<div class="flex items-start gap-3 p-3 rounded-lg border" style="border-color:#e7bfb3;background:#fff9f5;">
           ${imgHtml}
           <div class="flex-1 min-w-0 ${disabled ? 'opacity-60' : ''}">
@@ -968,7 +968,7 @@
         selectedGiftId = null;
         await refreshFromSupabase();
         updateMessageFormVisibility();
-        showToast('✓ Presente reservado com sucesso!');
+        showToast('Presente reservado com sucesso!');
       } catch (error) {
         console.error(error);
         document.getElementById('modal-error').textContent = 'Erro ao reservar presente.';
@@ -1021,7 +1021,7 @@
         updateHeaderButtons();
         await refreshFromSupabase();
         showAdminPanel();
-        showToast('✓ Login bem-sucedido!');
+        showToast('Login bem-sucedido!');
       } catch (error) {
         console.error(error);
         document.getElementById('pw-error').classList.remove('hidden');
@@ -1037,13 +1037,13 @@
       document.getElementById('guest-view').classList.remove('hidden');
       document.getElementById('messages-section').classList.remove('hidden');
       await refreshFromSupabase();
-      showToast('✓ Logout realizado!');
+      showToast('Logout realizado!');
     });
 
     function updateHeaderButtons() {
       const adminBtn = document.getElementById('btn-admin-access');
       const logoutBtn = document.getElementById('btn-logout');
-      if (isLoggedIn) { adminBtn.textContent = '⚙️ Painel'; logoutBtn.classList.remove('hidden'); }
+      if (isLoggedIn) { adminBtn.textContent = 'Painel'; logoutBtn.classList.remove('hidden'); }
       else { adminBtn.textContent = 'Área dos Noivos'; logoutBtn.classList.add('hidden'); }
       // Atualizar visibilidade dos botões da capa
       const img = document.getElementById('cover-photo');
@@ -1083,7 +1083,7 @@
     document.getElementById('gift-img').addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) { formImgData = null; document.getElementById('gift-img-name').textContent = ''; return; }
-      document.getElementById('gift-img-name').textContent = `📎 ${file.name}`;
+      document.getElementById('gift-img-name').textContent = `${file.name}`;
       const reader = new FileReader();
       reader.onload = (ev) => { formImgData = ev.target.result; };
       reader.readAsDataURL(file);
@@ -1094,7 +1094,7 @@
       const name = document.getElementById('gift-name').value.trim();
       const category = document.getElementById('gift-category').value.trim();
       const max = parseInt(document.getElementById('gift-max').value) || 1;
-      if (!name) { showToast('❌ Digite o nome do presente'); return; }
+      if (!name) { showToast('Erro: Digite o nome do presente'); return; }
 
       const btn = document.getElementById('btn-form-submit');
       btn.disabled = true; btn.textContent = '...';
@@ -1105,7 +1105,7 @@
           if (formImgData) payload.img = formImgData;
           const { error } = await supabaseClient.from('wedding_gifts').update(payload).eq('id', editGiftId);
           if (error) throw error;
-          showToast('✓ Presente atualizado!');
+          showToast('Presente atualizado!');
           editGiftId = null;
           document.getElementById('form-label').textContent = 'Adicionar Presente';
           document.getElementById('btn-form-submit').textContent = 'Adicionar';
@@ -1113,7 +1113,7 @@
         } else {
           const { error } = await supabaseClient.from('wedding_gifts').insert({ name, img: formImgData || '', max_choices: max, category });
           if (error) throw error;
-          showToast('✓ Presente adicionado!');
+          showToast('Presente adicionado!');
         }
         formImgData = null;
         document.getElementById('gift-name').value = '';
@@ -1125,7 +1125,7 @@
         renderAdminDashboard();
       } catch (error) {
         console.error(error);
-        showToast('❌ Erro ao salvar presente');
+        showToast('Erro: Erro ao salvar presente');
       }
       btn.disabled = false; btn.textContent = editGiftId ? 'Guardar' : 'Adicionar';
     });
@@ -1150,7 +1150,7 @@
       document.getElementById('gift-name').value = gift.name;
       document.getElementById('gift-category').value = gift.category || '';
       document.getElementById('gift-max').value = gift.maxChoices;
-      document.getElementById('form-label').textContent = '✏️ Editar Presente';
+      document.getElementById('form-label').textContent = 'Editar Presente';
       document.getElementById('btn-form-submit').textContent = 'Guardar';
       document.getElementById('btn-form-cancel').classList.remove('hidden');
       document.getElementById('gift-img-name').textContent = '';
@@ -1180,10 +1180,10 @@
         deleteGiftId = null;
         await refreshFromSupabase();
         renderAdminDashboard();
-        showToast('✓ Presente eliminado!');
+        showToast('Presente eliminado!');
       } catch (error) {
         console.error(error);
-        showToast('❌ Erro ao eliminar presente');
+        showToast('Erro: Erro ao eliminar presente');
       }
       btn.disabled = false; btn.textContent = 'Eliminar';
     });
@@ -1197,11 +1197,11 @@
       const gifts = [];
       let currentCategory = '';
       lines.forEach((line, index) => {
-        const isBullet = /^[•●▪◦*\-–—]+\s*/.test(line);
-        const cleanLine = line.replace(/^[•●▪◦*\-–—]+\s*/, '').replace(/^\d+[\.)]\s*/, '').trim();
+        const isBullet = /^[•*\-–—]+\s*/.test(line);
+        const cleanLine = line.replace(/^[•*\-–—]+\s*/, '').replace(/^\d+[\.)]\s*/, '').trim();
         if (!cleanLine) return;
         const nextLine = lines[index + 1] || '';
-        const nextIsBullet = /^[•●▪◦*\-–—]+\s*/.test(nextLine.trim());
+        const nextIsBullet = /^[•*\-–—]+\s*/.test(nextLine.trim());
         const looksLikeCategory = !isBullet && (nextIsBullet || !currentCategory);
         if (looksLikeCategory) { currentCategory = cleanLine; return; }
         gifts.push({ name: cleanLine, category: currentCategory || 'Outros Presentes', max_choices: 1, img: '' });
@@ -1214,23 +1214,23 @@
       const status = document.getElementById('bulk-gifts-status');
       const btn = document.getElementById('btn-import-bulk-gifts');
       const parsed = parseBulkGifts(textarea.value);
-      if (!parsed.length) { status.textContent = '❌ Cole uma lista com categorias e presentes'; status.classList.remove('hidden'); return; }
+      if (!parsed.length) { status.textContent = 'Erro: Cole uma lista com categorias e presentes'; status.classList.remove('hidden'); return; }
       const existing = new Set(GIFTS.map(g => `${(g.category || '').toLowerCase()}|${g.name.toLowerCase()}`));
       const toInsert = parsed.filter(g => !existing.has(`${g.category.toLowerCase()}|${g.name.toLowerCase()}`));
-      if (!toInsert.length) { status.textContent = `ℹ️ ${parsed.length} item(ns) já existem`; status.classList.remove('hidden'); return; }
+      if (!toInsert.length) { status.textContent = `${parsed.length} item(ns) já existem`; status.classList.remove('hidden'); return; }
       btn.disabled = true; btn.textContent = 'Importando...';
       try {
         const { error } = await supabaseClient.from('wedding_gifts').insert(toInsert);
         if (error) throw error;
         textarea.value = '';
         const catCount = new Set(toInsert.map(g => g.category)).size;
-        status.textContent = `✓ ${toInsert.length} presente(s) em ${catCount} categoria(s)!`;
+        status.textContent = `${toInsert.length} presente(s) em ${catCount} categoria(s)!`;
         status.classList.remove('hidden');
         await refreshFromSupabase();
         renderAdminDashboard();
       } catch (error) {
         console.error(error);
-        status.textContent = '❌ Erro ao importar lista';
+        status.textContent = 'Erro: Erro ao importar lista';
         status.classList.remove('hidden');
       }
       btn.disabled = false; btn.textContent = 'Importar Lista';
@@ -1286,7 +1286,7 @@
                 <p class="text-xs opacity-60">${formatDate(msg.created_at)}</p>
               </div>
               <button onclick="toggleLikeMessage('${msg.__backendId}')" class="flex items-center gap-1 text-sm" style="color:${userLiked || adminLiked ? '#e76c6c' : '#c9a898'};">
-                ${userLiked || adminLiked ? '❤️' : '🤍'} <span>${likes}</span>
+                <span>${likes}</span> Gosto
               </button>
             </div>
             <p class="text-sm mb-2">${escapeHtml(msg.message)}</p>
@@ -1310,7 +1310,7 @@
         const { error } = await supabaseClient.from('wedding_messages').update({ likes: msg.likes, liked_by: msg.liked_by }).eq('id', msgId);
         if (error) throw error;
         renderMessagesSection();
-      } catch (error) { console.error(error); showToast('❌ Erro ao atualizar like'); }
+      } catch (error) { console.error(error); showToast('Erro: Erro ao atualizar like'); }
     }
 
     document.getElementById('btn-msg-submit').addEventListener('click', async () => {
@@ -1327,7 +1327,7 @@
         if (error) throw error;
         document.getElementById('guest-message').value = '';
         await refreshFromSupabase();
-        showToast('✓ Recado enviado!');
+        showToast('Recado enviado!');
       } catch (error) {
         console.error(error);
         errorEl.textContent = 'Erro ao enviar recado.';
@@ -1366,8 +1366,8 @@
         document.getElementById('reply-overlay').classList.add('hidden');
         replyMessageId = null;
         await refreshFromSupabase();
-        showToast('✓ Resposta guardada!');
-      } catch (error) { console.error(error); showToast('❌ Erro ao guardar resposta'); }
+        showToast('Resposta guardada!');
+      } catch (error) { console.error(error); showToast('Erro: Erro ao guardar resposta'); }
       btn.disabled = false; btn.textContent = 'Responder';
     });
 
@@ -1397,8 +1397,8 @@
         document.getElementById('edit-msg-overlay').classList.add('hidden');
         editMessageId = null;
         await refreshFromSupabase();
-        showToast('✓ Recado atualizado!');
-      } catch (error) { console.error(error); showToast('❌ Erro ao atualizar recado'); }
+        showToast('Recado atualizado!');
+      } catch (error) { console.error(error); showToast('Erro: Erro ao atualizar recado'); }
       btn.disabled = false; btn.textContent = 'Guardar';
     });
 
@@ -1421,8 +1421,8 @@
         document.getElementById('delete-msg-overlay').classList.add('hidden');
         deleteMessageId = null;
         await refreshFromSupabase();
-        showToast('✓ Recado eliminado!');
-      } catch (error) { console.error(error); showToast('❌ Erro ao eliminar recado'); }
+        showToast('Recado eliminado!');
+      } catch (error) { console.error(error); showToast('Erro: Erro ao eliminar recado'); }
       btn.disabled = false; btn.textContent = 'Eliminar';
     });
 
@@ -1436,8 +1436,8 @@
         await upsertSetting('messages_enabled', messagesEnabled);
         renderMessagesSection();
         updateMessageFormVisibility();
-        showToast(`✓ Recados ${messagesEnabled ? 'ativados' : 'desativados'}!`);
-      } catch (error) { console.error(error); showToast('❌ Erro ao atualizar configuração'); }
+        showToast(`Recados ${messagesEnabled ? 'ativados' : 'desativados'}!`);
+      } catch (error) { console.error(error); showToast('Erro: Erro ao atualizar configuração'); }
     });
 
     // ============================================================================
@@ -1488,8 +1488,8 @@
           currentGuestName = null; localStorage.removeItem('jm_guest_name'); updateMessageFormVisibility();
         }
         await refreshFromSupabase();
-        showToast('✓ Reserva cancelada!');
-      } catch (error) { console.error(error); showToast('❌ Erro ao cancelar reserva'); }
+        showToast('Reserva cancelada!');
+      } catch (error) { console.error(error); showToast('Erro: Erro ao cancelar reserva'); }
     }
 
     // ============================================================================
@@ -1507,7 +1507,7 @@
         if (isLoggedIn) { showAdminPanel(); }
       } catch (error) {
         console.error('Erro na inicialização:', error);
-        showToast('❌ Erro ao carregar dados');
+        showToast('Erro: Erro ao carregar dados');
       }
     });
   </script>
