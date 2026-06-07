@@ -26,7 +26,7 @@
     .table-wrap { overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid #e7bfb3; }
     .table-wrap table { min-width:480px;width:100%;text-align:left;font-size:13px; }
     .transition-smooth { transition:all .2s ease; }
-    .img-fade { opacity:0;transition:opacity .35s ease;background:#f7dccb; }
+    .img-fade { opacity:0;transition:opacity .35s ease;background:#fdf9f6; }
     .img-fade.loaded { opacity:1; }
     .img-skeleton { background:linear-gradient(90deg,#f7dccb 25%,#fde8d8 50%,#f7dccb 75%);background-size:200% 100%;animation:shimmer 1.4s infinite; }
     @keyframes shimmer { 0%{background-position:200% 0}100%{background-position:-200% 0} }
@@ -36,9 +36,9 @@
     .edit-pencil { display:none;position:absolute;top:-6px;right:-6px;background:#a0694f;color:white;border:none;border-radius:6px;padding:2px 7px;font-size:11px;cursor:pointer;z-index:10;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.15); }
     .admin-mode .editable-wrap .edit-pencil { display:block; }
     /* Section controls */
-    .section-toolbar { display:none;align-items:center;gap:4px;padding:4px 6px;border-radius:8px;margin-bottom:8px; background:#f7dccb; }
+    .section-toolbar { display:none;align-items:center;gap:4px;padding:4px 6px;border-radius:8px;margin-bottom:8px; background:#fdf9f6; }
     .admin-mode .section-toolbar { display:flex; }
-    .section-hidden-banner { display:none;background:#f7dccb;border-radius:8px;padding:6px 10px;margin-bottom:8px;font-size:12px;color:#a0694f;text-align:center; }
+    .section-hidden-banner { display:none;background:#fdf9f6;border-radius:8px;padding:6px 10px;margin-bottom:8px;font-size:12px;color:#a0694f;text-align:center; }
     .section-is-hidden > .section-content { display:none; }
     .admin-mode .section-is-hidden > .section-content { display:block;opacity:.4;pointer-events:none; }
     .admin-mode .section-is-hidden > .section-hidden-banner { display:block; }
@@ -80,7 +80,7 @@
 <section id="guest-view">
 
   <!-- SECTION: Welcome card -->
-  <div id="sec-welcome" class="mb-6 sm:mb-8">
+  <div id="sec-welcome" class="mb-6 sm:mb-8 rounded-2xl border" style="border-color:#e7bfb3;background:#ffffff;padding:16px;">
     <div class="section-toolbar">
       <span class="text-xs font-medium mr-1" style="color:#a0694f;">Boas-vindas</span>
       <button onclick="secUp('sec-welcome')" class="px-2 py-1 rounded text-xs text-white" style="background:#c9a898;">&#8679;</button>
@@ -88,7 +88,7 @@
       <button onclick="secToggle('sec-welcome')" id="tb-sec-welcome" class="px-2 py-1 rounded text-xs text-white" style="background:#a0694f;">Ocultar</button>
     </div>
     <div class="section-hidden-banner">Secção oculta para convidados</div>
-    <div class="section-content p-4 sm:p-6 rounded-2xl border" style="border-color:#e7bfb3;background:#ffffff;">
+    <div class="section-content p-4 sm:p-6 rounded-2xl" style="background:#fdf9f6;">
       <div class="editable-wrap block-wrap mb-2">
         <p id="text-welcome-label" class="text-xs uppercase tracking-widest font-semibold" style="color:#c9a898;"></p>
         <button class="edit-pencil" onclick="openEditor('text-welcome-label','Etiqueta')">Editar</button>
@@ -110,7 +110,7 @@
             <button onclick="secToggle('sec-card-gifts')" id="tb-sec-card-gifts" class="px-2 py-1 rounded text-xs text-white" style="background:#a0694f;">Ocultar</button>
           </div>
           <div class="section-hidden-banner">Oculto</div>
-          <div class="section-content p-3 sm:p-4 rounded-xl" style="background:#fdf4f0;border:1px solid #e7bfb3;">
+          <div class="section-content p-3 sm:p-4 rounded-xl" style="background:#fdf9f6;border:1px solid #e7bfb3;">
             <div class="editable-wrap block-wrap mb-1">
               <p id="text-card-gifts-title" class="text-sm font-semibold" style="color:#a0694f;"></p>
               <button class="edit-pencil" onclick="openEditor('text-card-gifts-title','Título')">Editar</button>
@@ -128,7 +128,7 @@
             <button onclick="secToggle('sec-card-stores')" id="tb-sec-card-stores" class="px-2 py-1 rounded text-xs text-white" style="background:#a0694f;">Ocultar</button>
           </div>
           <div class="section-hidden-banner">Oculto</div>
-          <div class="section-content p-3 sm:p-4 rounded-xl" style="background:#fdf4f0;border:1px solid #e7bfb3;">
+          <div class="section-content p-3 sm:p-4 rounded-xl" style="background:#fdf9f6;border:1px solid #e7bfb3;">
             <div class="editable-wrap block-wrap mb-1">
               <p id="text-card-stores-title" class="text-sm font-semibold" style="color:#a0694f;"></p>
               <button class="edit-pencil" onclick="openEditor('text-card-stores-title','Título')">Editar</button>
@@ -148,7 +148,7 @@
             <button onclick="secToggle('sec-card-bank')" id="tb-sec-card-bank" class="px-2 py-1 rounded text-xs text-white" style="background:#a0694f;">Ocultar</button>
           </div>
           <div class="section-hidden-banner">Oculto</div>
-          <div class="section-content p-3 sm:p-4 rounded-xl" style="background:#fdf4f0;border:1px solid #e7bfb3;">
+          <div class="section-content p-3 sm:p-4 rounded-xl" style="background:#fdf9f6;border:1px solid #e7bfb3;">
             <div class="editable-wrap block-wrap mb-1">
               <p id="text-card-bank-title" class="text-sm font-semibold" style="color:#a0694f;"></p>
               <button class="edit-pencil" onclick="openEditor('text-card-bank-title','Título')">Editar</button>
@@ -325,15 +325,15 @@
     <div class="rounded-2xl p-3 sm:p-5 text-center border" style="border-color:#e7bfb3;background:#ffffff;"><p class="text-xs sm:text-sm opacity-70 mb-1">Progresso</p><p id="metric-progress" class="text-2xl sm:text-3xl font-bold" style="color:#a0694f;">0%</p></div>
   </div>
   <p class="text-sm font-medium mb-2" style="color:#a0694f;">Lista de Presentes</p>
-  <div class="table-wrap mb-5"><table><thead style="background:#f7dccb;"><tr><th class="p-3">Presente</th><th class="p-3">Categoria</th><th class="p-3">Reservas</th><th class="p-3">Limite</th><th class="p-3">Ações</th></tr></thead><tbody id="admin-gifts-body"></tbody></table></div>
+  <div class="table-wrap mb-5"><table><thead style="background:#fdf9f6;"><tr><th class="p-3">Presente</th><th class="p-3">Categoria</th><th class="p-3">Reservas</th><th class="p-3">Limite</th><th class="p-3">Ações</th></tr></thead><tbody id="admin-gifts-body"></tbody></table></div>
   <p class="text-sm font-medium mb-2" style="color:#a0694f;">Reservas</p>
-  <div class="table-wrap mb-5"><table><thead style="background:#f7dccb;"><tr><th class="p-3">Presente</th><th class="p-3">Convidado</th><th class="p-3">Telefone</th><th class="p-3">Data</th><th class="p-3">Ação</th></tr></thead><tbody id="admin-table-body"></tbody></table><p id="empty-reservations" class="text-center py-5 opacity-60 text-sm">Nenhuma reserva ainda</p></div>
+  <div class="table-wrap mb-5"><table><thead style="background:#fdf9f6;"><tr><th class="p-3">Presente</th><th class="p-3">Convidado</th><th class="p-3">Telefone</th><th class="p-3">Data</th><th class="p-3">Ação</th></tr></thead><tbody id="admin-table-body"></tbody></table><p id="empty-reservations" class="text-center py-5 opacity-60 text-sm">Nenhuma reserva ainda</p></div>
   <div class="mb-5 p-4 rounded-2xl border flex items-center justify-between gap-3" style="border-color:#e7bfb3;background:#ffffff;">
     <div><p class="text-sm font-medium" style="color:#a0694f;">Ativar Recados</p><p class="text-xs opacity-70 mt-0.5">Convidados podem deixar mensagens</p></div>
     <label class="cursor-pointer flex items-center gap-2 flex-shrink-0"><input type="checkbox" id="toggle-messages" class="w-5 h-5 cursor-pointer"><span class="text-sm" style="color:#a0694f;">Ativado</span></label>
   </div>
   <p class="text-sm font-medium mb-2" style="color:#a0694f;">Recados dos Convidados</p>
-  <div class="table-wrap mb-8"><table><thead style="background:#f7dccb;"><tr><th class="p-3">Autor</th><th class="p-3">Recado</th><th class="p-3">Data</th><th class="p-3">Ações</th></tr></thead><tbody id="admin-messages-body"></tbody></table><p id="empty-messages-admin" class="text-center py-5 opacity-60 text-sm">Nenhuma mensagem ainda</p></div>
+  <div class="table-wrap mb-8"><table><thead style="background:#fdf9f6;"><tr><th class="p-3">Autor</th><th class="p-3">Recado</th><th class="p-3">Data</th><th class="p-3">Ações</th></tr></thead><tbody id="admin-messages-body"></tbody></table><p id="empty-messages-admin" class="text-center py-5 opacity-60 text-sm">Nenhuma mensagem ainda</p></div>
 </section>
 </main>
 
@@ -456,7 +456,7 @@ const DEFAULT_TEXTS = {
   'text-card-stores-title': 'Lojas Parceiras em Luanda',
   'text-card-stores-desc': 'Em alternativa, podem visitar algumas lojas onde selecionámos peças que fazem parte do nosso gosto e que gostaríamos de ter em casa:',
   'text-card-bank-title': 'Contribuição Livre',
-  'text-card-bank-desc': 'Ou, se preferirem, poderão optar por oferecer um valor livre através de transferência bancária para o IBAN:',
+  'text-card-bank-desc': 'Ou, se preferirem, poderão optar por oferecer um valor livre, através de transferência bancária para as seguintes coordenadas:',
   'text-messages-title': 'Recados & Bênçãos'
 };
 
@@ -541,9 +541,8 @@ async function loadSupabaseData() {
     try { sectionState=settings.section_state?JSON.parse(settings.section_state):{}; } catch(e){sectionState={};}
     applySectionState();
 
-    // Stores
-    try { storesList=settings.stores_list?JSON.parse(settings.stores_list):[]; } catch(e){storesList=[];}
-    if(!settings.stores_list) storesList=[
+    // Stores — use defaults if empty or not yet saved
+    const defaultStores = [
       {name:'Dakaza',location:'Luanda Centro e Maxi'},
       {name:'Vista Alegre',location:'Belas Shopping'},
       {name:'Casa Ferreira',location:'Shopping Talatona'},
@@ -551,6 +550,10 @@ async function loadSupabaseData() {
       {name:'Luxury',location:'Belas Shopping'},
       {name:'Espaço Coisas',location:'Belas Shopping'}
     ];
+    try {
+      const parsed = settings.stores_list ? JSON.parse(settings.stores_list) : [];
+      storesList = (parsed && parsed.length > 0) ? parsed : defaultStores;
+    } catch(e) { storesList = defaultStores; }
     renderStoresGuest();
 
     // Bank — always ensure national and international keys exist
