@@ -313,9 +313,24 @@
     <p id="gift-img-name" class="text-xs mt-1 opacity-60"></p>
     <div class="mt-4 p-3 rounded-xl" style="background:#ffffff;border:1px solid #f7dccb;">
       <p class="text-sm font-semibold mb-2" style="color:#a0694f;">Importar Lista em Massa</p>
-      <textarea id="bulk-gifts-input" placeholder="Categoria&#10;• Item&#10;• Item" class="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;min-height:100px;resize:vertical;"></textarea>
-      <button id="btn-import-bulk-gifts" class="mt-2 w-full py-2.5 rounded-xl text-white text-sm font-medium" style="background:#a0694f;">Importar Lista</button>
+      <textarea id="bulk-gifts-input" placeholder="Categoria&#10;• Item&#10;• Item" class="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3]" style="border-color:#e7bfb3;min-height:100px;resize:vertical;" oninput="bulkPreviewReset()"></textarea>
+      <div class="flex gap-2 mt-2">
+        <button id="btn-preview-bulk" class="flex-1 py-2.5 rounded-xl text-sm font-medium border" style="border-color:#a0694f;color:#a0694f;">🔍 Verificar Lista</button>
+        <button id="btn-import-bulk-gifts" class="hidden flex-1 py-2.5 rounded-xl text-white text-sm font-medium" style="background:#a0694f;">✅ Importar Selecionados</button>
+      </div>
       <p id="bulk-gifts-status" class="text-xs mt-2 hidden"></p>
+      <!-- Preview panel -->
+      <div id="bulk-preview-panel" class="hidden mt-3 rounded-xl overflow-hidden border" style="border-color:#e7bfb3;">
+        <div class="px-3 py-2 flex items-center justify-between" style="background:#fdf9f6;">
+          <p class="text-xs font-semibold" style="color:#a0694f;">Pré-visualização da importação</p>
+          <div class="flex gap-3 text-xs">
+            <span id="preview-count-new" class="font-semibold text-green-700"></span>
+            <span id="preview-count-similar" class="font-semibold" style="color:#e67e22;"></span>
+            <span id="preview-count-exists" class="font-semibold text-red-600"></span>
+          </div>
+        </div>
+        <div id="bulk-preview-list" class="divide-y" style="border-color:#f7dccb;max-height:320px;overflow-y:auto;"></div>
+      </div>
     </div>
   </div>
   <!-- Metrics -->
@@ -324,7 +339,25 @@
     <div class="rounded-2xl p-3 sm:p-5 text-center border" style="border-color:#e7bfb3;background:#ffffff;"><p class="text-xs sm:text-sm opacity-70 mb-1">Reservados</p><p id="metric-reserved" class="text-2xl sm:text-3xl font-bold" style="color:#a0694f;">0</p></div>
     <div class="rounded-2xl p-3 sm:p-5 text-center border" style="border-color:#e7bfb3;background:#ffffff;"><p class="text-xs sm:text-sm opacity-70 mb-1">Progresso</p><p id="metric-progress" class="text-2xl sm:text-3xl font-bold" style="color:#a0694f;">0%</p></div>
   </div>
-  <p class="text-sm font-medium mb-2" style="color:#a0694f;">Lista de Presentes</p>
+  <!-- SEARCH & DUPLICATES -->
+  <div class="mb-3 flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
+    <div class="relative flex-1">
+      <input type="text" id="admin-search-input" placeholder="Pesquisar presentes por nome ou categoria…"
+        class="w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#e7bfb3] pr-8"
+        style="border-color:#e7bfb3;" oninput="renderAdminDashboard()">
+      <button onclick="$('admin-search-input').value='';renderAdminDashboard();" class="absolute right-2 top-1/2 -translate-y-1/2 text-xs" style="color:#c9a898;" title="Limpar">✕</button>
+    </div>
+    <button id="btn-check-duplicates" onclick="checkDuplicates()" class="px-4 py-2.5 rounded-xl text-sm font-medium border flex-shrink-0 transition-smooth hover:opacity-80" style="border-color:#e7bfb3;color:#a0694f;">🔍 Ver Duplicados</button>
+  </div>
+  <!-- Duplicates panel -->
+  <div id="duplicates-panel" class="hidden mb-4 p-4 rounded-2xl border" style="border-color:#e7bfb3;background:#fff8f5;">
+    <div class="flex items-center justify-between mb-3">
+      <p class="text-sm font-semibold" style="color:#a0694f;">Presentes Possivelmente Duplicados</p>
+      <button onclick="$('duplicates-panel').classList.add('hidden')" class="text-xs px-2 py-1 rounded" style="color:#a0694f;">✕ Fechar</button>
+    </div>
+    <div id="duplicates-list"></div>
+  </div>
+  <p class="text-sm font-medium mb-2" style="color:#a0694f;">Lista de Presentes <span id="admin-search-count" class="text-xs font-normal opacity-60"></span></p>
   <div class="table-wrap mb-5"><table><thead style="background:#fdf9f6;"><tr><th class="p-3">Presente</th><th class="p-3">Categoria</th><th class="p-3">Reservas</th><th class="p-3">Limite</th><th class="p-3">Ações</th></tr></thead><tbody id="admin-gifts-body"></tbody></table></div>
   <p class="text-sm font-medium mb-2" style="color:#a0694f;">Reservas</p>
   <div class="table-wrap mb-5"><table><thead style="background:#fdf9f6;"><tr><th class="p-3">Presente</th><th class="p-3">Convidado</th><th class="p-3">Telefone</th><th class="p-3">Data</th><th class="p-3">Ação</th></tr></thead><tbody id="admin-table-body"></tbody></table><p id="empty-reservations" class="text-center py-5 opacity-60 text-sm">Nenhuma reserva ainda</p></div>
@@ -1147,10 +1180,29 @@ function renderAdminDashboard() {
   $('toggle-messages').checked=messagesEnabled;
 
   const gb=$('admin-gifts-body'); gb.innerHTML='';
-  GIFTS.forEach(g=>{
+  const searchEl=$('admin-search-input');
+  const q=(searchEl?searchEl.value.trim():'').toLowerCase();
+  const filteredGifts=q
+    ? GIFTS.filter(g=>g.name.toLowerCase().includes(q)||(g.category||'').toLowerCase().includes(q))
+    : GIFTS;
+  const sc=$('admin-search-count');
+  if(sc) sc.textContent=q?`(${filteredGifts.length} de ${GIFTS.length})`:'' ;
+  if(filteredGifts.length===0&&q){
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td colspan="5" class="p-4 text-center text-sm opacity-60">Nenhum presente encontrado para "${escapeHtml(q)}"</td>`;
+    gb.appendChild(tr);
+  }
+  filteredGifts.forEach(g=>{
     const count=reservations.filter(r=>r.gift_id===g.id).length;
     const tr=document.createElement('tr'); tr.className='border-t'; tr.style.borderColor='#f7dccb';
-    tr.innerHTML=`<td class="p-3">${escapeHtml(g.name)}</td><td class="p-3">${escapeHtml(g.category||'-')}</td><td class="p-3">${count}</td><td class="p-3">${g.maxChoices}</td><td class="p-3 flex gap-2"><button class="text-xs underline" style="color:#a0694f;" onclick="startEditGift('${g.id}')">Editar</button><button class="text-xs underline text-red-600" onclick="confirmDeleteGift('${g.id}')">Eliminar</button></td>`;
+    const hl=(text)=>{
+      if(!q) return escapeHtml(text);
+      const lo=text.toLowerCase();
+      const idx=lo.indexOf(q);
+      if(idx===-1) return escapeHtml(text);
+      return escapeHtml(text.slice(0,idx))+'<mark style="background:#f7dccb;border-radius:3px;padding:0 2px;">'+escapeHtml(text.slice(idx,idx+q.length))+'</mark>'+escapeHtml(text.slice(idx+q.length));
+    };
+    tr.innerHTML=`<td class="p-3">${hl(g.name)}</td><td class="p-3">${hl(g.category||'-')}</td><td class="p-3">${count}</td><td class="p-3">${g.maxChoices}</td><td class="p-3 flex gap-2"><button class="text-xs underline" style="color:#a0694f;" onclick="startEditGift('${g.id}')">Editar</button><button class="text-xs underline text-red-600" onclick="confirmDeleteGift('${g.id}')">Eliminar</button></td>`;
     gb.appendChild(tr);
   });
 
@@ -1254,22 +1306,257 @@ function parseBulkGifts(text) {
   return gifts;
 }
 
-$('btn-import-bulk-gifts').addEventListener('click',async()=>{
-  const ta=$('bulk-gifts-input'), st=$('bulk-gifts-status'), btn=$('btn-import-bulk-gifts');
+// Bulk import state
+let bulkPreviewData = []; // [{parsed, status:'new'|'exists'|'similar', matchName, include}]
+
+function bulkPreviewReset() {
+  bulkPreviewData=[];
+  $('bulk-preview-panel').classList.add('hidden');
+  $('btn-import-bulk-gifts').classList.add('hidden');
+  const st=$('bulk-gifts-status'); st.classList.add('hidden');
+}
+
+$('btn-preview-bulk').addEventListener('click',()=>{
+  const ta=$('bulk-gifts-input'), st=$('bulk-gifts-status');
   const parsed=parseBulkGifts(ta.value);
-  if(!parsed.length){st.textContent='Cole uma lista com categorias e presentes';st.classList.remove('hidden');return;}
-  const existing=new Set(GIFTS.map(g=>`${(g.category||'').toLowerCase()}|${g.name.toLowerCase()}`));
-  const toInsert=parsed.filter(g=>!existing.has(`${g.category.toLowerCase()}|${g.name.toLowerCase()}`));
-  if(!toInsert.length){st.textContent=`${parsed.length} item(ns) já existem`;st.classList.remove('hidden');return;}
-  btn.disabled=true; btn.textContent='Importando...';
+  if(!parsed.length){
+    st.textContent='Cole uma lista com categorias e presentes.';
+    st.style.color='#c0392b'; st.classList.remove('hidden');
+    return;
+  }
+  st.classList.add('hidden');
+
+  // Classify each parsed gift
+  bulkPreviewData=parsed.map(g=>{
+    const ng=normalize(g.name);
+    // Exact match (name + category)
+    const exactMatch=GIFTS.find(e=>
+      normalize(e.name)===ng &&
+      normalize(e.category||'')===normalize(g.category||'')
+    );
+    if(exactMatch) return {...g, status:'exists', matchName:exactMatch.name, include:false};
+    // Similar name match (levenshtein or contains)
+    const similarMatch=GIFTS.find(e=>{
+      const ne=normalize(e.name);
+      return ne===ng || ne.includes(ng) || ng.includes(ne) || levenshtein(ne,ng)<=2;
+    });
+    if(similarMatch) return {...g, status:'similar', matchName:similarMatch.name, include:false};
+    return {...g, status:'new', matchName:null, include:true};
+  });
+
+  renderBulkPreview();
+  $('bulk-preview-panel').classList.remove('hidden');
+  $('btn-import-bulk-gifts').classList.remove('hidden');
+});
+
+function renderBulkPreview() {
+  const list=$('bulk-preview-list');
+  const countNew=bulkPreviewData.filter(g=>g.status==='new').length;
+  const countSim=bulkPreviewData.filter(g=>g.status==='similar').length;
+  const countEx=bulkPreviewData.filter(g=>g.status==='exists').length;
+  $('preview-count-new').textContent=countNew?`✅ ${countNew} novos`:'';
+  $('preview-count-similar').textContent=countSim?`⚠️ ${countSim} similares`:'';
+  $('preview-count-exists').textContent=countEx?`❌ ${countEx} já existem`:'';
+
+  list.innerHTML=bulkPreviewData.map((g,i)=>{
+    const bg=g.status==='new'?'#f0fff4':g.status==='similar'?'#fffbf0':'#fff5f5';
+    const badge=g.status==='new'
+      ? '<span class="text-xs px-1.5 py-0.5 rounded font-semibold" style="background:#d4edda;color:#155724;">Novo</span>'
+      : g.status==='similar'
+      ? `<span class="text-xs px-1.5 py-0.5 rounded font-semibold" style="background:#fde8c8;color:#7d4e00;">Similar a "${escapeHtml(g.matchName)}"</span>`
+      : `<span class="text-xs px-1.5 py-0.5 rounded font-semibold" style="background:#fde8e8;color:#c0392b;">Já existe</span>`;
+    const checked=g.include?'checked':'';
+    const disabled=g.status==='exists'?'disabled title="Já existe na lista"':'';
+    return `<div class="flex items-center gap-2 px-3 py-2 text-sm" style="background:${bg};">
+      <input type="checkbox" ${checked} ${disabled} onchange="bulkPreviewData[${i}].include=this.checked" class="w-4 h-4 cursor-pointer flex-shrink-0" style="accent-color:#a0694f;">
+      <div class="flex-1 min-w-0">
+        <span class="font-medium" style="color:#a0694f;">${escapeHtml(g.name)}</span>
+        ${g.category?`<span class="text-xs ml-1 opacity-60">${escapeHtml(g.category)}</span>`:''}
+      </div>
+      ${badge}
+    </div>`;
+  }).join('');
+}
+
+$('btn-import-bulk-gifts').addEventListener('click',async()=>{
+  const st=$('bulk-gifts-status'), btn=$('btn-import-bulk-gifts');
+  const toInsert=bulkPreviewData.filter(g=>g.include).map(g=>({name:g.name,category:g.category,max_choices:g.max_choices,img:g.img||''}));
+  if(!toInsert.length){
+    st.textContent='Nenhum presente selecionado para importar.';
+    st.style.color='#c0392b'; st.classList.remove('hidden'); return;
+  }
+  btn.disabled=true; btn.textContent='A importar...';
   try {
     const {error}=await sb.from('wedding_gifts').insert(toInsert);
     if(error) throw error;
-    ta.value=''; st.textContent=`${toInsert.length} presente(s) importado(s)!`; st.classList.remove('hidden');
+    $('bulk-gifts-input').value='';
+    $('bulk-preview-panel').classList.add('hidden');
+    btn.classList.add('hidden');
+    bulkPreviewData=[];
+    st.textContent=`✅ ${toInsert.length} presente(s) importado(s) com sucesso!`;
+    st.style.color='#155724'; st.classList.remove('hidden');
     await refreshFromSupabase(true); renderAdminDashboard();
-  } catch(e){ st.textContent='Erro ao importar lista'; st.classList.remove('hidden'); }
-  btn.disabled=false; btn.textContent='Importar Lista';
+  } catch(e){ st.textContent='Erro ao importar lista.'; st.style.color='#c0392b'; st.classList.remove('hidden'); }
+  btn.disabled=false; btn.textContent='✅ Importar Selecionados';
 });
+
+
+// ============================================================================
+// DUPLICATE CHECKER
+// ============================================================================
+function normalize(str) {
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9 ]/g,' ')
+    .replace(/\s+/g,' ').trim();
+}
+
+// Helper: find duplicate groups
+function findDuplicateGroups() {
+  const groups=[];
+  const used=new Set();
+  for(let i=0;i<GIFTS.length;i++){
+    if(used.has(GIFTS[i].id)) continue;
+    const na=normalize(GIFTS[i].name);
+    const group=[GIFTS[i]];
+    for(let j=i+1;j<GIFTS.length;j++){
+      if(used.has(GIFTS[j].id)) continue;
+      const nb=normalize(GIFTS[j].name);
+      if(na===nb || na.includes(nb) || nb.includes(na) || levenshtein(na,nb)<=2){
+        group.push(GIFTS[j]);
+        used.add(GIFTS[j].id);
+      }
+    }
+    if(group.length>1){ used.add(GIFTS[i].id); groups.push(group); }
+  }
+  return groups;
+}
+
+function checkDuplicates() {
+  const panel=$('duplicates-panel'), list=$('duplicates-list');
+  if(!panel||!list) return;
+  panel.classList.remove('hidden');
+  renderDuplicatesPanel();
+}
+
+function renderDuplicatesPanel() {
+  const list=$('duplicates-list'); if(!list) return;
+  const groups=findDuplicateGroups();
+
+  if(groups.length===0){
+    list.innerHTML='<p class="text-sm text-green-700 font-medium">✅ Nenhum duplicado encontrado! A lista está limpa.</p>';
+    // Hide auto-delete button if visible
+    const btn=$('btn-auto-delete-all'); if(btn) btn.classList.add('hidden');
+    return;
+  }
+
+  // Count how many would be deleted (all but 1 per group, prioritizing those with no reservations)
+  const toDeleteCount=groups.reduce((sum,grp)=>sum+(grp.length-1),0);
+
+  // Show/create auto-delete button
+  let autoBtn=$('btn-auto-delete-all');
+  if(!autoBtn){
+    autoBtn=document.createElement('button');
+    autoBtn.id='btn-auto-delete-all';
+    autoBtn.className='w-full mt-3 py-2.5 rounded-xl text-white text-sm font-semibold transition-smooth';
+    autoBtn.style.background='#c0392b';
+    list.parentNode.appendChild(autoBtn);
+  }
+  autoBtn.classList.remove('hidden');
+  autoBtn.textContent=`🗑️ Eliminar automaticamente ${toDeleteCount} duplicado(s)`;
+  autoBtn.onclick=()=>confirmAutoDeleteDuplicates(groups);
+
+  list.innerHTML=groups.map((grp,gi)=>{
+    // Sort: keep the one with most reservations (or first if tied) — mark others for deletion
+    const sorted=[...grp].sort((a,b)=>{
+      const ca=reservations.filter(r=>r.gift_id===a.id).length;
+      const cb=reservations.filter(r=>r.gift_id===b.id).length;
+      return cb-ca;
+    });
+    const keepId=sorted[0].id;
+    return `<div class="mb-3 p-3 rounded-xl" style="background:#ffffff;border:1px solid #e7bfb3;">
+      <div class="flex items-center justify-between mb-2">
+        <p class="text-xs font-semibold" style="color:#c9a898;">Grupo ${gi+1} — ${grp.length} presentes similares</p>
+        <button onclick="autoDeleteGroup(${JSON.stringify(sorted.slice(1).map(g=>g.id))})" class="text-xs px-2 py-1 rounded-lg text-white" style="background:#c0392b;">Eliminar duplicados deste grupo</button>
+      </div>
+      ${sorted.map((g,idx)=>{
+        const count=reservations.filter(r=>r.gift_id===g.id).length;
+        const isKeep=g.id===keepId;
+        return `<div class="flex items-center justify-between gap-2 py-1.5 border-t" style="border-color:#f7dccb;">
+          <div class="flex items-center gap-2">
+            ${isKeep
+              ? '<span class="text-xs px-2 py-0.5 rounded-full font-semibold" style="background:#d4edda;color:#155724;">Manter</span>'
+              : '<span class="text-xs px-2 py-0.5 rounded-full font-semibold" style="background:#fde8e8;color:#c0392b;">Duplicado</span>'}
+            <div>
+              <span class="text-sm font-medium" style="color:#a0694f;">${escapeHtml(g.name)}</span>
+              ${g.category?`<span class="text-xs ml-2 opacity-60">${escapeHtml(g.category)}</span>`:''}
+              ${count>0?`<span class="text-xs ml-2 font-semibold text-green-700">${count} reserva(s)</span>`:'<span class="text-xs ml-2 opacity-40">sem reservas</span>'}
+            </div>
+          </div>
+          <div class="flex gap-2 flex-shrink-0">
+            <button onclick="startEditGift('${g.id}');$('duplicates-panel').classList.add('hidden');" class="text-xs underline" style="color:#a0694f;">Editar</button>
+            <button onclick="confirmDeleteGift('${g.id}')" class="text-xs underline text-red-600">Eliminar</button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+}
+
+async function autoDeleteGroup(ids) {
+  if(!ids||!ids.length) return;
+  const hasRes=ids.some(id=>reservations.some(r=>r.gift_id===id));
+  const msg=hasRes
+    ? `Atenção: ${ids.length} presente(s) têm reservas. Eliminar mesmo assim?`
+    : `Eliminar ${ids.length} duplicado(s) deste grupo?`;
+  if(!confirm(msg)) return;
+  try {
+    for(const id of ids){
+      await sb.from('wedding_reservations').delete().eq('gift_id',id);
+      await sb.from('wedding_gifts').delete().eq('id',id);
+    }
+    await refreshFromSupabase(); renderAdminDashboard();
+    showToast(`${ids.length} duplicado(s) eliminado(s)!`);
+    renderDuplicatesPanel();
+  } catch(e){ showToast('Erro ao eliminar duplicados'); }
+}
+
+async function confirmAutoDeleteDuplicates(groups) {
+  // For each group, keep the one with most reservations; delete the rest
+  const toDelete=[];
+  groups.forEach(grp=>{
+    const sorted=[...grp].sort((a,b)=>{
+      const ca=reservations.filter(r=>r.gift_id===a.id).length;
+      const cb=reservations.filter(r=>r.gift_id===b.id).length;
+      return cb-ca;
+    });
+    toDelete.push(...sorted.slice(1).map(g=>g.id));
+  });
+  const hasRes=toDelete.some(id=>reservations.some(r=>r.gift_id===id));
+  const msg=hasRes
+    ? `Vai eliminar ${toDelete.length} presente(s) duplicados. Alguns têm reservas — estas também serão eliminadas. Continuar?`
+    : `Vai eliminar automaticamente ${toDelete.length} presente(s) duplicados, mantendo 1 de cada grupo. Continuar?`;
+  if(!confirm(msg)) return;
+  const btn=$('btn-auto-delete-all');
+  if(btn){btn.disabled=true;btn.textContent='A eliminar...';}
+  try {
+    for(const id of toDelete){
+      await sb.from('wedding_reservations').delete().eq('gift_id',id);
+      await sb.from('wedding_gifts').delete().eq('id',id);
+    }
+    await refreshFromSupabase(); renderAdminDashboard();
+    showToast(`✅ ${toDelete.length} duplicado(s) eliminado(s) com sucesso!`);
+    renderDuplicatesPanel();
+  } catch(e){ showToast('Erro ao eliminar duplicados'); if(btn){btn.disabled=false;btn.textContent='Tentar novamente';} }
+}
+
+function levenshtein(a,b){
+  const m=a.length, n=b.length;
+  const dp=Array.from({length:m+1},(_,i)=>Array.from({length:n+1},(_,j)=>i===0?j:j===0?i:0));
+  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++)
+    dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+  return dp[m][n];
+}
 
 // ============================================================================
 // INIT
